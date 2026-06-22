@@ -261,8 +261,9 @@ export interface Page {
             /**
              * Wrap text in {{double curly braces}} to apply serif/italic emphasis style.
              */
-            title: string;
+            heading: string;
             subtitle?: string | null;
+            intro?: string | null;
             backgroundMedia: 'image' | 'video' | 'shader';
             backgroundImage?: (string | null) | Media;
             /**
@@ -1912,8 +1913,9 @@ export interface PagesSelect<T extends boolean = true> {
         hero?:
           | T
           | {
-              title?: T;
+              heading?: T;
               subtitle?: T;
+              intro?: T;
               backgroundMedia?: T;
               backgroundImage?: T;
               backgroundVideo?: T;

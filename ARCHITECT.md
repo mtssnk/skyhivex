@@ -80,8 +80,9 @@ Each block has an **Anchor ID** field for hash-link navigation.
 
 ### Hero
 
-- **Title**: Text field with optional emphasis syntax using double curly braces, e.g. `This is the {{hero block}}`.
+- **Heading**: Text field with optional emphasis syntax using double curly braces, e.g. `This is the {{hero block}}`.
 - **Subtitle**: Text field.
+- **Intro**: Textarea field.
 - **Buttons**: Array field. Each button includes:
   - Label/text
   - Type: scroll to section (anchor), open video (self-hosted), or page link

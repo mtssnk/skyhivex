@@ -6,7 +6,7 @@ export const Hero: Block = {
   labels: { singular: 'Hero', plural: 'Hero Blocks' },
   fields: withBlockTabs([
     {
-      name: 'title',
+      name: 'heading',
       type: 'textarea',
       required: true,
       admin: {
@@ -16,6 +16,10 @@ export const Hero: Block = {
     {
       name: 'subtitle',
       type: 'text',
+    },
+    {
+      name: 'intro',
+      type: 'textarea',
     },
     {
       name: 'backgroundMedia',

@@ -1,0 +1,72 @@
+<canvas id="canvas"></canvas>
+<div id="hud"></div>
+
+<script type="module">
+  import { createRenderer } from '../lib/shader-renderer.js'
+
+  // ── Load the fragment shader source ──────────────────────────────────────
+  // We fetch shader.frag at runtime so you can edit it and just reload the
+  // page — no build step required during prototyping.
+  async function main() {
+    const canvas = document.getElementById('canvas')
+    const SHADER_FILE = '../hex-shader.frag'
+    // ────────────────────────────────────────────────────────────────────────
+
+    let fragSrc
+    try {
+      const res = await fetch(`./${SHADER_FILE}?v=` + Date.now())
+      if (!res.ok) throw new Error(`HTTP ${res.status}`)
+      fragSrc = await res.text()
+    } catch (err) {
+      showError(`Could not load shader.frag:\n${err.message}`)
+      return
+    }
+
+    const hud = document.getElementById('hud')
+    const hudBase = `Shader: ${SHADER_FILE}`
+    hud.textContent = hudBase
+
+    // ── Render resolution — lower maxPixelRatio to gain fps ───────────────
+    const MAX_PIXEL_RATIO = 1.5
+    // ──────────────────────────────────────────────────────────────────────
+
+    let renderer
+    try {
+      renderer = createRenderer(canvas, fragSrc, {
+        maxPixelRatio: MAX_PIXEL_RATIO,
+        onStats: ({ fps }) => {
+          hud.textContent = `${hudBase} — ${canvas.width}×${canvas.height}px — ${fps} fps`
+        },
+      })
+    } catch (err) {
+      showError(`WebGL / shader error:\n${err.message}`)
+      return
+    }
+
+    renderer.start()
+
+    // Pause when the tab is hidden to save GPU time.
+    document.addEventListener('visibilitychange', () => {
+      document.hidden ? renderer.stop() : renderer.start()
+    })
+  }
+
+  function showError(msg) {
+    const el = document.createElement('pre')
+    Object.assign(el.style, {
+      position: 'fixed',
+      inset: '2rem',
+      background: 'rgba(0,0,0,.85)',
+      color: '#f66',
+      padding: '1.5rem',
+      borderRadius: '6px',
+      whiteSpace: 'pre-wrap',
+      font: '13px/1.5 monospace',
+    })
+    el.textContent = msg
+    document.body.appendChild(el)
+    console.error(msg)
+  }
+
+  main()
+</script>

@@ -43,20 +43,40 @@ export type LexicalNode = {
   [key: string]: unknown
 }
 
-export type Work = {
+export type Category = {
+  id: string
+  name: string
+  slug: string
+}
+
+export type Project = {
   id: string
   title: string
   client: string
-  projectName: string
-  prefix?: string | null
   slug: string
-  listingMedia: Media
-  heroMedia?: Media | null
-  services?: { service: string; id?: string | null }[] | null
-  url?: string | null
-  body?: WorkBlock[] | null
-  featured?: boolean | null
+  categories?: Category[] | null
+  listingImage: Media
+  heroMedia?: {
+    type?: 'image' | 'video' | null
+    image?: Media | null
+    video?: Media | null
+    overlayAlpha?: number | null
+  } | null
+  intro?: string | null
+  summary?: { label: string; value: string; id?: string | null }[] | null
+  blocks?: ProjectBlock[] | null
   isDark?: boolean | null
+  metaDescription?: string | null
+  ogImage?: Media | null
+}
+
+export type Post = {
+  id: string
+  title: string
+  slug: string
+  categories?: Category[] | null
+  listingImage: Media
+  blocks?: PostBlock[] | null
   metaDescription?: string | null
   ogImage?: Media | null
 }
@@ -67,50 +87,80 @@ type BlockPadding = {
   paddingSize?: 'xl' | 'lg' | 'md' | 'sm' | null
 }
 
+export type HeroBlock = BlockPadding & {
+  blockType: 'hero'
+  id?: string | null
+  heading: string
+  subtitle?: string | null
+  intro?: string | null
+  backgroundMedia?: 'image' | 'video' | 'shader' | null
+  backgroundImage?: Media | null
+  backgroundVideo?: Media | null
+  overlayAlpha?: number | null
+  buttons?:
+    | {
+        label: string
+        type: 'link' | 'anchor' | 'video'
+        linkUrl?: string | null
+        anchorTarget?: string | null
+        videoFile?: Media | null
+        variant: 'solid' | 'outline'
+        colour: 'white' | 'green'
+        id?: string | null
+      }[]
+    | null
+}
+
 export type MediaTextBlock = BlockPadding & {
   blockType: 'mediaText'
   id?: string | null
-  media: Media
-  text: LexicalContent
+  variant: 'contained' | 'split'
+  heading?: string | null
+  headingStyle?: string | null
+  body?: LexicalContent | null
   mediaPosition: 'left' | 'right'
-  aspectRatio?: 'auto' | '16/9' | '4/3' | '1/1' | null
-  verticallyCentreText?: boolean | null
+  mediaType: 'image' | 'video'
+  image?: Media | null
+  video?: Media | null
+  aspectRatio?: 'auto' | '4/3' | '16/9' | '1/1' | '3/4' | null
 }
 
 export type MediaBlock = BlockPadding & {
   blockType: 'media'
   id?: string | null
-  media: Media
-  aspectRatio?: 'auto' | '16/9' | '4/3' | '1/1' | null
+  mediaType: 'image' | 'video'
+  image?: Media | null
+  video?: Media | null
+  openVideo?: Media | null
+  heading?: string | null
+  headingStyle?: string | null
+  overlayAlpha?: number | null
+  size: 'fullscreen' | 'large' | 'small'
+  aspectRatio?: 'auto' | '4/3' | '16/9' | '1/1' | '3/4' | null
 }
 
-export type QuoteBlock = BlockPadding & {
-  blockType: 'quote'
+export type TestimonialBlock = BlockPadding & {
+  blockType: 'testimonial'
   id?: string | null
+  quoteStyle: 'default' | 'large'
   quote: string
   attribution?: string | null
 }
 
-export type WorkBlock = MediaTextBlock | MediaBlock | QuoteBlock
-
-export type HeroBlock = BlockPadding & {
-  blockType: 'hero'
+export type CardListBlock = BlockPadding & {
+  blockType: 'cardList'
   id?: string | null
-  backgroundMedia?: Media | null
-  prefix?: string | null
-  heading: string
-  intro?: string | null
-  buttons?:
-    | {
-        label: string
-        type: 'page' | 'scroll' | 'video'
-        url?: string | null
-        anchorId?: string | null
-        videoUrl?: Media | null
-        target?: '_blank' | null
-        id?: string | null
-      }[]
-    | null
+  heading?: string | null
+  cards: {
+    illustration: string
+    heading: string
+    body?: LexicalContent | null
+    id?: string | null
+  }[]
+  button?: {
+    label?: string | null
+    url?: string | null
+  } | null
 }
 
 export type LogoListBlock = BlockPadding & {
@@ -120,42 +170,83 @@ export type LogoListBlock = BlockPadding & {
   logos: Svg[]
 }
 
-export type WorkListBlock = BlockPadding & {
-  heading?: string
-  blockType: 'workList'
+export type ProjectListBlock = BlockPadding & {
+  blockType: 'projectList'
   id?: string | null
-  works: Work[]
-  viewAllLabel?: string | null
+  selectionMode: 'manual' | 'category' | 'latest'
+  projects?: Project[] | null
+  category?: Category | null
+  count?: number | null
+  buttonLabel?: string | null
 }
 
-export type CardListBlock = BlockPadding & {
-  blockType: 'cardList'
+export type NewsCardListBlock = BlockPadding & {
+  blockType: 'newsCardList'
   id?: string | null
-  heading: string
-  cards: {
-    icon?: Svg | null
-    heading: string
-    body: string
+  selectionMode: 'manual' | 'category' | 'latest'
+  articles?: Post[] | null
+  category?: Category | null
+  buttonLabel?: string | null
+}
+
+export type BodyCopyBlock = BlockPadding & {
+  blockType: 'bodyCopy'
+  id?: string | null
+  content: LexicalContent
+}
+
+export type CTABlock = BlockPadding & {
+  blockType: 'cta'
+  id?: string | null
+  backgroundImage: Media
+  overlayAlpha?: number | null
+  text: string
+  textStyle: string
+  button: {
+    label: string
+    url: string
+  }
+}
+
+export type PersonListBlock = BlockPadding & {
+  blockType: 'personList'
+  id?: string | null
+  heading?: string | null
+  body?: LexicalContent | null
+  people: {
+    image: Media
+    name: string
+    role?: string | null
     id?: string | null
   }[]
 }
 
-export type ContactFormBlock = BlockPadding & {
-  blockType: 'contactForm'
+export type AccordionListBlock = BlockPadding & {
+  blockType: 'accordionList'
   id?: string | null
-  heading: string
-  intro?: string | null
+  items: {
+    heading: string
+    body: LexicalContent
+    id?: string | null
+  }[]
 }
 
-export type PageBlock =
-  | HeroBlock
-  | LogoListBlock
-  | WorkListBlock
-  | CardListBlock
-  | ContactFormBlock
+export type SharedBlock =
   | MediaTextBlock
   | MediaBlock
-  | QuoteBlock
+  | TestimonialBlock
+  | BodyCopyBlock
+  | CTABlock
+  | PersonListBlock
+  | AccordionListBlock
+  | CardListBlock
+  | ProjectListBlock
+  | NewsCardListBlock
+  | LogoListBlock
+
+export type PageBlock = HeroBlock | SharedBlock
+export type ProjectBlock = SharedBlock
+export type PostBlock = SharedBlock
 
 export type Page = {
   id: string
@@ -167,17 +258,24 @@ export type Page = {
   ogImage?: Media | null
 }
 
-export type WorkPage = {
+export type ProjectsPage = {
   heading?: string | null
   intro?: string | null
-  blocks?: PageBlock[] | null
+  blocks?: SharedBlock[] | null
+  metaDescription?: string | null
+  ogImage?: Media | null
+}
+
+export type ContactPage = {
+  heading: string
+  body?: LexicalContent | null
   metaDescription?: string | null
   ogImage?: Media | null
 }
 
 export type SocialPlatform = 'instagram' | 'linkedin'
 
-type NavLinkType = 'page' | 'work' | 'url'
+type NavLinkType = 'page' | 'projects' | 'news' | 'url'
 
 type NavLink = {
   label: string
@@ -202,6 +300,7 @@ export type SiteSettings = {
   contactName?: string | null
   contactEmail?: string | null
   contactPhone?: string | null
+  contactAddress?: string | null
   logo?: Media | null
   socialLinks?: { platform: SocialPlatform; url: string; id?: string | null }[] | null
   legalLinks?: { label: string; url: string; id?: string | null }[] | null
@@ -247,8 +346,8 @@ export async function getPageBySlug(
   return data?.docs[0] ?? null
 }
 
-export async function getWork(): Promise<Work[]> {
-  const data = await get<{ docs: Work[] }>('/work', {
+export async function getProjects(): Promise<Project[]> {
+  const data = await get<{ docs: Project[] }>('/projects', {
     depth: '1',
     limit: '100',
     sort: '-createdAt',
@@ -256,18 +355,42 @@ export async function getWork(): Promise<Work[]> {
   return data?.docs ?? []
 }
 
-export async function getWorkBySlug(
+export async function getProjectBySlug(
   slug: string,
   { draft = false, apiKey }: { draft?: boolean; apiKey?: string } = {},
-): Promise<Work | null> {
+): Promise<Project | null> {
   const params: Record<string, string> = {
     'where[slug][equals]': slug,
-    depth: '1',
+    depth: '2',
     limit: '1',
   }
   if (draft) params.draft = 'true'
   const headers: Record<string, string> = apiKey ? { Authorization: `users API-Key ${apiKey}` } : {}
-  const data = await get<{ docs: Work[] }>('/work', params, headers)
+  const data = await get<{ docs: Project[] }>('/projects', params, headers)
+  return data?.docs[0] ?? null
+}
+
+export async function getPosts(): Promise<Post[]> {
+  const data = await get<{ docs: Post[] }>('/posts', {
+    depth: '1',
+    limit: '100',
+    sort: '-createdAt',
+  })
+  return data?.docs ?? []
+}
+
+export async function getPostBySlug(
+  slug: string,
+  { draft = false, apiKey }: { draft?: boolean; apiKey?: string } = {},
+): Promise<Post | null> {
+  const params: Record<string, string> = {
+    'where[slug][equals]': slug,
+    depth: '2',
+    limit: '1',
+  }
+  if (draft) params.draft = 'true'
+  const headers: Record<string, string> = apiKey ? { Authorization: `users API-Key ${apiKey}` } : {}
+  const data = await get<{ docs: Post[] }>('/posts', params, headers)
   return data?.docs[0] ?? null
 }
 
@@ -279,6 +402,10 @@ export async function getNavigation(): Promise<Navigation | null> {
   return get<Navigation>('/globals/navigation', { depth: '1' })
 }
 
-export async function getWorkPage(): Promise<WorkPage | null> {
-  return get<WorkPage>('/globals/work-page')
+export async function getProjectsPage(): Promise<ProjectsPage | null> {
+  return get<ProjectsPage>('/globals/projects-page')
+}
+
+export async function getContactPage(): Promise<ContactPage | null> {
+  return get<ContactPage>('/globals/contact-page')
 }
