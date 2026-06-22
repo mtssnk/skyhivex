@@ -7,7 +7,8 @@ function linkFields(): Field[] {
       type: 'radio',
       options: [
         { label: 'Page', value: 'page' },
-        { label: 'Work listing', value: 'work' },
+        { label: 'Projects listing', value: 'projects' },
+        { label: 'News listing', value: 'news' },
         { label: 'Custom URL', value: 'url' },
       ],
       defaultValue: 'page',

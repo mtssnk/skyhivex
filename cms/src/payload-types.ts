@@ -71,7 +71,9 @@ export interface Config {
     media: Media;
     svgs: Svg;
     pages: Page;
-    work: Work;
+    projects: Project;
+    posts: Post;
+    categories: Category;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -83,7 +85,9 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     svgs: SvgsSelect<false> | SvgsSelect<true>;
     pages: PagesSelect<false> | PagesSelect<true>;
-    work: WorkSelect<false> | WorkSelect<true>;
+    projects: ProjectsSelect<false> | ProjectsSelect<true>;
+    posts: PostsSelect<false> | PostsSelect<true>;
+    categories: CategoriesSelect<false> | CategoriesSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -95,12 +99,14 @@ export interface Config {
   fallbackLocale: null;
   globals: {
     'site-settings': SiteSetting;
-    'work-page': WorkPage;
+    'projects-page': ProjectsPage;
+    'contact-page': ContactPage;
     navigation: Navigation;
   };
   globalsSelect: {
     'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
-    'work-page': WorkPageSelect<false> | WorkPageSelect<true>;
+    'projects-page': ProjectsPageSelect<false> | ProjectsPageSelect<true>;
+    'contact-page': ContactPageSelect<false> | ContactPageSelect<true>;
     navigation: NavigationSelect<false> | NavigationSelect<true>;
   };
   locale: null;
@@ -253,21 +259,35 @@ export interface Page {
     | (
         | {
             /**
-             * Full-bleed background image or video behind the hero content.
+             * Wrap text in {{double curly braces}} to apply serif/italic emphasis style.
              */
-            backgroundMedia?: (string | null) | Media;
-            heading: string;
-            intro?: string | null;
+            title: string;
+            subtitle?: string | null;
+            backgroundMedia: 'image' | 'video' | 'shader';
+            backgroundImage?: (string | null) | Media;
+            /**
+             * Muted, looped, autoplayed as background.
+             */
+            backgroundVideo?: (string | null) | Media;
+            /**
+             * Dark overlay opacity (0–1) to improve text contrast.
+             */
+            overlayAlpha?: number | null;
             buttons?:
               | {
                   label: string;
-                  type: 'page' | 'scroll' | 'video';
-                  url?: string | null;
+                  type: 'link' | 'anchor' | 'video';
+                  linkUrl?: string | null;
                   /**
-                   * CSS ID of the target element on the page, without the # symbol.
+                   * CSS ID of the target element, without the # symbol.
                    */
-                  anchorId?: string | null;
-                  videoUrl?: (string | null) | Media;
+                  anchorTarget?: string | null;
+                  /**
+                   * Opens unmuted in a dialog.
+                   */
+                  videoFile?: (string | null) | Media;
+                  variant: 'solid' | 'outline';
+                  colour: 'white' | 'green';
                   id?: string | null;
                 }[]
               | null;
@@ -307,12 +327,53 @@ export interface Page {
             blockType: 'logoList';
           }
         | {
-            heading?: string | null;
-            works: (string | Work)[];
+            variant: 'contained' | 'split';
             /**
-             * Label for the link to /work.
+             * Wrap text in {{double curly braces}} to apply serif/italic emphasis style.
              */
-            viewAllLabel?: string | null;
+            heading?: string | null;
+            headingStyle?:
+              | (
+                  | 'text-serif-5xl'
+                  | 'text-serif-2xl'
+                  | 'text-serif-md'
+                  | 'text-serif-sm'
+                  | 'text-extended-3xl'
+                  | 'text-extended-2xl'
+                  | 'text-extended-xl-semibold'
+                  | 'text-extended-xl-light'
+                  | 'text-extended-lg'
+                  | 'text-extended-lg-light'
+                  | 'text-extended-md'
+                  | 'text-extended-2xs'
+                )
+              | null;
+            body?: {
+              root: {
+                type: string;
+                children: {
+                  type: any;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            mediaPosition: 'left' | 'right';
+            mediaType: 'image' | 'video';
+            image?: (string | null) | Media;
+            /**
+             * Muted, looped, autoplayed.
+             */
+            video?: (string | null) | Media;
+            /**
+             * Only applies to the contained variant.
+             */
+            aspectRatio?: ('auto' | '4/3' | '16/9' | '1/1' | '3/4') | null;
             /**
              * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
              */
@@ -327,16 +388,96 @@ export interface Page {
             paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
             id?: string | null;
             blockName?: string | null;
-            blockType: 'workList';
+            blockType: 'mediaText';
           }
         | {
-            heading: string;
+            mediaType: 'image' | 'video';
+            image?: (string | null) | Media;
+            /**
+             * Muted, looped, autoplayed as background.
+             */
+            video?: (string | null) | Media;
+            /**
+             * If set, a play button opens this video unmuted in a dialog.
+             */
+            openVideo?: (string | null) | Media;
+            heading?: string | null;
+            headingStyle?:
+              | (
+                  | 'text-serif-5xl'
+                  | 'text-serif-2xl'
+                  | 'text-serif-md'
+                  | 'text-serif-sm'
+                  | 'text-extended-3xl'
+                  | 'text-extended-2xl'
+                  | 'text-extended-xl-semibold'
+                  | 'text-extended-xl-light'
+                  | 'text-extended-lg'
+                  | 'text-extended-lg-light'
+                  | 'text-extended-md'
+                  | 'text-extended-2xs'
+                )
+              | null;
+            /**
+             * Dark overlay opacity (0–1). Only relevant when heading is set.
+             */
+            overlayAlpha?: number | null;
+            size: 'fullscreen' | 'large' | 'small';
+            aspectRatio?: ('auto' | '4/3' | '16/9' | '1/1' | '3/4') | null;
+            /**
+             * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
+             */
+            anchorId?: string | null;
+            /**
+             * Which side(s) the vertical padding is applied to.
+             */
+            paddingWhere?: ('both' | 'top' | 'bottom') | null;
+            /**
+             * Size of the vertical padding.
+             */
+            paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'media';
+          }
+        | {
+            heading?: string | null;
             cards: {
-              icon?: (string | null) | Svg;
+              /**
+               * Predefined illustration — update options once illustrations are finalised.
+               */
+              illustration:
+                | 'illustration-1'
+                | 'illustration-2'
+                | 'illustration-3'
+                | 'illustration-4'
+                | 'illustration-5'
+                | 'illustration-6';
               heading: string;
-              body: string;
+              body?: {
+                root: {
+                  type: string;
+                  children: {
+                    type: any;
+                    version: number;
+                    [k: string]: unknown;
+                  }[];
+                  direction: ('ltr' | 'rtl') | null;
+                  format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                  indent: number;
+                  version: number;
+                };
+                [k: string]: unknown;
+              } | null;
               id?: string | null;
             }[];
+            /**
+             * Optional button below the cards. Leave label empty to hide.
+             */
+            button?: {
+              label?: string | null;
+              url?: string | null;
+            };
             /**
              * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
              */
@@ -354,8 +495,12 @@ export interface Page {
             blockType: 'cardList';
           }
         | {
-            heading: string;
-            intro?: string | null;
+            /**
+             * Visual style for the quote. Confirm final options from Figma.
+             */
+            quoteStyle: 'default' | 'large';
+            quote: string;
+            attribution?: string | null;
             /**
              * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
              */
@@ -370,13 +515,10 @@ export interface Page {
             paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
             id?: string | null;
             blockName?: string | null;
-            blockType: 'contactForm';
+            blockType: 'testimonial';
           }
         | {
-            media: string | Media;
-            mediaPosition: 'left' | 'right';
-            aspectRatio?: ('auto' | '16/9' | '4/3' | '1/1') | null;
-            text: {
+            content: {
               root: {
                 type: string;
                 children: {
@@ -403,14 +545,34 @@ export interface Page {
              * Size of the vertical padding.
              */
             paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
-            verticallyCentreText?: boolean | null;
             id?: string | null;
             blockName?: string | null;
-            blockType: 'mediaText';
+            blockType: 'bodyCopy';
           }
         | {
-            media: string | Media;
-            aspectRatio?: ('auto' | '16/9' | '4/3' | '1/1') | null;
+            backgroundImage: string | Media;
+            /**
+             * Dark overlay opacity (0–1) to improve text contrast.
+             */
+            overlayAlpha?: number | null;
+            text: string;
+            textStyle:
+              | 'text-serif-5xl'
+              | 'text-serif-2xl'
+              | 'text-serif-md'
+              | 'text-serif-sm'
+              | 'text-extended-3xl'
+              | 'text-extended-2xl'
+              | 'text-extended-xl-semibold'
+              | 'text-extended-xl-light'
+              | 'text-extended-lg'
+              | 'text-extended-lg-light'
+              | 'text-extended-md'
+              | 'text-extended-2xs';
+            button: {
+              label: string;
+              url: string;
+            };
             /**
              * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
              */
@@ -425,11 +587,31 @@ export interface Page {
             paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
             id?: string | null;
             blockName?: string | null;
-            blockType: 'media';
+            blockType: 'cta';
           }
         | {
-            quote: string;
-            attribution?: string | null;
+            heading?: string | null;
+            body?: {
+              root: {
+                type: string;
+                children: {
+                  type: any;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            people: {
+              image: string | Media;
+              name: string;
+              role?: string | null;
+              id?: string | null;
+            }[];
             /**
              * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
              */
@@ -444,7 +626,107 @@ export interface Page {
             paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
             id?: string | null;
             blockName?: string | null;
-            blockType: 'quote';
+            blockType: 'personList';
+          }
+        | {
+            items: {
+              /**
+               * Acts as the toggle trigger.
+               */
+              heading: string;
+              body: {
+                root: {
+                  type: string;
+                  children: {
+                    type: any;
+                    version: number;
+                    [k: string]: unknown;
+                  }[];
+                  direction: ('ltr' | 'rtl') | null;
+                  format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                  indent: number;
+                  version: number;
+                };
+                [k: string]: unknown;
+              };
+              id?: string | null;
+            }[];
+            /**
+             * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
+             */
+            anchorId?: string | null;
+            /**
+             * Which side(s) the vertical padding is applied to.
+             */
+            paddingWhere?: ('both' | 'top' | 'bottom') | null;
+            /**
+             * Size of the vertical padding.
+             */
+            paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'accordionList';
+          }
+        | {
+            selectionMode: 'manual' | 'category' | 'latest';
+            /**
+             * Pick specific projects to display.
+             */
+            projects?: (string | Project)[] | null;
+            category?: (string | null) | Category;
+            /**
+             * Number of projects to display.
+             */
+            count?: number | null;
+            /**
+             * Label for the link to the projects index. Leave empty to hide.
+             */
+            buttonLabel?: string | null;
+            /**
+             * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
+             */
+            anchorId?: string | null;
+            /**
+             * Which side(s) the vertical padding is applied to.
+             */
+            paddingWhere?: ('both' | 'top' | 'bottom') | null;
+            /**
+             * Size of the vertical padding.
+             */
+            paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'projectList';
+          }
+        | {
+            selectionMode: 'manual' | 'category' | 'latest';
+            /**
+             * Pick up to three articles.
+             */
+            articles?: (string | Post)[] | null;
+            /**
+             * Shows the latest three articles in this category.
+             */
+            category?: (string | null) | Category;
+            /**
+             * Label for the link to the news index. Leave empty to hide.
+             */
+            buttonLabel?: string | null;
+            /**
+             * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
+             */
+            anchorId?: string | null;
+            /**
+             * Which side(s) the vertical padding is applied to.
+             */
+            paddingWhere?: ('both' | 'top' | 'bottom') | null;
+            /**
+             * Size of the vertical padding.
+             */
+            paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'newsCardList';
           }
       )[]
     | null;
@@ -462,49 +744,194 @@ export interface Page {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "work".
+ * via the `definition` "projects".
  */
-export interface Work {
+export interface Project {
   id: string;
-  /**
-   * Enable dark mode for this work page.
-   */
-  isDark?: boolean | null;
   title: string;
   client: string;
-  /**
-   * Public-facing project name. Used on listing cards and in structured data.
-   */
-  projectName: string;
   /**
    * Auto-generated from the title. Do not change after publishing.
    */
   slug: string;
+  categories?: (string | Category)[] | null;
   /**
-   * Image or video shown on the work listing card.
+   * Image shown on the projects index card. Used as hero background if no hero media is set.
    */
-  listingMedia: string | Media;
+  listingImage: string | Media;
   /**
-   * Hero media on the detail page. Falls back to listing media if not set.
+   * Overrides the listing image as the hero background.
    */
-  heroMedia?: (string | null) | Media;
-  services?:
+  heroMedia?: {
+    type?: ('image' | 'video') | null;
+    image?: (string | null) | Media;
+    /**
+     * Muted, looped, autoplayed as background.
+     */
+    video?: (string | null) | Media;
+    /**
+     * Dark overlay opacity (0–1) to improve text contrast.
+     */
+    overlayAlpha?: number | null;
+  };
+  /**
+   * Displayed before the project summary section.
+   */
+  intro?: string | null;
+  /**
+   * Key details displayed in the project summary section.
+   */
+  summary?:
     | {
-        service: string;
+        label: string;
+        value: string;
         id?: string | null;
       }[]
     | null;
   /**
-   * Optional link to the live project.
+   * Appended after the summary section.
    */
-  url?: string | null;
-  body?:
+  blocks?:
     | (
         | {
-            media: string | Media;
+            variant: 'contained' | 'split';
+            /**
+             * Wrap text in {{double curly braces}} to apply serif/italic emphasis style.
+             */
+            heading?: string | null;
+            headingStyle?:
+              | (
+                  | 'text-serif-5xl'
+                  | 'text-serif-2xl'
+                  | 'text-serif-md'
+                  | 'text-serif-sm'
+                  | 'text-extended-3xl'
+                  | 'text-extended-2xl'
+                  | 'text-extended-xl-semibold'
+                  | 'text-extended-xl-light'
+                  | 'text-extended-lg'
+                  | 'text-extended-lg-light'
+                  | 'text-extended-md'
+                  | 'text-extended-2xs'
+                )
+              | null;
+            body?: {
+              root: {
+                type: string;
+                children: {
+                  type: any;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
             mediaPosition: 'left' | 'right';
-            aspectRatio?: ('auto' | '16/9' | '4/3' | '1/1') | null;
-            text: {
+            mediaType: 'image' | 'video';
+            image?: (string | null) | Media;
+            /**
+             * Muted, looped, autoplayed.
+             */
+            video?: (string | null) | Media;
+            /**
+             * Only applies to the contained variant.
+             */
+            aspectRatio?: ('auto' | '4/3' | '16/9' | '1/1' | '3/4') | null;
+            /**
+             * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
+             */
+            anchorId?: string | null;
+            /**
+             * Which side(s) the vertical padding is applied to.
+             */
+            paddingWhere?: ('both' | 'top' | 'bottom') | null;
+            /**
+             * Size of the vertical padding.
+             */
+            paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'mediaText';
+          }
+        | {
+            mediaType: 'image' | 'video';
+            image?: (string | null) | Media;
+            /**
+             * Muted, looped, autoplayed as background.
+             */
+            video?: (string | null) | Media;
+            /**
+             * If set, a play button opens this video unmuted in a dialog.
+             */
+            openVideo?: (string | null) | Media;
+            heading?: string | null;
+            headingStyle?:
+              | (
+                  | 'text-serif-5xl'
+                  | 'text-serif-2xl'
+                  | 'text-serif-md'
+                  | 'text-serif-sm'
+                  | 'text-extended-3xl'
+                  | 'text-extended-2xl'
+                  | 'text-extended-xl-semibold'
+                  | 'text-extended-xl-light'
+                  | 'text-extended-lg'
+                  | 'text-extended-lg-light'
+                  | 'text-extended-md'
+                  | 'text-extended-2xs'
+                )
+              | null;
+            /**
+             * Dark overlay opacity (0–1). Only relevant when heading is set.
+             */
+            overlayAlpha?: number | null;
+            size: 'fullscreen' | 'large' | 'small';
+            aspectRatio?: ('auto' | '4/3' | '16/9' | '1/1' | '3/4') | null;
+            /**
+             * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
+             */
+            anchorId?: string | null;
+            /**
+             * Which side(s) the vertical padding is applied to.
+             */
+            paddingWhere?: ('both' | 'top' | 'bottom') | null;
+            /**
+             * Size of the vertical padding.
+             */
+            paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'media';
+          }
+        | {
+            /**
+             * Visual style for the quote. Confirm final options from Figma.
+             */
+            quoteStyle: 'default' | 'large';
+            quote: string;
+            attribution?: string | null;
+            /**
+             * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
+             */
+            anchorId?: string | null;
+            /**
+             * Which side(s) the vertical padding is applied to.
+             */
+            paddingWhere?: ('both' | 'top' | 'bottom') | null;
+            /**
+             * Size of the vertical padding.
+             */
+            paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'testimonial';
+          }
+        | {
+            content: {
               root: {
                 type: string;
                 children: {
@@ -531,14 +958,34 @@ export interface Work {
              * Size of the vertical padding.
              */
             paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
-            verticallyCentreText?: boolean | null;
             id?: string | null;
             blockName?: string | null;
-            blockType: 'mediaText';
+            blockType: 'bodyCopy';
           }
         | {
-            media: string | Media;
-            aspectRatio?: ('auto' | '16/9' | '4/3' | '1/1') | null;
+            backgroundImage: string | Media;
+            /**
+             * Dark overlay opacity (0–1) to improve text contrast.
+             */
+            overlayAlpha?: number | null;
+            text: string;
+            textStyle:
+              | 'text-serif-5xl'
+              | 'text-serif-2xl'
+              | 'text-serif-md'
+              | 'text-serif-sm'
+              | 'text-extended-3xl'
+              | 'text-extended-2xl'
+              | 'text-extended-xl-semibold'
+              | 'text-extended-xl-light'
+              | 'text-extended-lg'
+              | 'text-extended-lg-light'
+              | 'text-extended-md'
+              | 'text-extended-2xs';
+            button: {
+              label: string;
+              url: string;
+            };
             /**
              * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
              */
@@ -553,11 +1000,31 @@ export interface Work {
             paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
             id?: string | null;
             blockName?: string | null;
-            blockType: 'media';
+            blockType: 'cta';
           }
         | {
-            quote: string;
-            attribution?: string | null;
+            heading?: string | null;
+            body?: {
+              root: {
+                type: string;
+                children: {
+                  type: any;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            people: {
+              image: string | Media;
+              name: string;
+              role?: string | null;
+              id?: string | null;
+            }[];
             /**
              * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
              */
@@ -572,20 +1039,658 @@ export interface Work {
             paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
             id?: string | null;
             blockName?: string | null;
-            blockType: 'quote';
+            blockType: 'personList';
+          }
+        | {
+            items: {
+              /**
+               * Acts as the toggle trigger.
+               */
+              heading: string;
+              body: {
+                root: {
+                  type: string;
+                  children: {
+                    type: any;
+                    version: number;
+                    [k: string]: unknown;
+                  }[];
+                  direction: ('ltr' | 'rtl') | null;
+                  format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                  indent: number;
+                  version: number;
+                };
+                [k: string]: unknown;
+              };
+              id?: string | null;
+            }[];
+            /**
+             * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
+             */
+            anchorId?: string | null;
+            /**
+             * Which side(s) the vertical padding is applied to.
+             */
+            paddingWhere?: ('both' | 'top' | 'bottom') | null;
+            /**
+             * Size of the vertical padding.
+             */
+            paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'accordionList';
+          }
+        | {
+            heading?: string | null;
+            cards: {
+              /**
+               * Predefined illustration — update options once illustrations are finalised.
+               */
+              illustration:
+                | 'illustration-1'
+                | 'illustration-2'
+                | 'illustration-3'
+                | 'illustration-4'
+                | 'illustration-5'
+                | 'illustration-6';
+              heading: string;
+              body?: {
+                root: {
+                  type: string;
+                  children: {
+                    type: any;
+                    version: number;
+                    [k: string]: unknown;
+                  }[];
+                  direction: ('ltr' | 'rtl') | null;
+                  format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                  indent: number;
+                  version: number;
+                };
+                [k: string]: unknown;
+              } | null;
+              id?: string | null;
+            }[];
+            /**
+             * Optional button below the cards. Leave label empty to hide.
+             */
+            button?: {
+              label?: string | null;
+              url?: string | null;
+            };
+            /**
+             * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
+             */
+            anchorId?: string | null;
+            /**
+             * Which side(s) the vertical padding is applied to.
+             */
+            paddingWhere?: ('both' | 'top' | 'bottom') | null;
+            /**
+             * Size of the vertical padding.
+             */
+            paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'cardList';
+          }
+        | {
+            selectionMode: 'manual' | 'category' | 'latest';
+            /**
+             * Pick specific projects to display.
+             */
+            projects?: (string | Project)[] | null;
+            category?: (string | null) | Category;
+            /**
+             * Number of projects to display.
+             */
+            count?: number | null;
+            /**
+             * Label for the link to the projects index. Leave empty to hide.
+             */
+            buttonLabel?: string | null;
+            /**
+             * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
+             */
+            anchorId?: string | null;
+            /**
+             * Which side(s) the vertical padding is applied to.
+             */
+            paddingWhere?: ('both' | 'top' | 'bottom') | null;
+            /**
+             * Size of the vertical padding.
+             */
+            paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'projectList';
+          }
+        | {
+            selectionMode: 'manual' | 'category' | 'latest';
+            /**
+             * Pick up to three articles.
+             */
+            articles?: (string | Post)[] | null;
+            /**
+             * Shows the latest three articles in this category.
+             */
+            category?: (string | null) | Category;
+            /**
+             * Label for the link to the news index. Leave empty to hide.
+             */
+            buttonLabel?: string | null;
+            /**
+             * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
+             */
+            anchorId?: string | null;
+            /**
+             * Which side(s) the vertical padding is applied to.
+             */
+            paddingWhere?: ('both' | 'top' | 'bottom') | null;
+            /**
+             * Size of the vertical padding.
+             */
+            paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'newsCardList';
+          }
+        | {
+            heading: string;
+            logos: (string | Svg)[];
+            /**
+             * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
+             */
+            anchorId?: string | null;
+            /**
+             * Which side(s) the vertical padding is applied to.
+             */
+            paddingWhere?: ('both' | 'top' | 'bottom') | null;
+            /**
+             * Size of the vertical padding.
+             */
+            paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'logoList';
           }
       )[]
     | null;
   /**
-   * Pin this entry to the homepage WorkList block.
+   * If enabled, the header will use the dark variant with white text.
    */
-  featured?: boolean | null;
+  isDark?: boolean | null;
   /**
-   * SEO meta description (max 160 characters). Defaults to "Client — Title".
+   * SEO meta description (max 160 characters).
    */
   metaDescription?: string | null;
   /**
-   * Social share image (OG). Recommended: 1200×630px. Falls back to hero/listing media.
+   * Social share image (OG). Recommended: 1200×630px. Falls back to listing image.
+   */
+  ogImage?: (string | null) | Media;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "categories".
+ */
+export interface Category {
+  id: string;
+  name: string;
+  /**
+   * Auto-generated from name. Do not change after publishing.
+   */
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "posts".
+ */
+export interface Post {
+  id: string;
+  title: string;
+  /**
+   * Auto-generated from the title. Do not change after publishing.
+   */
+  slug: string;
+  categories?: (string | Category)[] | null;
+  /**
+   * Image shown on the news index card and at the top of the post.
+   */
+  listingImage: string | Media;
+  blocks: (
+    | {
+        variant: 'contained' | 'split';
+        /**
+         * Wrap text in {{double curly braces}} to apply serif/italic emphasis style.
+         */
+        heading?: string | null;
+        headingStyle?:
+          | (
+              | 'text-serif-5xl'
+              | 'text-serif-2xl'
+              | 'text-serif-md'
+              | 'text-serif-sm'
+              | 'text-extended-3xl'
+              | 'text-extended-2xl'
+              | 'text-extended-xl-semibold'
+              | 'text-extended-xl-light'
+              | 'text-extended-lg'
+              | 'text-extended-lg-light'
+              | 'text-extended-md'
+              | 'text-extended-2xs'
+            )
+          | null;
+        body?: {
+          root: {
+            type: string;
+            children: {
+              type: any;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        } | null;
+        mediaPosition: 'left' | 'right';
+        mediaType: 'image' | 'video';
+        image?: (string | null) | Media;
+        /**
+         * Muted, looped, autoplayed.
+         */
+        video?: (string | null) | Media;
+        /**
+         * Only applies to the contained variant.
+         */
+        aspectRatio?: ('auto' | '4/3' | '16/9' | '1/1' | '3/4') | null;
+        /**
+         * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
+         */
+        anchorId?: string | null;
+        /**
+         * Which side(s) the vertical padding is applied to.
+         */
+        paddingWhere?: ('both' | 'top' | 'bottom') | null;
+        /**
+         * Size of the vertical padding.
+         */
+        paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'mediaText';
+      }
+    | {
+        mediaType: 'image' | 'video';
+        image?: (string | null) | Media;
+        /**
+         * Muted, looped, autoplayed as background.
+         */
+        video?: (string | null) | Media;
+        /**
+         * If set, a play button opens this video unmuted in a dialog.
+         */
+        openVideo?: (string | null) | Media;
+        heading?: string | null;
+        headingStyle?:
+          | (
+              | 'text-serif-5xl'
+              | 'text-serif-2xl'
+              | 'text-serif-md'
+              | 'text-serif-sm'
+              | 'text-extended-3xl'
+              | 'text-extended-2xl'
+              | 'text-extended-xl-semibold'
+              | 'text-extended-xl-light'
+              | 'text-extended-lg'
+              | 'text-extended-lg-light'
+              | 'text-extended-md'
+              | 'text-extended-2xs'
+            )
+          | null;
+        /**
+         * Dark overlay opacity (0–1). Only relevant when heading is set.
+         */
+        overlayAlpha?: number | null;
+        size: 'fullscreen' | 'large' | 'small';
+        aspectRatio?: ('auto' | '4/3' | '16/9' | '1/1' | '3/4') | null;
+        /**
+         * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
+         */
+        anchorId?: string | null;
+        /**
+         * Which side(s) the vertical padding is applied to.
+         */
+        paddingWhere?: ('both' | 'top' | 'bottom') | null;
+        /**
+         * Size of the vertical padding.
+         */
+        paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'media';
+      }
+    | {
+        /**
+         * Visual style for the quote. Confirm final options from Figma.
+         */
+        quoteStyle: 'default' | 'large';
+        quote: string;
+        attribution?: string | null;
+        /**
+         * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
+         */
+        anchorId?: string | null;
+        /**
+         * Which side(s) the vertical padding is applied to.
+         */
+        paddingWhere?: ('both' | 'top' | 'bottom') | null;
+        /**
+         * Size of the vertical padding.
+         */
+        paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'testimonial';
+      }
+    | {
+        content: {
+          root: {
+            type: string;
+            children: {
+              type: any;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        };
+        /**
+         * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
+         */
+        anchorId?: string | null;
+        /**
+         * Which side(s) the vertical padding is applied to.
+         */
+        paddingWhere?: ('both' | 'top' | 'bottom') | null;
+        /**
+         * Size of the vertical padding.
+         */
+        paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'bodyCopy';
+      }
+    | {
+        backgroundImage: string | Media;
+        /**
+         * Dark overlay opacity (0–1) to improve text contrast.
+         */
+        overlayAlpha?: number | null;
+        text: string;
+        textStyle:
+          | 'text-serif-5xl'
+          | 'text-serif-2xl'
+          | 'text-serif-md'
+          | 'text-serif-sm'
+          | 'text-extended-3xl'
+          | 'text-extended-2xl'
+          | 'text-extended-xl-semibold'
+          | 'text-extended-xl-light'
+          | 'text-extended-lg'
+          | 'text-extended-lg-light'
+          | 'text-extended-md'
+          | 'text-extended-2xs';
+        button: {
+          label: string;
+          url: string;
+        };
+        /**
+         * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
+         */
+        anchorId?: string | null;
+        /**
+         * Which side(s) the vertical padding is applied to.
+         */
+        paddingWhere?: ('both' | 'top' | 'bottom') | null;
+        /**
+         * Size of the vertical padding.
+         */
+        paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'cta';
+      }
+    | {
+        heading?: string | null;
+        body?: {
+          root: {
+            type: string;
+            children: {
+              type: any;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        } | null;
+        people: {
+          image: string | Media;
+          name: string;
+          role?: string | null;
+          id?: string | null;
+        }[];
+        /**
+         * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
+         */
+        anchorId?: string | null;
+        /**
+         * Which side(s) the vertical padding is applied to.
+         */
+        paddingWhere?: ('both' | 'top' | 'bottom') | null;
+        /**
+         * Size of the vertical padding.
+         */
+        paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'personList';
+      }
+    | {
+        items: {
+          /**
+           * Acts as the toggle trigger.
+           */
+          heading: string;
+          body: {
+            root: {
+              type: string;
+              children: {
+                type: any;
+                version: number;
+                [k: string]: unknown;
+              }[];
+              direction: ('ltr' | 'rtl') | null;
+              format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+              indent: number;
+              version: number;
+            };
+            [k: string]: unknown;
+          };
+          id?: string | null;
+        }[];
+        /**
+         * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
+         */
+        anchorId?: string | null;
+        /**
+         * Which side(s) the vertical padding is applied to.
+         */
+        paddingWhere?: ('both' | 'top' | 'bottom') | null;
+        /**
+         * Size of the vertical padding.
+         */
+        paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'accordionList';
+      }
+    | {
+        heading?: string | null;
+        cards: {
+          /**
+           * Predefined illustration — update options once illustrations are finalised.
+           */
+          illustration:
+            | 'illustration-1'
+            | 'illustration-2'
+            | 'illustration-3'
+            | 'illustration-4'
+            | 'illustration-5'
+            | 'illustration-6';
+          heading: string;
+          body?: {
+            root: {
+              type: string;
+              children: {
+                type: any;
+                version: number;
+                [k: string]: unknown;
+              }[];
+              direction: ('ltr' | 'rtl') | null;
+              format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+              indent: number;
+              version: number;
+            };
+            [k: string]: unknown;
+          } | null;
+          id?: string | null;
+        }[];
+        /**
+         * Optional button below the cards. Leave label empty to hide.
+         */
+        button?: {
+          label?: string | null;
+          url?: string | null;
+        };
+        /**
+         * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
+         */
+        anchorId?: string | null;
+        /**
+         * Which side(s) the vertical padding is applied to.
+         */
+        paddingWhere?: ('both' | 'top' | 'bottom') | null;
+        /**
+         * Size of the vertical padding.
+         */
+        paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'cardList';
+      }
+    | {
+        selectionMode: 'manual' | 'category' | 'latest';
+        /**
+         * Pick specific projects to display.
+         */
+        projects?: (string | Project)[] | null;
+        category?: (string | null) | Category;
+        /**
+         * Number of projects to display.
+         */
+        count?: number | null;
+        /**
+         * Label for the link to the projects index. Leave empty to hide.
+         */
+        buttonLabel?: string | null;
+        /**
+         * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
+         */
+        anchorId?: string | null;
+        /**
+         * Which side(s) the vertical padding is applied to.
+         */
+        paddingWhere?: ('both' | 'top' | 'bottom') | null;
+        /**
+         * Size of the vertical padding.
+         */
+        paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'projectList';
+      }
+    | {
+        selectionMode: 'manual' | 'category' | 'latest';
+        /**
+         * Pick up to three articles.
+         */
+        articles?: (string | Post)[] | null;
+        /**
+         * Shows the latest three articles in this category.
+         */
+        category?: (string | null) | Category;
+        /**
+         * Label for the link to the news index. Leave empty to hide.
+         */
+        buttonLabel?: string | null;
+        /**
+         * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
+         */
+        anchorId?: string | null;
+        /**
+         * Which side(s) the vertical padding is applied to.
+         */
+        paddingWhere?: ('both' | 'top' | 'bottom') | null;
+        /**
+         * Size of the vertical padding.
+         */
+        paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'newsCardList';
+      }
+    | {
+        heading: string;
+        logos: (string | Svg)[];
+        /**
+         * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
+         */
+        anchorId?: string | null;
+        /**
+         * Which side(s) the vertical padding is applied to.
+         */
+        paddingWhere?: ('both' | 'top' | 'bottom') | null;
+        /**
+         * Size of the vertical padding.
+         */
+        paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'logoList';
+      }
+  )[];
+  /**
+   * SEO meta description (max 160 characters).
+   */
+  metaDescription?: string | null;
+  /**
+   * Social share image (OG). Recommended: 1200×630px. Falls back to listing image.
    */
   ogImage?: (string | null) | Media;
   updatedAt: string;
@@ -633,8 +1738,16 @@ export interface PayloadLockedDocument {
         value: string | Page;
       } | null)
     | ({
-        relationTo: 'work';
-        value: string | Work;
+        relationTo: 'projects';
+        value: string | Project;
+      } | null)
+    | ({
+        relationTo: 'posts';
+        value: string | Post;
+      } | null)
+    | ({
+        relationTo: 'categories';
+        value: string | Category;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -799,17 +1912,22 @@ export interface PagesSelect<T extends boolean = true> {
         hero?:
           | T
           | {
+              title?: T;
+              subtitle?: T;
               backgroundMedia?: T;
-              heading?: T;
-              intro?: T;
+              backgroundImage?: T;
+              backgroundVideo?: T;
+              overlayAlpha?: T;
               buttons?:
                 | T
                 | {
                     label?: T;
                     type?: T;
-                    url?: T;
-                    anchorId?: T;
-                    videoUrl?: T;
+                    linkUrl?: T;
+                    anchorTarget?: T;
+                    videoFile?: T;
+                    variant?: T;
+                    colour?: T;
                     id?: T;
                   };
               anchorId?: T;
@@ -829,12 +1947,36 @@ export interface PagesSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
-        workList?:
+        mediaText?:
           | T
           | {
+              variant?: T;
               heading?: T;
-              works?: T;
-              viewAllLabel?: T;
+              headingStyle?: T;
+              body?: T;
+              mediaPosition?: T;
+              mediaType?: T;
+              image?: T;
+              video?: T;
+              aspectRatio?: T;
+              anchorId?: T;
+              paddingWhere?: T;
+              paddingSize?: T;
+              id?: T;
+              blockName?: T;
+            };
+        media?:
+          | T
+          | {
+              mediaType?: T;
+              image?: T;
+              video?: T;
+              openVideo?: T;
+              heading?: T;
+              headingStyle?: T;
+              overlayAlpha?: T;
+              size?: T;
+              aspectRatio?: T;
               anchorId?: T;
               paddingWhere?: T;
               paddingSize?: T;
@@ -848,7 +1990,89 @@ export interface PagesSelect<T extends boolean = true> {
               cards?:
                 | T
                 | {
-                    icon?: T;
+                    illustration?: T;
+                    heading?: T;
+                    body?: T;
+                    id?: T;
+                  };
+              button?:
+                | T
+                | {
+                    label?: T;
+                    url?: T;
+                  };
+              anchorId?: T;
+              paddingWhere?: T;
+              paddingSize?: T;
+              id?: T;
+              blockName?: T;
+            };
+        testimonial?:
+          | T
+          | {
+              quoteStyle?: T;
+              quote?: T;
+              attribution?: T;
+              anchorId?: T;
+              paddingWhere?: T;
+              paddingSize?: T;
+              id?: T;
+              blockName?: T;
+            };
+        bodyCopy?:
+          | T
+          | {
+              content?: T;
+              anchorId?: T;
+              paddingWhere?: T;
+              paddingSize?: T;
+              id?: T;
+              blockName?: T;
+            };
+        cta?:
+          | T
+          | {
+              backgroundImage?: T;
+              overlayAlpha?: T;
+              text?: T;
+              textStyle?: T;
+              button?:
+                | T
+                | {
+                    label?: T;
+                    url?: T;
+                  };
+              anchorId?: T;
+              paddingWhere?: T;
+              paddingSize?: T;
+              id?: T;
+              blockName?: T;
+            };
+        personList?:
+          | T
+          | {
+              heading?: T;
+              body?: T;
+              people?:
+                | T
+                | {
+                    image?: T;
+                    name?: T;
+                    role?: T;
+                    id?: T;
+                  };
+              anchorId?: T;
+              paddingWhere?: T;
+              paddingSize?: T;
+              id?: T;
+              blockName?: T;
+            };
+        accordionList?:
+          | T
+          | {
+              items?:
+                | T
+                | {
                     heading?: T;
                     body?: T;
                     id?: T;
@@ -859,47 +2083,27 @@ export interface PagesSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
-        contactForm?:
+        projectList?:
           | T
           | {
-              heading?: T;
-              intro?: T;
+              selectionMode?: T;
+              projects?: T;
+              category?: T;
+              count?: T;
+              buttonLabel?: T;
               anchorId?: T;
               paddingWhere?: T;
               paddingSize?: T;
               id?: T;
               blockName?: T;
             };
-        mediaText?:
+        newsCardList?:
           | T
           | {
-              media?: T;
-              mediaPosition?: T;
-              aspectRatio?: T;
-              text?: T;
-              anchorId?: T;
-              paddingWhere?: T;
-              paddingSize?: T;
-              verticallyCentreText?: T;
-              id?: T;
-              blockName?: T;
-            };
-        media?:
-          | T
-          | {
-              media?: T;
-              aspectRatio?: T;
-              anchorId?: T;
-              paddingWhere?: T;
-              paddingSize?: T;
-              id?: T;
-              blockName?: T;
-            };
-        quote?:
-          | T
-          | {
-              quote?: T;
-              attribution?: T;
+              selectionMode?: T;
+              articles?: T;
+              category?: T;
+              buttonLabel?: T;
               anchorId?: T;
               paddingWhere?: T;
               paddingSize?: T;
@@ -915,44 +2119,62 @@ export interface PagesSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "work_select".
+ * via the `definition` "projects_select".
  */
-export interface WorkSelect<T extends boolean = true> {
-  isDark?: T;
+export interface ProjectsSelect<T extends boolean = true> {
   title?: T;
   client?: T;
-  projectName?: T;
   slug?: T;
-  listingMedia?: T;
-  heroMedia?: T;
-  services?:
+  categories?: T;
+  listingImage?: T;
+  heroMedia?:
     | T
     | {
-        service?: T;
+        type?: T;
+        image?: T;
+        video?: T;
+        overlayAlpha?: T;
+      };
+  intro?: T;
+  summary?:
+    | T
+    | {
+        label?: T;
+        value?: T;
         id?: T;
       };
-  url?: T;
-  body?:
+  blocks?:
     | T
     | {
         mediaText?:
           | T
           | {
-              media?: T;
+              variant?: T;
+              heading?: T;
+              headingStyle?: T;
+              body?: T;
               mediaPosition?: T;
+              mediaType?: T;
+              image?: T;
+              video?: T;
               aspectRatio?: T;
-              text?: T;
               anchorId?: T;
               paddingWhere?: T;
               paddingSize?: T;
-              verticallyCentreText?: T;
               id?: T;
               blockName?: T;
             };
         media?:
           | T
           | {
-              media?: T;
+              mediaType?: T;
+              image?: T;
+              video?: T;
+              openVideo?: T;
+              heading?: T;
+              headingStyle?: T;
+              overlayAlpha?: T;
+              size?: T;
               aspectRatio?: T;
               anchorId?: T;
               paddingWhere?: T;
@@ -960,9 +2182,10 @@ export interface WorkSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
-        quote?:
+        testimonial?:
           | T
           | {
+              quoteStyle?: T;
               quote?: T;
               attribution?: T;
               anchorId?: T;
@@ -971,13 +2194,342 @@ export interface WorkSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
+        bodyCopy?:
+          | T
+          | {
+              content?: T;
+              anchorId?: T;
+              paddingWhere?: T;
+              paddingSize?: T;
+              id?: T;
+              blockName?: T;
+            };
+        cta?:
+          | T
+          | {
+              backgroundImage?: T;
+              overlayAlpha?: T;
+              text?: T;
+              textStyle?: T;
+              button?:
+                | T
+                | {
+                    label?: T;
+                    url?: T;
+                  };
+              anchorId?: T;
+              paddingWhere?: T;
+              paddingSize?: T;
+              id?: T;
+              blockName?: T;
+            };
+        personList?:
+          | T
+          | {
+              heading?: T;
+              body?: T;
+              people?:
+                | T
+                | {
+                    image?: T;
+                    name?: T;
+                    role?: T;
+                    id?: T;
+                  };
+              anchorId?: T;
+              paddingWhere?: T;
+              paddingSize?: T;
+              id?: T;
+              blockName?: T;
+            };
+        accordionList?:
+          | T
+          | {
+              items?:
+                | T
+                | {
+                    heading?: T;
+                    body?: T;
+                    id?: T;
+                  };
+              anchorId?: T;
+              paddingWhere?: T;
+              paddingSize?: T;
+              id?: T;
+              blockName?: T;
+            };
+        cardList?:
+          | T
+          | {
+              heading?: T;
+              cards?:
+                | T
+                | {
+                    illustration?: T;
+                    heading?: T;
+                    body?: T;
+                    id?: T;
+                  };
+              button?:
+                | T
+                | {
+                    label?: T;
+                    url?: T;
+                  };
+              anchorId?: T;
+              paddingWhere?: T;
+              paddingSize?: T;
+              id?: T;
+              blockName?: T;
+            };
+        projectList?:
+          | T
+          | {
+              selectionMode?: T;
+              projects?: T;
+              category?: T;
+              count?: T;
+              buttonLabel?: T;
+              anchorId?: T;
+              paddingWhere?: T;
+              paddingSize?: T;
+              id?: T;
+              blockName?: T;
+            };
+        newsCardList?:
+          | T
+          | {
+              selectionMode?: T;
+              articles?: T;
+              category?: T;
+              buttonLabel?: T;
+              anchorId?: T;
+              paddingWhere?: T;
+              paddingSize?: T;
+              id?: T;
+              blockName?: T;
+            };
+        logoList?:
+          | T
+          | {
+              heading?: T;
+              logos?: T;
+              anchorId?: T;
+              paddingWhere?: T;
+              paddingSize?: T;
+              id?: T;
+              blockName?: T;
+            };
       };
-  featured?: T;
+  isDark?: T;
   metaDescription?: T;
   ogImage?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "posts_select".
+ */
+export interface PostsSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  categories?: T;
+  listingImage?: T;
+  blocks?:
+    | T
+    | {
+        mediaText?:
+          | T
+          | {
+              variant?: T;
+              heading?: T;
+              headingStyle?: T;
+              body?: T;
+              mediaPosition?: T;
+              mediaType?: T;
+              image?: T;
+              video?: T;
+              aspectRatio?: T;
+              anchorId?: T;
+              paddingWhere?: T;
+              paddingSize?: T;
+              id?: T;
+              blockName?: T;
+            };
+        media?:
+          | T
+          | {
+              mediaType?: T;
+              image?: T;
+              video?: T;
+              openVideo?: T;
+              heading?: T;
+              headingStyle?: T;
+              overlayAlpha?: T;
+              size?: T;
+              aspectRatio?: T;
+              anchorId?: T;
+              paddingWhere?: T;
+              paddingSize?: T;
+              id?: T;
+              blockName?: T;
+            };
+        testimonial?:
+          | T
+          | {
+              quoteStyle?: T;
+              quote?: T;
+              attribution?: T;
+              anchorId?: T;
+              paddingWhere?: T;
+              paddingSize?: T;
+              id?: T;
+              blockName?: T;
+            };
+        bodyCopy?:
+          | T
+          | {
+              content?: T;
+              anchorId?: T;
+              paddingWhere?: T;
+              paddingSize?: T;
+              id?: T;
+              blockName?: T;
+            };
+        cta?:
+          | T
+          | {
+              backgroundImage?: T;
+              overlayAlpha?: T;
+              text?: T;
+              textStyle?: T;
+              button?:
+                | T
+                | {
+                    label?: T;
+                    url?: T;
+                  };
+              anchorId?: T;
+              paddingWhere?: T;
+              paddingSize?: T;
+              id?: T;
+              blockName?: T;
+            };
+        personList?:
+          | T
+          | {
+              heading?: T;
+              body?: T;
+              people?:
+                | T
+                | {
+                    image?: T;
+                    name?: T;
+                    role?: T;
+                    id?: T;
+                  };
+              anchorId?: T;
+              paddingWhere?: T;
+              paddingSize?: T;
+              id?: T;
+              blockName?: T;
+            };
+        accordionList?:
+          | T
+          | {
+              items?:
+                | T
+                | {
+                    heading?: T;
+                    body?: T;
+                    id?: T;
+                  };
+              anchorId?: T;
+              paddingWhere?: T;
+              paddingSize?: T;
+              id?: T;
+              blockName?: T;
+            };
+        cardList?:
+          | T
+          | {
+              heading?: T;
+              cards?:
+                | T
+                | {
+                    illustration?: T;
+                    heading?: T;
+                    body?: T;
+                    id?: T;
+                  };
+              button?:
+                | T
+                | {
+                    label?: T;
+                    url?: T;
+                  };
+              anchorId?: T;
+              paddingWhere?: T;
+              paddingSize?: T;
+              id?: T;
+              blockName?: T;
+            };
+        projectList?:
+          | T
+          | {
+              selectionMode?: T;
+              projects?: T;
+              category?: T;
+              count?: T;
+              buttonLabel?: T;
+              anchorId?: T;
+              paddingWhere?: T;
+              paddingSize?: T;
+              id?: T;
+              blockName?: T;
+            };
+        newsCardList?:
+          | T
+          | {
+              selectionMode?: T;
+              articles?: T;
+              category?: T;
+              buttonLabel?: T;
+              anchorId?: T;
+              paddingWhere?: T;
+              paddingSize?: T;
+              id?: T;
+              blockName?: T;
+            };
+        logoList?:
+          | T
+          | {
+              heading?: T;
+              logos?: T;
+              anchorId?: T;
+              paddingWhere?: T;
+              paddingSize?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
+  metaDescription?: T;
+  ogImage?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "categories_select".
+ */
+export interface CategoriesSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1028,6 +2580,10 @@ export interface SiteSetting {
   contactName?: string | null;
   contactEmail?: string | null;
   contactPhone?: string | null;
+  /**
+   * Displayed on the contact page.
+   */
+  contactAddress?: string | null;
   socialLinks?:
     | {
         platform: 'instagram' | 'linkedin';
@@ -1059,81 +2615,153 @@ export interface SiteSetting {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "work-page".
+ * via the `definition` "projects-page".
  */
-export interface WorkPage {
+export interface ProjectsPage {
   id: string;
   heading?: string | null;
   intro?: string | null;
   blocks?:
     | (
         | {
-            heading: string;
-            logos: (string | Svg)[];
+            variant: 'contained' | 'split';
             /**
-             * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
+             * Wrap text in {{double curly braces}} to apply serif/italic emphasis style.
              */
-            anchorId?: string | null;
-            /**
-             * Which side(s) the vertical padding is applied to.
-             */
-            paddingWhere?: ('both' | 'top' | 'bottom') | null;
-            /**
-             * Size of the vertical padding.
-             */
-            paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'logoList';
-          }
-        | {
-            heading: string;
-            cards: {
-              icon?: (string | null) | Svg;
-              heading: string;
-              body: string;
-              id?: string | null;
-            }[];
-            /**
-             * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
-             */
-            anchorId?: string | null;
-            /**
-             * Which side(s) the vertical padding is applied to.
-             */
-            paddingWhere?: ('both' | 'top' | 'bottom') | null;
-            /**
-             * Size of the vertical padding.
-             */
-            paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'cardList';
-          }
-        | {
-            heading: string;
-            intro?: string | null;
-            /**
-             * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
-             */
-            anchorId?: string | null;
-            /**
-             * Which side(s) the vertical padding is applied to.
-             */
-            paddingWhere?: ('both' | 'top' | 'bottom') | null;
-            /**
-             * Size of the vertical padding.
-             */
-            paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'contactForm';
-          }
-        | {
-            media: string | Media;
+            heading?: string | null;
+            headingStyle?:
+              | (
+                  | 'text-serif-5xl'
+                  | 'text-serif-2xl'
+                  | 'text-serif-md'
+                  | 'text-serif-sm'
+                  | 'text-extended-3xl'
+                  | 'text-extended-2xl'
+                  | 'text-extended-xl-semibold'
+                  | 'text-extended-xl-light'
+                  | 'text-extended-lg'
+                  | 'text-extended-lg-light'
+                  | 'text-extended-md'
+                  | 'text-extended-2xs'
+                )
+              | null;
+            body?: {
+              root: {
+                type: string;
+                children: {
+                  type: any;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
             mediaPosition: 'left' | 'right';
-            aspectRatio?: ('auto' | '16/9' | '4/3' | '1/1') | null;
-            text: {
+            mediaType: 'image' | 'video';
+            image?: (string | null) | Media;
+            /**
+             * Muted, looped, autoplayed.
+             */
+            video?: (string | null) | Media;
+            /**
+             * Only applies to the contained variant.
+             */
+            aspectRatio?: ('auto' | '4/3' | '16/9' | '1/1' | '3/4') | null;
+            /**
+             * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
+             */
+            anchorId?: string | null;
+            /**
+             * Which side(s) the vertical padding is applied to.
+             */
+            paddingWhere?: ('both' | 'top' | 'bottom') | null;
+            /**
+             * Size of the vertical padding.
+             */
+            paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'mediaText';
+          }
+        | {
+            mediaType: 'image' | 'video';
+            image?: (string | null) | Media;
+            /**
+             * Muted, looped, autoplayed as background.
+             */
+            video?: (string | null) | Media;
+            /**
+             * If set, a play button opens this video unmuted in a dialog.
+             */
+            openVideo?: (string | null) | Media;
+            heading?: string | null;
+            headingStyle?:
+              | (
+                  | 'text-serif-5xl'
+                  | 'text-serif-2xl'
+                  | 'text-serif-md'
+                  | 'text-serif-sm'
+                  | 'text-extended-3xl'
+                  | 'text-extended-2xl'
+                  | 'text-extended-xl-semibold'
+                  | 'text-extended-xl-light'
+                  | 'text-extended-lg'
+                  | 'text-extended-lg-light'
+                  | 'text-extended-md'
+                  | 'text-extended-2xs'
+                )
+              | null;
+            /**
+             * Dark overlay opacity (0–1). Only relevant when heading is set.
+             */
+            overlayAlpha?: number | null;
+            size: 'fullscreen' | 'large' | 'small';
+            aspectRatio?: ('auto' | '4/3' | '16/9' | '1/1' | '3/4') | null;
+            /**
+             * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
+             */
+            anchorId?: string | null;
+            /**
+             * Which side(s) the vertical padding is applied to.
+             */
+            paddingWhere?: ('both' | 'top' | 'bottom') | null;
+            /**
+             * Size of the vertical padding.
+             */
+            paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'media';
+          }
+        | {
+            /**
+             * Visual style for the quote. Confirm final options from Figma.
+             */
+            quoteStyle: 'default' | 'large';
+            quote: string;
+            attribution?: string | null;
+            /**
+             * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
+             */
+            anchorId?: string | null;
+            /**
+             * Which side(s) the vertical padding is applied to.
+             */
+            paddingWhere?: ('both' | 'top' | 'bottom') | null;
+            /**
+             * Size of the vertical padding.
+             */
+            paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'testimonial';
+          }
+        | {
+            content: {
               root: {
                 type: string;
                 children: {
@@ -1160,14 +2788,34 @@ export interface WorkPage {
              * Size of the vertical padding.
              */
             paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
-            verticallyCentreText?: boolean | null;
             id?: string | null;
             blockName?: string | null;
-            blockType: 'mediaText';
+            blockType: 'bodyCopy';
           }
         | {
-            media: string | Media;
-            aspectRatio?: ('auto' | '16/9' | '4/3' | '1/1') | null;
+            backgroundImage: string | Media;
+            /**
+             * Dark overlay opacity (0–1) to improve text contrast.
+             */
+            overlayAlpha?: number | null;
+            text: string;
+            textStyle:
+              | 'text-serif-5xl'
+              | 'text-serif-2xl'
+              | 'text-serif-md'
+              | 'text-serif-sm'
+              | 'text-extended-3xl'
+              | 'text-extended-2xl'
+              | 'text-extended-xl-semibold'
+              | 'text-extended-xl-light'
+              | 'text-extended-lg'
+              | 'text-extended-lg-light'
+              | 'text-extended-md'
+              | 'text-extended-2xs';
+            button: {
+              label: string;
+              url: string;
+            };
             /**
              * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
              */
@@ -1182,11 +2830,31 @@ export interface WorkPage {
             paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
             id?: string | null;
             blockName?: string | null;
-            blockType: 'media';
+            blockType: 'cta';
           }
         | {
-            quote: string;
-            attribution?: string | null;
+            heading?: string | null;
+            body?: {
+              root: {
+                type: string;
+                children: {
+                  type: any;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            people: {
+              image: string | Media;
+              name: string;
+              role?: string | null;
+              id?: string | null;
+            }[];
             /**
              * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
              */
@@ -1201,10 +2869,222 @@ export interface WorkPage {
             paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
             id?: string | null;
             blockName?: string | null;
-            blockType: 'quote';
+            blockType: 'personList';
+          }
+        | {
+            items: {
+              /**
+               * Acts as the toggle trigger.
+               */
+              heading: string;
+              body: {
+                root: {
+                  type: string;
+                  children: {
+                    type: any;
+                    version: number;
+                    [k: string]: unknown;
+                  }[];
+                  direction: ('ltr' | 'rtl') | null;
+                  format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                  indent: number;
+                  version: number;
+                };
+                [k: string]: unknown;
+              };
+              id?: string | null;
+            }[];
+            /**
+             * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
+             */
+            anchorId?: string | null;
+            /**
+             * Which side(s) the vertical padding is applied to.
+             */
+            paddingWhere?: ('both' | 'top' | 'bottom') | null;
+            /**
+             * Size of the vertical padding.
+             */
+            paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'accordionList';
+          }
+        | {
+            heading?: string | null;
+            cards: {
+              /**
+               * Predefined illustration — update options once illustrations are finalised.
+               */
+              illustration:
+                | 'illustration-1'
+                | 'illustration-2'
+                | 'illustration-3'
+                | 'illustration-4'
+                | 'illustration-5'
+                | 'illustration-6';
+              heading: string;
+              body?: {
+                root: {
+                  type: string;
+                  children: {
+                    type: any;
+                    version: number;
+                    [k: string]: unknown;
+                  }[];
+                  direction: ('ltr' | 'rtl') | null;
+                  format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                  indent: number;
+                  version: number;
+                };
+                [k: string]: unknown;
+              } | null;
+              id?: string | null;
+            }[];
+            /**
+             * Optional button below the cards. Leave label empty to hide.
+             */
+            button?: {
+              label?: string | null;
+              url?: string | null;
+            };
+            /**
+             * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
+             */
+            anchorId?: string | null;
+            /**
+             * Which side(s) the vertical padding is applied to.
+             */
+            paddingWhere?: ('both' | 'top' | 'bottom') | null;
+            /**
+             * Size of the vertical padding.
+             */
+            paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'cardList';
+          }
+        | {
+            selectionMode: 'manual' | 'category' | 'latest';
+            /**
+             * Pick specific projects to display.
+             */
+            projects?: (string | Project)[] | null;
+            category?: (string | null) | Category;
+            /**
+             * Number of projects to display.
+             */
+            count?: number | null;
+            /**
+             * Label for the link to the projects index. Leave empty to hide.
+             */
+            buttonLabel?: string | null;
+            /**
+             * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
+             */
+            anchorId?: string | null;
+            /**
+             * Which side(s) the vertical padding is applied to.
+             */
+            paddingWhere?: ('both' | 'top' | 'bottom') | null;
+            /**
+             * Size of the vertical padding.
+             */
+            paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'projectList';
+          }
+        | {
+            selectionMode: 'manual' | 'category' | 'latest';
+            /**
+             * Pick up to three articles.
+             */
+            articles?: (string | Post)[] | null;
+            /**
+             * Shows the latest three articles in this category.
+             */
+            category?: (string | null) | Category;
+            /**
+             * Label for the link to the news index. Leave empty to hide.
+             */
+            buttonLabel?: string | null;
+            /**
+             * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
+             */
+            anchorId?: string | null;
+            /**
+             * Which side(s) the vertical padding is applied to.
+             */
+            paddingWhere?: ('both' | 'top' | 'bottom') | null;
+            /**
+             * Size of the vertical padding.
+             */
+            paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'newsCardList';
+          }
+        | {
+            heading: string;
+            logos: (string | Svg)[];
+            /**
+             * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
+             */
+            anchorId?: string | null;
+            /**
+             * Which side(s) the vertical padding is applied to.
+             */
+            paddingWhere?: ('both' | 'top' | 'bottom') | null;
+            /**
+             * Size of the vertical padding.
+             */
+            paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'logoList';
           }
       )[]
     | null;
+  /**
+   * SEO meta description (max 160 characters).
+   */
+  metaDescription?: string | null;
+  /**
+   * Social share image (OG). Recommended: 1200×630px.
+   */
+  ogImage?: (string | null) | Media;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact-page".
+ */
+export interface ContactPage {
+  id: string;
+  /**
+   * Main heading displayed at the top of the contact page.
+   */
+  heading: string;
+  /**
+   * Text displayed below the contact details (phone, email, address from Site Settings).
+   */
+  body?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
   /**
    * SEO meta description (max 160 characters).
    */
@@ -1225,7 +3105,7 @@ export interface Navigation {
   links?:
     | {
         label: string;
-        type: 'page' | 'work' | 'url';
+        type: 'page' | 'projects' | 'news' | 'url';
         page?: (string | null) | Page;
         url?: string | null;
         id?: string | null;
@@ -1237,7 +3117,7 @@ export interface Navigation {
   button: {
     enabled?: boolean | null;
     label?: string | null;
-    type: 'page' | 'work' | 'url';
+    type: 'page' | 'projects' | 'news' | 'url';
     page?: (string | null) | Page;
     url?: string | null;
   };
@@ -1252,6 +3132,7 @@ export interface SiteSettingsSelect<T extends boolean = true> {
   contactName?: T;
   contactEmail?: T;
   contactPhone?: T;
+  contactAddress?: T;
   socialLinks?:
     | T
     | {
@@ -1275,19 +3156,120 @@ export interface SiteSettingsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "work-page_select".
+ * via the `definition` "projects-page_select".
  */
-export interface WorkPageSelect<T extends boolean = true> {
+export interface ProjectsPageSelect<T extends boolean = true> {
   heading?: T;
   intro?: T;
   blocks?:
     | T
     | {
-        logoList?:
+        mediaText?:
+          | T
+          | {
+              variant?: T;
+              heading?: T;
+              headingStyle?: T;
+              body?: T;
+              mediaPosition?: T;
+              mediaType?: T;
+              image?: T;
+              video?: T;
+              aspectRatio?: T;
+              anchorId?: T;
+              paddingWhere?: T;
+              paddingSize?: T;
+              id?: T;
+              blockName?: T;
+            };
+        media?:
+          | T
+          | {
+              mediaType?: T;
+              image?: T;
+              video?: T;
+              openVideo?: T;
+              heading?: T;
+              headingStyle?: T;
+              overlayAlpha?: T;
+              size?: T;
+              aspectRatio?: T;
+              anchorId?: T;
+              paddingWhere?: T;
+              paddingSize?: T;
+              id?: T;
+              blockName?: T;
+            };
+        testimonial?:
+          | T
+          | {
+              quoteStyle?: T;
+              quote?: T;
+              attribution?: T;
+              anchorId?: T;
+              paddingWhere?: T;
+              paddingSize?: T;
+              id?: T;
+              blockName?: T;
+            };
+        bodyCopy?:
+          | T
+          | {
+              content?: T;
+              anchorId?: T;
+              paddingWhere?: T;
+              paddingSize?: T;
+              id?: T;
+              blockName?: T;
+            };
+        cta?:
+          | T
+          | {
+              backgroundImage?: T;
+              overlayAlpha?: T;
+              text?: T;
+              textStyle?: T;
+              button?:
+                | T
+                | {
+                    label?: T;
+                    url?: T;
+                  };
+              anchorId?: T;
+              paddingWhere?: T;
+              paddingSize?: T;
+              id?: T;
+              blockName?: T;
+            };
+        personList?:
           | T
           | {
               heading?: T;
-              logos?: T;
+              body?: T;
+              people?:
+                | T
+                | {
+                    image?: T;
+                    name?: T;
+                    role?: T;
+                    id?: T;
+                  };
+              anchorId?: T;
+              paddingWhere?: T;
+              paddingSize?: T;
+              id?: T;
+              blockName?: T;
+            };
+        accordionList?:
+          | T
+          | {
+              items?:
+                | T
+                | {
+                    heading?: T;
+                    body?: T;
+                    id?: T;
+                  };
               anchorId?: T;
               paddingWhere?: T;
               paddingSize?: T;
@@ -1301,10 +3283,16 @@ export interface WorkPageSelect<T extends boolean = true> {
               cards?:
                 | T
                 | {
-                    icon?: T;
+                    illustration?: T;
                     heading?: T;
                     body?: T;
                     id?: T;
+                  };
+              button?:
+                | T
+                | {
+                    label?: T;
+                    url?: T;
                   };
               anchorId?: T;
               paddingWhere?: T;
@@ -1312,47 +3300,38 @@ export interface WorkPageSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
-        contactForm?:
+        projectList?:
+          | T
+          | {
+              selectionMode?: T;
+              projects?: T;
+              category?: T;
+              count?: T;
+              buttonLabel?: T;
+              anchorId?: T;
+              paddingWhere?: T;
+              paddingSize?: T;
+              id?: T;
+              blockName?: T;
+            };
+        newsCardList?:
+          | T
+          | {
+              selectionMode?: T;
+              articles?: T;
+              category?: T;
+              buttonLabel?: T;
+              anchorId?: T;
+              paddingWhere?: T;
+              paddingSize?: T;
+              id?: T;
+              blockName?: T;
+            };
+        logoList?:
           | T
           | {
               heading?: T;
-              intro?: T;
-              anchorId?: T;
-              paddingWhere?: T;
-              paddingSize?: T;
-              id?: T;
-              blockName?: T;
-            };
-        mediaText?:
-          | T
-          | {
-              media?: T;
-              mediaPosition?: T;
-              aspectRatio?: T;
-              text?: T;
-              anchorId?: T;
-              paddingWhere?: T;
-              paddingSize?: T;
-              verticallyCentreText?: T;
-              id?: T;
-              blockName?: T;
-            };
-        media?:
-          | T
-          | {
-              media?: T;
-              aspectRatio?: T;
-              anchorId?: T;
-              paddingWhere?: T;
-              paddingSize?: T;
-              id?: T;
-              blockName?: T;
-            };
-        quote?:
-          | T
-          | {
-              quote?: T;
-              attribution?: T;
+              logos?: T;
               anchorId?: T;
               paddingWhere?: T;
               paddingSize?: T;
@@ -1360,6 +3339,19 @@ export interface WorkPageSelect<T extends boolean = true> {
               blockName?: T;
             };
       };
+  metaDescription?: T;
+  ogImage?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact-page_select".
+ */
+export interface ContactPageSelect<T extends boolean = true> {
+  heading?: T;
+  body?: T;
   metaDescription?: T;
   ogImage?: T;
   updatedAt?: T;

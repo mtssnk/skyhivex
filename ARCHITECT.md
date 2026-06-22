@@ -25,27 +25,43 @@ Payload 3 handles content authoring and serves a REST API. Astro consumes this A
 **Status: TBD (intentional).**
 
 Current operational setup:
+
 - Deploy both CMS and frontend on **Railway** to keep infrastructure simple during planning.
 
 Final decision pending:
+
 - Choose **SSR**, **static**, or **hybrid** once requirements, editor workflow, and performance targets are confirmed.
 
 Notes:
+
 - SSR: newly published pages can go live without a frontend rebuild.
 - Static/hybrid: may require rebuild/deploy hooks depending on prerender strategy.
 
+### Collections
+
+- Projects - Each project requires a listing image, a heading and a client name. The project page will display the heading in the hero and the listing image in the background if another media item isn't specified in the CMS (can be image or video with alpha opacity options). We can utilise the hero block on the front end. There is an optional intro section (textarea) which is displayed before the project summary section. The project summary section consists of an array field consisting of label and value. A project can have a category or more than one.
+- Pages - see below
+- Media
+- Posts - A post requires a heading and a listing image. The rest of the news post page consists of blocks. News posts can have a category or more than one.
+- SVGs
+
 ### Pages collection instead of Globals
 
-All pages (Home, About, Contact, and future pages) are documents in a single `Pages` collection. Each document has a `slug` field that maps to its URL. Astro uses `pages/index.astro` for the home slug and `pages/[slug].astro` as a catch-all for other pages.
+All pages (Home, FAQs and future pages) are documents in a single `Pages` collection. Each document has a `slug` field that maps to its URL. Astro uses `pages/index.astro` for the home slug and `pages/[slug].astro` as a catch-all for other pages.
 
 This allows CMS editors to create a new page (for example, Services) without developer changes to route files.
 
 Most pages are block-based. Current exceptions under discussion:
+
 - News collection pages
 - Projects collection pages
 - Contact page template
 
 These may use predefined templates/fields, with optional block content appended after templated content.
+
+### Contact page
+
+This is a templated page with a heading, and a templated form. The contact number, email address and postal address are output from the Site Settings CMS section. There is a text section which is displayed below the contact details and edited via the contact page section in the CMS.
 
 ### Shared block system (Payload Blocks field)
 
@@ -78,10 +94,12 @@ Each block has an **Anchor ID** field for hash-link navigation.
 ### Text and Media
 
 Two variants:
+
 1. **Split viewport variant**: media spans 50% viewport width and 100vh on wide viewports.
 2. **Contained grid variant**: text and media are constrained in a 12-column container, each taking half width on wide viewports.
 
 Fields:
+
 - Heading text field (supports double-curly-brace emphasis)
 - Heading style selection
 - Body copy (WYSIWYG)
@@ -89,6 +107,7 @@ Fields:
 - Media type (image or self-hosted video, muted/loop/autoplay)
 
 For the contained variant, selectable media aspect ratios:
+
 - 4:3, 16:9, square, 3:4, or auto
 
 ### Media
@@ -111,6 +130,7 @@ For the contained variant, selectable media aspect ratios:
 ### News card list
 
 Editor can:
+
 - Manually pick up to three articles
 - Select a category and show the latest three in that category
 - Show the latest three articles overall
@@ -120,6 +140,7 @@ Optional button label/text links to the news index page. If empty, the button is
 ### Project list
 
 Editor can:
+
 - Manually pick projects
 - Select a category and number of projects
 - Show a selected number of latest projects
@@ -155,7 +176,10 @@ Optional button label/text links to the projects index page. If empty, the butto
 
 ### Accordion list
 
-- To be finalised in `SPEC.md` once interaction and content constraints are confirmed
+When the heading is clicked, the body is revealed.
+
+- Heading (text field)
+- Body text (WYSIWYG)
 
 ---
 
@@ -208,6 +232,6 @@ Optional button label/text links to the projects index page. If empty, the butto
 
 ## Requirements traceability (template)
 
-| Requirement | CMS schema file | Web type/API impact | Web route/component | Acceptance criteria |
-| ----------- | --------------- | ------------------- | ------------------- | ------------------- |
+| Requirement                    | CMS schema file          | Web type/API impact      | Web route/component         | Acceptance criteria                                                  |
+| ------------------------------ | ------------------------ | ------------------------ | --------------------------- | -------------------------------------------------------------------- |
 | Hero supports background video | `cms/src/blocks/Hero.ts` | `web/src/lib/payload.ts` | `web/src/blocks/Hero.astro` | Video renders correctly, overlay works, responsive behavior verified |

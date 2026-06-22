@@ -1,8 +1,8 @@
 ---
 import clsx from 'clsx'
 interface Props {
-  colour?: 'primary' | 'secondary' | 'white' | 'dark'
-  size?: 'md' | 'sm'
+  colour?: 'green' | 'white'
+  size?: 'lg' | 'md'
   style?: 'solid' | 'outline'
   href?: string
   target?: string
@@ -12,7 +12,7 @@ interface Props {
 }
 
 const {
-  colour = 'primary',
+  colour = 'green',
   size = 'md',
   style = 'solid',
   href,
@@ -24,22 +24,17 @@ const {
 } = Astro.props
 
 const sizeClasses: Record<string, string> = {
-  md: 'btn-md',
-  sm: 'btn-sm',
+  md: 'btn-lg',
+  sm: 'btn-md',
 }
 
 const solidClasses: Record<string, string> = {
-  primary: 'btn-primary',
-  secondary: 'btn-secondary',
-  white: 'btn-white',
-  dark: 'btn-dark',
+  green: 'btn-green-solid',
+  white: 'btn-white-solid',
 }
 
 const outlineClasses: Record<string, string> = {
-  primary: 'btn-outline-primary',
-  secondary: 'btn-outline-secondary',
-  white: 'btn-outline-white',
-  dark: 'btn-outline-dark',
+  green: 'btn-white-outline',
 }
 
 const colourClass = style === 'outline' ? outlineClasses[colour] : solidClasses[colour]

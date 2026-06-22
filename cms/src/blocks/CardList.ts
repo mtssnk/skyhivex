@@ -3,12 +3,11 @@ import { withBlockTabs } from './fields/blockFields'
 
 export const CardList: Block = {
   slug: 'cardList',
-  labels: { singular: 'Card List', plural: 'Card Lists' },
+  labels: { singular: 'Illustration Card List', plural: 'Illustration Card Lists' },
   fields: withBlockTabs([
     {
       name: 'heading',
       type: 'text',
-      required: true,
     },
     {
       name: 'cards',
@@ -17,10 +16,20 @@ export const CardList: Block = {
       minRows: 1,
       fields: [
         {
-          name: 'icon',
-          type: 'relationship',
-          relationTo: 'svgs',
-          hasMany: false,
+          name: 'illustration',
+          type: 'select',
+          required: true,
+          admin: {
+            description: 'Predefined illustration — update options once illustrations are finalised.',
+          },
+          options: [
+            { label: 'Illustration 1', value: 'illustration-1' },
+            { label: 'Illustration 2', value: 'illustration-2' },
+            { label: 'Illustration 3', value: 'illustration-3' },
+            { label: 'Illustration 4', value: 'illustration-4' },
+            { label: 'Illustration 5', value: 'illustration-5' },
+            { label: 'Illustration 6', value: 'illustration-6' },
+          ],
         },
         {
           name: 'heading',
@@ -29,8 +38,24 @@ export const CardList: Block = {
         },
         {
           name: 'body',
-          type: 'textarea',
-          required: true,
+          type: 'richText',
+        },
+      ],
+    },
+    {
+      name: 'button',
+      type: 'group',
+      admin: {
+        description: 'Optional button below the cards. Leave label empty to hide.',
+      },
+      fields: [
+        {
+          name: 'label',
+          type: 'text',
+        },
+        {
+          name: 'url',
+          type: 'text',
         },
       ],
     },

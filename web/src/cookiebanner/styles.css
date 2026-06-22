@@ -5,7 +5,7 @@
   @apply max-w-[340px] shadow-md fixed bottom-0 left-0 bg-white text-night px-4 py-6 z-40 animate-fade-in;
 }
 .cb-title {
-  @apply text-condensed-md mb-3;
+  /* @apply text-condensed-md mb-3; */
 }
 
 .cb-desc {
@@ -13,11 +13,11 @@
 }
 
 .cb-accept {
-  @apply btn btn-sm btn-primary;
+  @apply btn btn-md btn-green-solid;
 }
 
 .cb-reject {
-  @apply btn btn-sm btn-outline-primary;
+  @apply btn btn-md btn-outline-white;
 }
 .cb-actions {
   @apply flex gap-3 flex-wrap mt-4;

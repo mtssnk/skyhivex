@@ -1,130 +1,192 @@
-/* 
------------ White space 
+/*
+----------- Serif
 */
-@utility condensed-text-trim {
-  &::after {
-    content: '';
-    display: table;
-    margin-top: -0.25em;
-  }
-}
-@utility wide-text-trim {
-  &::after {
-    content: '';
-    display: table;
-    margin-top: -0.35em;
-  }
-}
-
-/* 
------------ Wide
-*/
-
-@utility text-wide-xl {
-  @apply wide-text-trim;
-  font-family: var(--font-wide);
-  font-size: clamp(2.625rem, 1.4118rem + 4.0441vw, 4rem); /* 42px, 64px */
-  font-weight: 500;
-  line-height: 1.094;
-  letter-spacing: -0.02em;
-}
-@utility text-wide-lg {
-  @apply wide-text-trim;
-  font-family: var(--font-wide);
-  font-size: clamp(1.5rem, calc(0.618rem + 2.941vw), 2.5rem); /* 24px, 40px */
-  font-weight: 500;
-  line-height: 1.2;
-  letter-spacing: -0.02em;
-}
-@utility text-wide-md {
-  @apply wide-text-trim;
-  font-family: var(--font-wide);
-  font-size: clamp(1.25rem, calc(1.029rem + 0.735vw), 1.5rem); /* 20px, 24px */
-  font-weight: 500;
-  line-height: 1.14;
-  letter-spacing: -0.02em;
-}
-@utility text-wide-sm {
-  @apply wide-text-trim;
-  font-family: var(--font-wide);
-  font-size: clamp(1.13rem, calc(1.015rem + 0.368vw), 1.25rem); /* 18px, 20px */
-  font-weight: 500;
-  line-height: 1.2;
-  letter-spacing: -0.02em;
-}
-
-/* 
------------ Condensed
-*/
-@utility text-condensed-md {
-  /* @apply condensed-text-trim; */
-  font-family: var(--font-condensed);
-  font-size: clamp(1.125rem, 1.0147rem + 0.3676vw, 1.25rem); /* 18px, 20px */
-  font-weight: 500;
+@utility text-serif-5xl {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(4.8125rem, 3.2rem + 5.375vw, 7.5rem); /* 77px → 120px */
+  line-height: 1.04;
+  letter-spacing: -0.03em;
   text-transform: uppercase;
-  line-height: 1;
-  letter-spacing: 0.035em;
 }
-@utility text-condensed-sm {
-  /* @apply condensed-text-trim; */
-  font-family: var(--font-condensed);
-  font-size: clamp(1rem, 0.8897rem + 0.3676vw, 1.125rem); /* 16px, 18px */
-  font-weight: 500;
+
+@utility text-serif-2xl {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(2.75rem, 2.075rem + 2.25vw, 3.875rem); /* 44px → 62px */
+  line-height: 1.13;
+  letter-spacing: -0.03em;
   text-transform: uppercase;
-  line-height: 1;
-  letter-spacing: 0.035em;
 }
-@utility text-condensed-xs {
-  /* @apply condensed-text-trim; */
-  font-family: var(--font-condensed);
+
+@utility text-serif-md {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1.625rem, 1.4rem + 0.75vw, 2rem); /* 26px → 32px */
+  line-height: 1.09;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+}
+
+@utility text-serif-sm {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1.375rem, 1.3rem + 0.25vw, 1.5rem); /* 22px → 24px */
+  line-height: 1.13;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+}
+
+/*
+----------- Extended
+*/
+@utility text-extended-3xl {
+  font-family: var(--font-extended);
+  font-weight: 500;
+  font-size: clamp(3.375rem, 2.55rem + 2.75vw, 4.75rem); /* 54px → 76px */
+  line-height: 0.97;
+  letter-spacing: 0.05em;
+}
+
+@utility text-extended-2xl {
+  font-family: var(--font-extended);
+  font-weight: 600;
+  font-size: clamp(2.75rem, 2.075rem + 2.25vw, 3.875rem); /* 44px → 62px */
+  line-height: 0.95;
+  letter-spacing: 0.05em;
+}
+
+@utility text-extended-xl-semibold {
+  font-family: var(--font-extended);
+  font-weight: 600;
+  font-size: clamp(2.25rem, 1.8rem + 1.5vw, 3rem); /* 36px → 48px */
+  line-height: 1.1;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+@utility text-extended-xl-light {
+  font-family: var(--font-extended);
+  font-weight: 300;
+  font-size: clamp(2.25rem, 1.8rem + 1.5vw, 3rem); /* 36px → 48px */
+  line-height: 1.1;
+  letter-spacing: 0.04em;
+}
+
+@utility text-extended-lg {
+  font-family: var(--font-extended);
+  font-weight: 500;
+  font-size: clamp(1.875rem, 1.5rem + 1.25vw, 2.5rem); /* 30px → 40px */
+  line-height: 1.1;
+  letter-spacing: 0.04em;
+}
+
+@utility text-extended-lg-light {
+  font-family: var(--font-extended);
+  font-weight: 300;
+  font-size: clamp(1.875rem, 1.5rem + 1.25vw, 2.5rem); /* 30px → 40px */
+  line-height: 1.1;
+  letter-spacing: 0.04em;
+}
+
+@utility text-extended-md {
+  font-family: var(--font-extended);
+  font-weight: 500;
+  font-size: clamp(1.625rem, 1.4rem + 0.75vw, 2rem); /* 26px → 32px */
+  line-height: 1.13;
+  letter-spacing: 0.04em;
+}
+
+@utility text-extended-2xs {
+  font-family: var(--font-extended);
+  font-weight: 500;
+  font-size: 1rem; /* 16px */
+  line-height: 1.31;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/*
+----------- Mono
+*/
+@utility text-mono-3xs {
+  font-family: var(--font-mono);
+  font-weight: 500;
   font-size: 0.875rem; /* 14px */
-  font-weight: 500;
+  line-height: 1.14;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
-  line-height: 1;
-  letter-spacing: 0.035em;
 }
 
-/* 
+@utility text-mono-4xs {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: 0.75rem; /* 12px */
+  line-height: 1.17;
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+}
+
+/*
 ----------- Body
 */
-@utility text-body-lg {
-  font-family: var(--font-body);
-  font-size: clamp(1.125rem, calc(0.794rem + 1.103vw), 1.5rem); /* 18px, 24px */
-  line-height: 1.4;
-}
 @utility text-body-md {
   font-family: var(--font-body);
-  font-size: clamp(1rem, calc(0.779rem + 0.735vw), 1.25rem); /* 16px, 20px */
-  line-height: 1.45;
+  font-weight: 400;
+  font-size: clamp(1.625rem, 1.4rem + 0.75vw, 2rem); /* 26px → 32px */
+  line-height: 1.25;
 }
+
 @utility text-body-sm {
   font-family: var(--font-body);
-  font-size: 0.875rem; /* 14px */
-  line-height: 1.5;
+  font-weight: 400;
+  font-size: clamp(1.375rem, 1.3rem + 0.25vw, 1.5rem); /* 22px → 24px */
+  line-height: 1.44;
 }
+
 @utility text-body-xs {
   font-family: var(--font-body);
-  font-size: 0.75rem; /* 12px */
-  line-height: 1.5;
+  font-weight: 400;
+  font-size: clamp(1.125rem, 1.05rem + 0.25vw, 1.25rem); /* 18px → 20px */
+  line-height: 1.45;
+}
+
+@utility text-body-2xs {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 1rem; /* 16px */
+  line-height: 1.45;
+}
+
+@utility text-body-3xs {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 0.875rem; /* 14px */
+  line-height: 1.36;
+  letter-spacing: 0.04em;
 }
 
 .wysiwyg {
   p,
   ol,
   ul {
-    @apply text-body-sm text-mist mb-[1em];
+    @apply text-body-xs text-mist mb-[1em];
   }
   h2,
   h3 {
     @apply mb-[1em];
   }
   h2 {
-    @apply text-wide-lg;
+    @apply text-extended-lg;
   }
   h3 {
-    @apply text-wide-md;
+    @apply text-extended-md;
   }
   a {
-    @apply text-violet underline;
+    @apply underline;
   }
 }

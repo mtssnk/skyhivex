@@ -23,6 +23,14 @@ export const SiteSettings: GlobalConfig = {
       label: 'Contact Phone',
     },
     {
+      name: 'contactAddress',
+      type: 'textarea',
+      label: 'Postal Address',
+      admin: {
+        description: 'Displayed on the contact page.',
+      },
+    },
+    {
       name: 'socialLinks',
       type: 'array',
       label: 'Social Links',

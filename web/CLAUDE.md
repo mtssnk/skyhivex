@@ -131,11 +131,11 @@ Components live in `web/src/components/`.
 
 ### Button
 
-| Prop     | Values                               | Default   |
-| -------- | ------------------------------------ | --------- |
-| `colour`   | `green`, `white`                   | `primary` |
-| `size`     | `lg`, `md`, `sm`                   | `md`      |
-| `variant`  | `solid`, `text`, `outline`, `icon` | `solid`   |
+| Prop      | Values                             | Default   |
+| --------- | ---------------------------------- | --------- |
+| `colour`  | `green`, `white`                   | `primary` |
+| `size`    | `lg`, `md`, `sm`                   | `md`      |
+| `variant` | `solid`, `text`, `outline`, `icon` | `solid`   |
 
 ## Tailwind spacing
 
@@ -149,6 +149,7 @@ When a Figma layer has a spacing value not assigned to a variable, round it to t
 
 The Figma variable collection **Clamp Spacing** contains fluid values clamped between breakpoints. These are defined in `web/src/styles/global.css` inside `@theme` as `--spacing-*`:
 The following are examples and demonstrate the system being used, the final variables may vary.
+
 ```css
 @theme {
   --spacing-2xs: clamp(...);
@@ -168,32 +169,9 @@ These generate Tailwind utility classes: `m-sm`, `p-lg`, `pt-xl`, `gap-md`, etc.
 ## Typography
 
 Typography utilities are defined in `web/src/styles/typography.css` using Tailwind v4's `@utility`. Use these class names directly in markup — do not inline raw font values.
-TODO: These Typographical classes need updated so that they reflect the Figma text styles.
-| Class               | Font                 | Usage               |
-| ------------------- | -------------------- | ------------------- |
-| `text-serif-5xl`    | Acumin Pro Wide      | Large hero headings |
-| `text-serif-2xl`    | Acumin Pro Wide      | Section headings    |
-| `text-wide-md`      | Acumin Pro Wide      | Sub-headings        |
-| `text-wide-sm`      | Acumin Pro Wide      | Small headings      |
-| `text-condensed-md` | Acumin Pro Condensed | Labels, tags        |
-| `text-condensed-sm` | Acumin Pro Condensed | Small labels        |
-| `text-condensed-xs` | Acumin Pro Condensed | Micro labels        |
-| `text-body-lg`      | Acumin Pro           | Large body copy     |
-| `text-body-md`      | Acumin Pro           | Default body copy   |
-| `text-body-sm`      | Acumin Pro           | Small print         |
 
 ---
 
 ## Colours
 
 Colour variables are defined in `web/src/styles/global.css` inside `@theme` as `--color-*`. These generate Tailwind colour utilities (`bg-*`, `text-*`, `border-*`, etc.).
-TODO: These colour variablers need updated so that they reflect the Figma colour variables.
-| Token                | Hex       | Usage                                           |
-| -------------------- | --------- | ----------------------------------------------- |
-| `--color-night`      | `#25202d` | Primary dark background / text                  |
-| `--color-ash`        | `#f0f0f2` | Light background                                |
-| `--color-terracotta` | `#d2f250` | Accent / highlight (maps to `secondary` button) |
-| `--color-smoke`      | `#b5acbc` | Muted text                                      |
-| `--color-mist`       | `#716977` | Subtle muted text                               |
-| `--color-sky`        | `#0934c8` | Link / interactive blue                         |
-| `--color-violet`     | `#6008e4` | Primary accent / `primary` button               |

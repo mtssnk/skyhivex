@@ -10,9 +10,12 @@ import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 import { SVGs } from './collections/SVGs'
 import { Pages } from './collections/Pages'
-import { Work } from './collections/Work'
+import { Projects } from './collections/Projects'
+import { Posts } from './collections/Posts'
+import { Categories } from './collections/Categories'
 import { SiteSettings } from './globals/SiteSettings'
-import { WorkPage } from './globals/WorkPage'
+import { ProjectsPage } from './globals/ProjectsPage'
+import { ContactPage } from './globals/ContactPage'
 import { Navigation } from './globals/Navigation'
 
 const filename = fileURLToPath(import.meta.url)
@@ -26,8 +29,8 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, SVGs, Pages, Work],
-  globals: [SiteSettings, WorkPage, Navigation],
+  collections: [Users, Media, SVGs, Pages, Projects, Posts, Categories],
+  globals: [SiteSettings, ProjectsPage, ContactPage, Navigation],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {

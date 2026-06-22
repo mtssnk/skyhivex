@@ -1,26 +1,28 @@
 import type { CollectionConfig } from 'payload'
 import { Hero } from '../blocks/Hero'
-import { LogoList } from '../blocks/LogoList'
 import { MediaText } from '../blocks/MediaText'
 import { Media } from '../blocks/Media'
-import { CardList } from '../blocks/CardList'
 import { Testimonial } from '../blocks/Testimonial'
 import { BodyCopy } from '../blocks/BodyCopy'
 import { CTA } from '../blocks/CTA'
 import { PersonList } from '../blocks/PersonList'
 import { AccordionList } from '../blocks/AccordionList'
+import { CardList } from '../blocks/CardList'
 import { ProjectList } from '../blocks/ProjectList'
 import { NewsCardList } from '../blocks/NewsCardList'
+import { LogoList } from '../blocks/LogoList'
 
-export const Pages: CollectionConfig = {
-  slug: 'pages',
+export const Posts: CollectionConfig = {
+  slug: 'posts',
+  labels: { singular: 'Post', plural: 'Posts' },
   admin: {
     useAsTitle: 'title',
+    defaultColumns: ['title', 'categories', 'updatedAt'],
     preview: (doc) => {
       const slug = doc?.slug as string | undefined
       const base = process.env.WEB_URL ?? 'http://localhost:4321'
       const secret = process.env.PREVIEW_SECRET ?? ''
-      return `${base}/api/preview?secret=${secret}&slug=${slug ?? ''}&collection=pages`
+      return `${base}/api/preview?secret=${secret}&slug=news/${slug ?? ''}&collection=posts`
     },
   },
   access: {
@@ -42,8 +44,7 @@ export const Pages: CollectionConfig = {
       unique: true,
       admin: {
         position: 'sidebar',
-        description:
-          'URL path for this page. Use "home" for the homepage (/), otherwise the slug becomes the URL path. Do not change after publishing.',
+        description: 'Auto-generated from the title. Do not change after publishing.',
       },
       hooks: {
         beforeValidate: [
@@ -62,39 +63,49 @@ export const Pages: CollectionConfig = {
       ) => {
         if (!value || Array.isArray(value)) return true
         const existing = await req.payload.find({
-          collection: 'pages',
+          collection: 'posts',
           where: { slug: { equals: value }, ...(id ? { id: { not_equals: id } } : {}) },
           limit: 1,
           depth: 0,
         })
-        if (existing.totalDocs > 0) return 'A page with this slug already exists.'
+        if (existing.totalDocs > 0) return 'A post with this slug already exists.'
         return true
       },
     },
     {
-      name: 'isDark',
-      type: 'checkbox',
-      defaultValue: true,
+      name: 'categories',
+      type: 'relationship',
+      relationTo: 'categories',
+      hasMany: true,
       admin: {
-        description: 'If enabled, the header will use the dark variant with white text.',
+        position: 'sidebar',
+      },
+    },
+    {
+      name: 'listingImage',
+      type: 'upload',
+      relationTo: 'media',
+      required: true,
+      admin: {
+        description: 'Image shown on the news index card and at the top of the post.',
       },
     },
     {
       name: 'blocks',
       type: 'blocks',
+      required: true,
       blocks: [
-        Hero,
-        LogoList,
         MediaText,
         Media,
-        CardList,
         Testimonial,
         BodyCopy,
         CTA,
         PersonList,
         AccordionList,
+        CardList,
         ProjectList,
         NewsCardList,
+        LogoList,
       ],
     },
     {
@@ -111,7 +122,7 @@ export const Pages: CollectionConfig = {
       relationTo: 'media',
       admin: {
         position: 'sidebar',
-        description: 'Social share image (OG). Recommended: 1200×630px.',
+        description: 'Social share image (OG). Recommended: 1200×630px. Falls back to listing image.',
       },
     },
   ],
