@@ -1,0 +1,43 @@
+---
+import type { MediaTextBlock } from '@/lib/payload'
+import MediaItem from '@/components/MediaItem.astro'
+import { lexicalToHtml } from '@/lib/lexical'
+import clsx from 'clsx'
+import { blockPaddingClass } from '@/lib/blocks'
+
+const {
+  media,
+  text,
+  mediaPosition,
+  aspectRatio,
+  anchorId,
+  paddingWhere,
+  paddingSize,
+  verticallyCentreText,
+} = Astro.props as MediaTextBlock
+const html = lexicalToHtml(text)
+const isMediaLeft = mediaPosition === 'left'
+const paddingClass = blockPaddingClass(paddingWhere, paddingSize)
+---
+
+<section id={anchorId ?? undefined} class="section-mediatext bg-ash">
+  <div class={clsx('container grid grid-cols-12', paddingClass)}>
+    <div
+      class={clsx(
+        isMediaLeft ? '' : 'lg:col-start-8 md:order-2',
+        'col-span-12 md:col-span-6 lg:col-span-5',
+      )}
+    >
+      <MediaItem {media} aspectRatio={aspectRatio ?? 'auto'} class="w-full h-auto block" />
+    </div>
+    <div
+      class={clsx(
+        'wysiwyg col-span-12 md:col-span-6 lg:col-span-5',
+        isMediaLeft ? 'lg:col-start-7' : 'lg:col-start-2',
+        verticallyCentreText && 'flex items-center',
+      )}
+    >
+      <div class="max-w-[450px]"><Fragment set:html={html} /></div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,31 @@
+---
+import type { CardListBlock } from '@/lib/payload'
+import HeadingUnderline from '@/components/HeadingUnderline.astro'
+import clsx from 'clsx'
+import CardText from '@/components/CardText.astro'
+import { blockPaddingClass } from '@/lib/blocks'
+
+const { heading, cards, anchorId, paddingWhere, paddingSize } = Astro.props as CardListBlock
+const paddingClass = blockPaddingClass(paddingWhere, paddingSize)
+---
+
+<section id={anchorId ?? undefined} class="section-cardlist bg-ash">
+  <div class={clsx('container space-y-sm', paddingClass)}>
+    {
+      heading && (
+        <header class="text-mist">
+          <HeadingUnderline>{heading}</HeadingUnderline>
+        </header>
+      )
+    }
+    <ul class="grid grid-cols-12" role="list">
+      {
+        cards.map((card) => (
+          <li class="col-span-12 md:col-span-6 lg:col-span-4 bg-white rounded-sm">
+            <CardText icon={card.icon} heading={card.heading} body={card.body} />
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

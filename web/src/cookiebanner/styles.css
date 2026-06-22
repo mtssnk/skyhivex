@@ -1,0 +1,28 @@
+@reference "../styles/global.css";
+@reference "../styles/button.css";
+
+.cb-mode-banner {
+  @apply max-w-[340px] shadow-md fixed bottom-0 left-0 bg-white text-night px-4 py-6 z-40 animate-fade-in;
+}
+.cb-title {
+  @apply text-condensed-md mb-3;
+}
+
+.cb-desc {
+  @apply text-body-xs;
+}
+
+.cb-accept {
+  @apply btn btn-sm btn-primary;
+}
+
+.cb-reject {
+  @apply btn btn-sm btn-outline-primary;
+}
+.cb-actions {
+  @apply flex gap-3 flex-wrap mt-4;
+}
+
+.cb-manage {
+  display: none;
+}

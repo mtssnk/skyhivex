@@ -1,0 +1,86 @@
+---
+import SnkLogomark from '@/assets/icons/snkLogomark.astro'
+import Instagram from '@/assets/icons/instagram.astro'
+import LinkedIn from '@/assets/icons/linkedin.astro'
+import { getSiteSettings } from '@/lib/payload'
+import type { SocialPlatform } from '@/lib/payload'
+
+const year = new Date().getFullYear()
+const settings = await getSiteSettings()
+
+const email = settings?.contactEmail ?? ''
+const phone = settings?.contactPhone ?? ''
+const socialLinks = settings?.socialLinks ?? []
+const legalLinks = settings?.legalLinks ?? []
+
+const socialLabels: Record<SocialPlatform, string> = {
+  instagram: 'Instagram',
+  linkedin: 'LinkedIn',
+}
+
+function enc(str: string) {
+  return btoa(str)
+}
+---
+
+<footer class="bg-night text-ash py-lg">
+  <div class="container grid">
+    <div class="col-span-12 md:col-span-6 flex flex-col md:flex-row gap-xs">
+      <figure class="inline-block w-6 h-7.25">
+        <SnkLogomark />
+      </figure>
+      <p class="text-wide-md">
+        Built to perform. <br />Built to impress. <br />
+        Built to last.
+      </p>
+    </div>
+    <div class="col-span-12 md:col-span-6 flex flex-col gap-2 text-body-md">
+      {email && <a href="#" data-obf-href={enc(`mailto:${email}`)} data-obf-text={enc(email)} />}
+      {
+        phone && (
+          <a
+            href="#"
+            data-obf-href={enc(`tel:${phone.replace(/\s/g, '')}`)}
+            data-obf-text={enc(phone)}
+          />
+        )
+      }
+      {
+        socialLinks.length > 0 && (
+          <div class="flex gap-4 mt-2">
+            {socialLinks.map(({ platform, url }) => (
+              <a
+                href={url}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={socialLabels[platform]}
+                class="inline-block size-6 text-ash hover:text-white"
+              >
+                {platform === 'instagram' && <Instagram />}
+                {platform === 'linkedin' && <LinkedIn />}
+              </a>
+            ))}
+          </div>
+        )
+      }
+    </div>
+    <div class="col-span-12 text-body-sm text-smoke flex flex-wrap items-center gap-6 mt-sm">
+      <p>&copy; {year} Snook Studio</p>
+      {
+        legalLinks.length > 0 && (
+          <nav class="flex gap-6" aria-label="Legal">
+            {legalLinks.map(({ label, url }) => (
+              <a href={url}>{label}</a>
+            ))}
+          </nav>
+        )
+      }
+    </div>
+  </div>
+</footer>
+<script>
+  document.querySelectorAll<HTMLAnchorElement>('[data-obf-href]').forEach((el) => {
+    el.href = atob(el.dataset.obfHref ?? '')
+    el.textContent = atob(el.dataset.obfText ?? '')
+  })
+</script>

@@ -1,0 +1,111 @@
+@import 'tailwindcss';
+@import './typography.css';
+@import './button.css';
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@theme {
+  /* Colors */
+  --color-night: #25202d;
+  --color-mist: #716977;
+  --color-smoke: #b5acbc;
+  --color-ash: #f0f0f2;
+  --color-terracotta: #ff652c;
+  --color-violet: #6008e4;
+
+  /* Fonts */
+  --font-wide: 'Acumin Pro Wide', system-ui, sans-serif;
+  --font-condensed: 'Acumin Pro Condensed', system-ui, sans-serif;
+  --font-body: 'Acumin Pro', system-ui, sans-serif;
+
+  /* Spacing - generated with utopia.fyi */
+  /* Clamped values between 1024px and 480px */
+  /* https://utopia.fyi/space/calculator/?c=480,56,1.2,1024,98,1.25,5,2,&s=0.75%7C0.5%7C0.25%7C0.25,1.5%7C2%7C3%7C4%7C6,s-l&g=s,l,xl,12 */
+  --spacing-2xs: clamp(0.4375rem, 0.1618rem + 0.9191vw, 0.75rem); /* 7px, 12px */
+  --spacing-xs: clamp(0.875rem, 0.3235rem + 1.8382vw, 1.5rem); /* 14px, 24px */
+  --spacing-sm: clamp(1.75rem, 0.6471rem + 3.6765vw, 3rem); /* 28px, 48px */
+  --spacing-md: clamp(2.625rem, 0.9706rem + 5.5147vw, 4.5rem); /* 42px, 72px */
+  --spacing-lg: clamp(3.5rem, 1.2941rem + 7.3529vw, 6rem); /* 56px, 96px */
+  --spacing-xl: clamp(5.25rem, 1.9412rem + 11.0294vw, 9rem); /* 84px, 144px */
+  --spacing-2xl: clamp(7rem, 2.5882rem + 14.7059vw, 12rem); /* 112px, 192px */
+
+  /* Animations */
+  --animate-fade-in: fade-in 1s ease-out both;
+}
+
+:root {
+  --gutter: 32px;
+  --content-max: 1216px;
+}
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+@layer base {
+  .grid {
+    gap: var(--gutter);
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+}
+dialog[open] {
+  animation: fade-in 0.6s ease-out both;
+  &::backdrop {
+    animation: fade-in 0.6s ease-out both;
+  }
+}
+dialog::backdrop {
+  background: rgba(0, 0, 0, 0.85);
+}
+
+@starting-style {
+  dialog[open] {
+    opacity: 1;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  color: var(--color-night);
+  background: #fff;
+}
+
+/* header is fixed, give first hero padding top */
+.snk-header {
+  height: 80px;
+  @media screen and (min-width: 960px) {
+    height: 100px;
+  }
+}
+main {
+  > *:first-child {
+    padding-top: 80px;
+    @media screen and (min-width: 960px) {
+      padding-top: 100px;
+    }
+  }
+}
+
+.container {
+  width: 100%;
+  max-width: calc(var(--content-max) + var(--gutter) * 2);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}

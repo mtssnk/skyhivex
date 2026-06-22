@@ -1,0 +1,48 @@
+---
+import Layout from '@/layouts/Layout.astro'
+import CardLink from '@/components/CardLink.astro'
+import BlockRenderer from '@/blocks/BlockRenderer.astro'
+import { getWork, getWorkPage } from '@/lib/payload'
+import MeshGradientBackground from '@/components/MeshGradientBackground.tsx'
+
+const [works, workPage] = await Promise.all([getWork(), getWorkPage()])
+---
+
+<Layout
+  title="Work"
+  description={workPage?.metaDescription ?? undefined}
+  ogImage={workPage?.ogImage?.url ?? undefined}
+>
+  <section class="bg-terracotta relative">
+    <MeshGradientBackground colors={['#FFD152', '#ff652c']} client:only="preact" />
+    <div class="flex flex-col gap-sm py-lg relative z-10">
+      {
+        (workPage?.heading || workPage?.intro) && (
+          <div class="container grid">
+            <div class="col-span-12 space-y-6 md:space-y-10 max-w-[36em] ">
+              {workPage.heading && (
+                <h1 class="text-wide-lg whitespace-pre-line">{workPage.heading}</h1>
+              )}
+              {workPage.intro && <p class="text-body-md text-balance">{workPage.intro}</p>}
+            </div>
+          </div>
+        )
+      }
+      <div class="container grid">
+        {
+          works.map((work) => (
+            <div class="col-span-12 md:col-span-4">
+              <CardLink
+                href={`/work/${work.slug}`}
+                media={work.listingMedia}
+                label={work.projectName}
+                sizes="(max-width: 768px) 100vw, 33vw"
+              />
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+  <BlockRenderer blocks={workPage?.blocks} />
+</Layout>

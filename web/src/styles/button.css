@@ -1,0 +1,36 @@
+@utility btn {
+  @apply inline-flex items-center justify-center rounded-full focus:outline-none px-[1.6em] py-[0.8em];
+}
+@utility btn-md {
+  @apply text-condensed-sm;
+}
+@utility btn-sm {
+  @apply text-condensed-xs;
+}
+@utility btn-primary {
+  @apply bg-violet text-white;
+}
+@utility btn-secondary {
+  @apply bg-terracotta text-night;
+}
+@utility btn-white {
+  @apply bg-white text-violet;
+}
+@utility btn-dark {
+  @apply bg-night text-white;
+}
+@utility btn-outline {
+  @apply border-2 border-violet text-violet;
+}
+@utility btn-outline-primary {
+  @apply border-2 border-violet text-violet;
+}
+@utility btn-outline-secondary {
+  @apply border-2 border-terracotta text-terracotta;
+}
+@utility btn-outline-white {
+  @apply border-2 border-white text-white;
+}
+@utility btn-outline-dark {
+  @apply border-2 border-night text-night;
+}

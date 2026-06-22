@@ -1,0 +1,21 @@
+---
+import Layout from '@/layouts/Layout.astro'
+import BlockRenderer from '@/blocks/BlockRenderer.astro'
+import { getPageBySlug } from '@/lib/payload'
+
+const { slug } = Astro.params
+const isPreview = Astro.cookies.get('__preview')?.value === 'true'
+const apiKey = isPreview ? (import.meta.env.PAYLOAD_API_KEY as string) : undefined
+const page = await getPageBySlug(slug!, { draft: isPreview, apiKey })
+if (!page) return new Response(null, { status: 404 })
+---
+
+<Layout
+  title={page.title}
+  isDark={page.isDark ?? false}
+  description={page.metaDescription ?? undefined}
+  ogImage={page.ogImage?.url ?? undefined}
+  isPreview={isPreview}
+>
+  <BlockRenderer blocks={page.blocks} />
+</Layout>

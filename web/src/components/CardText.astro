@@ -1,0 +1,29 @@
+---
+import type { Svg } from '@/lib/payload'
+import clsx from 'clsx'
+
+interface Props {
+  icon?: Svg | null
+  heading: string
+  body: string
+}
+
+const { icon, heading, body } = Astro.props
+---
+
+<div class="bg-white rounded px-8 py-9 flex flex-col gap-5">
+  <div class="flex flex-col lg:flex-row lg:items-center gap-3">
+    {
+      icon && (
+        <span
+          class="shrink-0 text-night [&>svg]:size-[26px]"
+          set:html={icon.code}
+          aria-hidden="true"
+        />
+      )
+    }
+    <h3 class="text-wide-md text-night m-0">{heading}</h3>
+  </div>
+  <hr class="border-t border-smoke/33 m-0" />
+  <p class={clsx('text-body-sm text-mist m-0', icon ? 'lg:pl-[38px]' : '')}>{body}</p>
+</div>

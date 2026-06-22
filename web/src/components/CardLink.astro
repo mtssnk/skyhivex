@@ -1,0 +1,24 @@
+---
+import type { Media } from '@/lib/payload'
+import MediaItem from '@/components/MediaItem.astro'
+import ArrowRight from '@/assets/icons/arrowRight.astro'
+
+interface Props {
+  href: string
+  media: Media
+  label: string
+  sizes?: string
+}
+
+const { href, media, label, sizes = '(max-width: 768px) 100vw, 33vw' } = Astro.props
+---
+
+<a href={href} class="flex flex-col gap-5 no-underline">
+  <div class="aspect-video overflow-hidden">
+    <MediaItem {media} {sizes} class="w-full h-full object-cover block" />
+  </div>
+  <div class="flex items-center gap-2 text-night">
+    <span class="text-wide-sm">{label}</span>
+    <span class="inline-block size-6"><ArrowRight class="size-6 shrink-0" /></span>
+  </div>
+</a>

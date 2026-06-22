@@ -1,0 +1,74 @@
+---
+import type { Media } from '@/lib/payload'
+
+interface Props {
+  media: Media
+  aspectRatio?: 'auto' | '4/3' | '1/1' | '16/9'
+  muted?: boolean
+  class?: string
+  sizes?: string
+}
+
+const { media, aspectRatio, class: className, sizes, muted } = Astro.props
+const isVideo = media.mimeType?.startsWith('video/')
+
+const srcset = media.sizes
+  ? Object.entries(media.sizes)
+      .filter(([, s]) => s?.url && s?.width)
+      .map(([, s]) => `${s!.url} ${s!.width}w`)
+      .join(', ')
+  : undefined
+
+const ratioClasses: Record<string, string> = {
+  '4/3': 'aspect-[4/3]',
+  '1/1': 'aspect-square',
+  '16/9': 'aspect-video',
+}
+const wrapClass = aspectRatio && aspectRatio !== 'auto' ? ratioClasses[aspectRatio] : null
+---
+
+{
+  wrapClass ? (
+    <div class={`${wrapClass} overflow-hidden`}>
+      {isVideo ? (
+        <video
+          src={media.url ?? ''}
+          autoplay
+          muted={muted ?? true}
+          loop
+          playsinline
+          class="w-full h-full object-cover block"
+        />
+      ) : (
+        <img
+          src={media.url ?? ''}
+          srcset={srcset}
+          alt={media.alt}
+          width={media.width ?? undefined}
+          height={media.height ?? undefined}
+          sizes={sizes}
+          class="w-full h-full object-cover block"
+        />
+      )}
+    </div>
+  ) : isVideo ? (
+    <video
+      src={media.url ?? ''}
+      autoplay
+      muted={muted ?? true}
+      loop
+      playsinline
+      class={className}
+    />
+  ) : (
+    <img
+      src={media.url ?? ''}
+      srcset={srcset}
+      alt={media.alt}
+      width={media.width ?? undefined}
+      height={media.height ?? undefined}
+      sizes={sizes}
+      class={className}
+    />
+  )
+}

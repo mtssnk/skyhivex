@@ -1,0 +1,72 @@
+---
+import type { HeroBlock } from '@/lib/payload'
+import MediaItem from '@/components/MediaItem.astro'
+import Button from '@/components/Button.astro'
+import MeshGradientBackground from '@/components/MeshGradientBackground.tsx'
+
+interface Props extends Omit<HeroBlock, 'blockType'> {
+  paddingWhere?: 'top' | 'bottom' | 'both'
+  paddingSize?: 'xl' | 'lg' | 'md' | 'sm'
+}
+
+const { backgroundMedia, heading, intro, buttons, anchorId, prefix } = Astro.props
+const hasBackground = !!backgroundMedia
+const buttonColours = hasBackground
+  ? (['primary', 'white', 'secondary'] as const)
+  : (['secondary', 'white', 'primary'] as const)
+---
+
+<header
+  id={anchorId ?? undefined}
+  class="section-hero relative min-h-[80vh] flex items-center bg-night overflow-hidden"
+>
+  {
+    hasBackground ? (
+      <>
+        <div class="absolute inset-0" aria-hidden="true">
+          <MediaItem
+            media={backgroundMedia!}
+            sizes="100vw"
+            muted
+            class="w-full h-full object-cover opacity-80"
+          />
+        </div>
+        <div
+          class="absolute inset-0 bg-[linear-gradient(to_right,rgba(0,0,0,0.7)_8%,transparent_68%)]"
+          aria-hidden="true"
+        />
+      </>
+    ) : (
+      <MeshGradientBackground colors={['#25202d', '#5f08e2']} client:only="preact" />
+    )
+  }
+  <div class="container relative py-md">
+    {prefix && <p class="text-condensed-md text-ash mb-8">{prefix}</p>}
+    {heading && <h1 class="text-wide-xl text-ash whitespace-pre-line max-w-[10em]">{heading}</h1>}
+    {intro && <div class="text-body-md text-ash text-balance mt-10 max-w-[28em]">{intro}</div>}
+    {
+      buttons && buttons.length > 0 && (
+        <div class="flex flex-wrap gap-y-4 gap-x-8 items-center mt-sm">
+          {buttons.map((btn, i) => {
+            const colour = buttonColours[i] ?? 'primary'
+            if (btn.type === 'video') {
+              return (
+                <Button colour={colour} data-video-url={btn.videoUrl?.url ?? ''}>
+                  {btn.label}
+                </Button>
+              )
+            }
+            const href = btn.type === 'scroll' ? `#${btn.anchorId ?? ''}` : (btn.url ?? '#')
+            const target = btn.target ?? undefined
+            const rel = target === '_blank' ? 'noopener noreferrer' : undefined
+            return (
+              <Button href={href} colour={colour} target={target} rel={rel}>
+                {btn.label}
+              </Button>
+            )
+          })}
+        </div>
+      )
+    }
+  </div>
+</header>

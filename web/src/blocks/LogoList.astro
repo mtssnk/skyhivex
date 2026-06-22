@@ -1,0 +1,44 @@
+---
+import type { LogoListBlock } from '@/lib/payload'
+import HeadingUnderline from '@/components/HeadingUnderline.astro'
+import { clsx } from 'clsx'
+import { blockPaddingClass } from '@/lib/blocks'
+
+const { heading, logos, anchorId, paddingWhere, paddingSize } = Astro.props as LogoListBlock
+const paddingClass = blockPaddingClass(paddingWhere, paddingSize)
+---
+
+<section id={anchorId ?? undefined} class="section-logolist bg-ash">
+  <div class={clsx('container space-y-sm', paddingClass)}>
+    {
+      heading && (
+        <header class="text-mist">
+          <HeadingUnderline>{heading}</HeadingUnderline>
+        </header>
+      )
+    }
+    <ul
+      class="flex flex-wrap items-center justify-center gap-x-13 gap-y-7 md:gap-[7vw] xl:gap-30"
+      role="list"
+    >
+      {
+        logos.map((svg) => (
+          <li class="flex items-center justify-center svg-wrapper">
+            <span set:html={svg.code} aria-label={svg.name} />
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .svg-wrapper {
+    svg {
+      max-width: 60px;
+      @media screen and (min-width: 960px) {
+        max-width: none;
+      }
+    }
+  }
+</style>

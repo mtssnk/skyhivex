@@ -1,0 +1,43 @@
+---
+import type { WorkListBlock } from '@/lib/payload'
+import { clsx } from 'clsx'
+import Button from '@/components/Button.astro'
+import HeadingUnderline from '@/components/HeadingUnderline.astro'
+import CardLink from '@/components/CardLink.astro'
+import { blockPaddingClass } from '@/lib/blocks'
+
+const { heading, works, viewAllLabel, anchorId, paddingWhere, paddingSize } =
+  Astro.props as WorkListBlock
+const paddingClass = blockPaddingClass(paddingWhere, paddingSize)
+---
+
+<section id={anchorId ?? undefined} class="section-worklist bg-terracotta">
+  <div class={clsx('container space-y-sm', paddingClass)}>
+    {
+      heading && (
+        <header>
+          <HeadingUnderline>{heading}</HeadingUnderline>
+        </header>
+      )
+    }
+    <ul class="grid grid-cols-3" role="list">
+      {
+        works.map((work) => (
+          <li>
+            <CardLink
+              href={`/work/${work.slug}`}
+              media={work.listingMedia}
+              label={work.projectName}
+              sizes="(max-width: 768px) 100vw, 33vw"
+            />
+          </li>
+        ))
+      }
+    </ul>
+    <div class="flex justify-center">
+      <Button href="/work" style="outline" size="sm" colour="dark">
+        {viewAllLabel ?? 'View all work'}
+      </Button>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,32 @@
+---
+import type { MediaBlock } from '@/lib/payload'
+import clsx from 'clsx'
+import MediaItem from '@/components/MediaItem.astro'
+import { blockPaddingClass } from '@/lib/blocks'
+
+const {
+  media,
+  aspectRatio = 'auto',
+  anchorId,
+  paddingWhere,
+  paddingSize,
+} = Astro.props as MediaBlock
+const paddingClass = blockPaddingClass(paddingWhere, paddingSize)
+
+console.log({ paddingClass })
+const ratioClass: Record<string, string> = {
+  auto: '',
+  '16/9': 'aspect-video',
+  '4/3': 'aspect-[4/3]',
+  '1/1': 'aspect-square',
+}
+const wrapClass = ratioClass[aspectRatio ?? 'auto'] ?? ''
+---
+
+<section id={anchorId ?? undefined} class="section-media bg-ash">
+  <div class={clsx('container', paddingClass)}>
+    <div class={wrapClass}>
+      <MediaItem {media} sizes="100vw" class="w-full h-full object-cover block" />
+    </div>
+  </div>
+</section>

@@ -1,0 +1,129 @@
+---
+import Header from '@/components/Header.astro'
+import Footer from '@/components/Footer.astro'
+import VideoModal from '@/components/VideoModal.astro'
+import { GoogleTracking } from '@/components/GoogleTracking'
+import { getSiteSettings } from '@/lib/payload'
+import { getAdobeFontsCss } from '@/lib/fonts'
+import '@/styles/global.css'
+import '@/cookiebanner/styles.css'
+
+interface Props {
+  title: string
+  description?: string
+  ogImage?: string
+  isDark?: boolean
+  isPreview?: boolean
+  jsonLd?: Record<string, unknown>
+}
+
+const { title, description, ogImage, isDark = false, isPreview = false, jsonLd } = Astro.props
+const siteName = 'Snook Studio'
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? Astro.url).href
+const pageTitle = `${title} — ${siteName}`
+
+const settings = await getSiteSettings()
+const fontCss = settings?.adobeFontsId ? await getAdobeFontsCss(settings.adobeFontsId) : ''
+
+const orgSchema: Record<string, unknown> = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: siteName,
+  url: (Astro.site ?? Astro.url).origin,
+}
+if (settings?.logo?.url) orgSchema.logo = settings.logo.url
+if (settings?.contactEmail) orgSchema.email = settings.contactEmail
+if (settings?.socialLinks?.length) orgSchema.sameAs = settings.socialLinks.map((l) => l.url)
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    {!settings?.allowIndexing && <meta name="robots" content="noindex, nofollow" />}
+    <title>{pageTitle}</title>
+    <link rel="canonical" href={canonicalUrl} />
+    {description && <meta name="description" content={description} />}
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:url" content={canonicalUrl} />
+    {description && <meta property="og:description" content={description} />}
+    {ogImage && <meta property="og:image" content={ogImage} />}
+    <meta name="twitter:card" content={ogImage ? 'summary_large_image' : 'summary'} />
+    <meta name="twitter:title" content={pageTitle} />
+    {description && <meta name="twitter:description" content={description} />}
+    {ogImage && <meta name="twitter:image" content={ogImage} />}
+    {fontCss && <style set:html={fontCss} />}
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(orgSchema)} />
+    {jsonLd && <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
+    {
+      import.meta.env.PUBLIC_CF_BEACON_TOKEN && (
+        <script
+          is:inline
+          defer
+          src="https://static.cloudflareinsights.com/beacon.min.js"
+          data-cf-beacon={`{"token": "${import.meta.env.PUBLIC_CF_BEACON_TOKEN}"}`}
+        />
+      )
+    }
+    <script is:inline>
+      window.dataLayer = window.dataLayer || []
+      function gtag() {
+        window.dataLayer.push(arguments)
+      }
+      window.gtag = gtag
+      gtag('consent', 'default', {
+        analytics_storage: 'denied',
+        ad_storage: 'denied',
+        ad_user_data: 'denied',
+        ad_personalization: 'denied',
+        wait_for_update: 500,
+      })
+      try {
+        const stored = JSON.parse(localStorage.getItem('astro-consent') || 'null')
+        if (stored && stored.categories && stored.expiresAt > Date.now()) {
+          gtag('consent', 'update', {
+            analytics_storage: stored.categories.analytics ? 'granted' : 'denied',
+            ad_storage: stored.categories.marketing ? 'granted' : 'denied',
+            ad_user_data: stored.categories.marketing ? 'granted' : 'denied',
+            ad_personalization: stored.categories.marketing ? 'granted' : 'denied',
+          })
+        }
+      } catch {}
+    </script>
+  </head>
+  <body>
+    {
+      isPreview && (
+        <div class="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 flex items-center gap-4 bg-night text-ash text-condensed-sm px-5 py-3 rounded-full shadow-lg">
+          <span>Preview mode</span>
+          <a href="/api/exit-preview" class="underline hover:no-underline">
+            Exit
+          </a>
+        </div>
+      )
+    }
+    <Header isDark={isDark} />
+    <main>
+      <slot />
+    </main>
+    <Footer />
+    <VideoModal />
+    <GoogleTracking client:load />
+  </body>
+</html>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-video-url]').forEach((trigger) => {
+    trigger.addEventListener('click', (e) => {
+      e.preventDefault()
+      document.dispatchEvent(
+        new CustomEvent('open-video', { detail: { url: trigger.dataset.videoUrl ?? '' } }),
+      )
+    })
+  })
+</script>

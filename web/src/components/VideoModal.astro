@@ -1,0 +1,42 @@
+---
+import Close from '@/assets/icons/close.astro'
+---
+
+<dialog id="video-modal" class="w-full max-w-7xl m-auto bg-transparent border-0 p-0 outline-none">
+  <div class="relative p-9 text-white aspect-video">
+    <button
+      id="video-modal-close"
+      class="absolute top-1 right-1 flex items-center justify-center cursor-pointer w-8 h-8 focus:outline-none"
+      aria-label="Close video"
+    >
+      <Close />
+    </button>
+    <video id="video-modal-video" controls playsinline class="w-full block bg-black"></video>
+  </div>
+</dialog>
+
+<script>
+  const modal = document.getElementById('video-modal') as HTMLDialogElement
+  const video = document.getElementById('video-modal-video') as HTMLVideoElement
+  const closeBtn = document.getElementById('video-modal-close')
+
+  document.addEventListener('open-video', (e: Event) => {
+    const { url } = (e as CustomEvent<{ url: string }>).detail
+    document.body.style.overflow = 'hidden'
+    video.src = url
+    modal.showModal()
+    video.play()
+  })
+
+  closeBtn?.addEventListener('click', () => modal.close())
+
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) modal.close()
+  })
+
+  modal.addEventListener('close', () => {
+    video.pause()
+    document.body.style.overflow = ''
+    video.src = ''
+  })
+</script>

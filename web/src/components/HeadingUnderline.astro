@@ -1,0 +1,39 @@
+---
+interface Props {
+  colour?: string
+  class?: string
+  textClass?: string
+}
+
+const { class: className, textClass } = Astro.props
+
+const classes = ['mb-4', 'w-fit', className, textClass ?? 'text-condensed-sm']
+  .filter(Boolean)
+  .join(' ')
+---
+
+<div data-heading-text class={classes}>
+  <slot />
+</div>
+<div data-heading-line class="h-0.5 bg-current w-0"></div>
+
+<script>
+  function init() {
+    document.querySelectorAll<HTMLElement>('[data-heading-text]').forEach((textEl) => {
+      const line = textEl.nextElementSibling as HTMLElement | null
+      if (!line) return
+
+      const update = () => {
+        const textRect = textEl.getBoundingClientRect()
+        line.style.marginLeft = `-${textRect.left}px`
+        line.style.width = `${textRect.right}px`
+        line.dataset.width = `${textRect.right}`
+      }
+
+      update()
+      window.addEventListener('resize', update, { passive: true })
+    })
+  }
+
+  init()
+</script>

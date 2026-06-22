@@ -1,0 +1,63 @@
+---
+import clsx from 'clsx'
+interface Props {
+  colour?: 'primary' | 'secondary' | 'white' | 'dark'
+  size?: 'md' | 'sm'
+  style?: 'solid' | 'outline'
+  href?: string
+  target?: string
+  rel?: string
+  type?: 'button' | 'submit' | 'reset'
+  class?: string
+}
+
+const {
+  colour = 'primary',
+  size = 'md',
+  style = 'solid',
+  href,
+  target,
+  rel,
+  type = 'button',
+  class: className,
+  ...rest
+} = Astro.props
+
+const sizeClasses: Record<string, string> = {
+  md: 'btn-md',
+  sm: 'btn-sm',
+}
+
+const solidClasses: Record<string, string> = {
+  primary: 'btn-primary',
+  secondary: 'btn-secondary',
+  white: 'btn-white',
+  dark: 'btn-dark',
+}
+
+const outlineClasses: Record<string, string> = {
+  primary: 'btn-outline-primary',
+  secondary: 'btn-outline-secondary',
+  white: 'btn-outline-white',
+  dark: 'btn-outline-dark',
+}
+
+const colourClass = style === 'outline' ? outlineClasses[colour] : solidClasses[colour]
+const classes = clsx('btn', colourClass, className, sizeClasses[size])
+---
+
+{
+  href ? (
+    <a href={href} class={classes} target={target} rel={rel} {...rest}>
+      <span>
+        <slot />
+      </span>
+    </a>
+  ) : (
+    <button type={type} class={classes} {...rest}>
+      <span>
+        <slot />
+      </span>
+    </button>
+  )
+}

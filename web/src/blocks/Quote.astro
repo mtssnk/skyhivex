@@ -1,0 +1,17 @@
+---
+import type { QuoteBlock } from '@/lib/payload'
+import clsx from 'clsx'
+import { blockPaddingClass } from '@/lib/blocks'
+
+const { quote, attribution, anchorId, paddingWhere, paddingSize } = Astro.props as QuoteBlock
+const paddingClass = blockPaddingClass(paddingWhere, paddingSize)
+---
+
+<section id={anchorId ?? undefined} class="section-quote bg-ash">
+  <div class={clsx('container flex flex-col text-center items-center', paddingClass)}>
+    <blockquote class="m-0 max-w-[800px] space-y-xs">
+      <p class="text-body-lg text-mist font-light">{quote}</p>
+      {attribution && <cite class="text-condensed-xs text-mist not-italic">{attribution}</cite>}
+    </blockquote>
+  </div>
+</section>

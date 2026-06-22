@@ -1,0 +1,31 @@
+{
+  "name": "snookstudio",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev:cms": "cd cms && pnpm dev",
+    "dev:web": "cd web && pnpm dev",
+    "dev:killport": "cd cms && lsof -ti :3000 | xargs kill",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "**/*.{ts,tsx,mjs,mts,astro,css,json,md}": "prettier --write"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "sharp",
+      "esbuild",
+      "unrs-resolver"
+    ]
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^20.5.0",
+    "@commitlint/config-conventional": "^20.5.0",
+    "eslint": "^9.39.4",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0",
+    "prettier": "^3.8.3",
+    "prettier-plugin-astro": "^0.14.1"
+  }
+}
