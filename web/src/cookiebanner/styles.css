@@ -17,7 +17,7 @@
 }
 
 .cb-reject {
-  @apply btn btn-md btn-outline-white;
+  @apply btn btn-md btn-white-outline;
 }
 .cb-actions {
   @apply flex gap-3 flex-wrap mt-4;

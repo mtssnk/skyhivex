@@ -19,9 +19,13 @@ const {
 } = Astro.props
 
 const bgMedia =
-  backgroundMedia === 'image' ? backgroundImage
-  : backgroundMedia === 'video' ? backgroundVideo
-  : null
+  backgroundMedia === 'image'
+    ? backgroundImage
+    : backgroundMedia === 'video'
+      ? backgroundVideo
+      : null
+
+console.log(backgroundMedia)
 ---
 
 <header
@@ -32,12 +36,7 @@ const bgMedia =
     bgMedia ? (
       <>
         <div class="absolute inset-0" aria-hidden="true">
-          <MediaItem
-            media={bgMedia}
-            sizes="100vw"
-            muted
-            class="w-full h-full object-cover"
-          />
+          <MediaItem media={bgMedia} sizes="100vw" muted class="w-full h-full object-cover" />
         </div>
         <div
           class="absolute inset-0 bg-black"
@@ -45,9 +44,9 @@ const bgMedia =
           aria-hidden="true"
         />
       </>
-    ) : (
+    ) : backgroundMedia === 'shader' ? (
       <HexShader />
-    )
+    ) : null
   }
   <div class="container relative py-md">
     {heading && <h1 class="text-wide-xl text-ash whitespace-pre-line max-w-[10em]">{heading}</h1>}
@@ -59,7 +58,11 @@ const bgMedia =
           {buttons.map((btn) => {
             if (btn.type === 'video') {
               return (
-                <Button colour={btn.colour} style={btn.variant} data-video-url={btn.videoFile?.url ?? ''}>
+                <Button
+                  colour={btn.colour}
+                  style={btn.variant}
+                  data-video-url={btn.videoFile?.url ?? ''}
+                >
                   {btn.label}
                 </Button>
               )

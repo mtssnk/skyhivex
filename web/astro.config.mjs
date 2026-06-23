@@ -24,7 +24,7 @@ export default defineConfig({
   integrations: [
     preact({ compat: true }),
     astroConsent({
-      siteName: 'Snook Studio',
+      siteName: 'SkyHive X',
       headline: 'Cookie preferences',
       description:
         'We use cookies to enhance your experience and for marketing. Do you consent to the use of these cookies?',

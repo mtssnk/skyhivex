@@ -1,57 +1,32 @@
-<canvas id="canvas"></canvas>
-<div id="hud"></div>
+<canvas class="w-full h-full z-0 absolute inset-0" id="canvas"></canvas>
 
-<script type="module">
+<script>
   import { createRenderer } from '../lib/shader-renderer.js'
+  import fragSrc from '../lib/hex-shader.frag?raw'
 
-  // ── Load the fragment shader source ──────────────────────────────────────
-  // We fetch shader.frag at runtime so you can edit it and just reload the
-  // page — no build step required during prototyping.
+  const MAX_PIXEL_RATIO = 1.5
+
   async function main() {
-    const canvas = document.getElementById('canvas')
-    const SHADER_FILE = '../hex-shader.frag'
-    // ────────────────────────────────────────────────────────────────────────
-
-    let fragSrc
-    try {
-      const res = await fetch(`./${SHADER_FILE}?v=` + Date.now())
-      if (!res.ok) throw new Error(`HTTP ${res.status}`)
-      fragSrc = await res.text()
-    } catch (err) {
-      showError(`Could not load shader.frag:\n${err.message}`)
-      return
-    }
-
-    const hud = document.getElementById('hud')
-    const hudBase = `Shader: ${SHADER_FILE}`
-    hud.textContent = hudBase
-
-    // ── Render resolution — lower maxPixelRatio to gain fps ───────────────
-    const MAX_PIXEL_RATIO = 1.5
-    // ──────────────────────────────────────────────────────────────────────
+    const canvas = document.getElementById('canvas') as HTMLCanvasElement
 
     let renderer
     try {
       renderer = createRenderer(canvas, fragSrc, {
         maxPixelRatio: MAX_PIXEL_RATIO,
-        onStats: ({ fps }) => {
-          hud.textContent = `${hudBase} — ${canvas.width}×${canvas.height}px — ${fps} fps`
-        },
       })
     } catch (err) {
-      showError(`WebGL / shader error:\n${err.message}`)
+      showError(`WebGL / shader error:\n${(err as Error).message}`)
       return
     }
 
     renderer.start()
 
-    // Pause when the tab is hidden to save GPU time.
     document.addEventListener('visibilitychange', () => {
       document.hidden ? renderer.stop() : renderer.start()
     })
   }
 
-  function showError(msg) {
+  function showError(msg: string) {
     const el = document.createElement('pre')
     Object.assign(el.style, {
       position: 'fixed',

@@ -15,10 +15,10 @@
   "dependencies": {
     "@astrojs/node": "^10.1.0",
     "@astrojs/preact": "^5.1.2",
+    "preact": "^10.26.0",
     "@paper-design/shaders-react": "^0.0.76",
     "astro": "^6.3.0",
     "astro-consent": "^2.0.0",
-    "preact": "^10.29.1",
     "resend": "^6.12.2",
     "tailwindcss": "^4.1.0"
   },
