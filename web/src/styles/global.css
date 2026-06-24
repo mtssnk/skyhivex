@@ -15,7 +15,7 @@
   /* Colors */
   --color-night: #130e14;
   --color-space: #18131b;
-  --color-tamarind: #1E192;
+  --color-tamarind: #1e1922;
   --color-obsidian: #272028;
   --color-congo: #382f39;
   --color-mortar: #635764;
@@ -24,6 +24,7 @@
   --color-smoke: #cac9c9;
   --color-white: #ffffff;
   --color-malachite: #44f988;
+  --color-moss: #126d0d;
   --color-cyan: #00fbff;
 
   /* Fonts */
@@ -91,8 +92,6 @@ html {
 body {
   margin: 0;
   font-family: var(--font-body);
-  color: var(--color-night);
-  background: #fff;
 }
 
 /* header is fixed, give first hero padding top */

@@ -1,21 +1,49 @@
 @utility btn {
-  @apply inline-flex items-center justify-center rounded-full focus:outline-none px-[1.6em] py-[0.8em];
+  @apply inline-flex items-center justify-center rounded-full focus:outline-none;
+  box-shadow:
+    3px -2px 0 2px rgba(41, 48, 255, 0.6),
+    -3px 2px 0 2px rgba(255, 0, 0, 0.5);
 }
 @utility btn-lg {
   @apply text-mono-3xs;
+  gap: 0.86em;
+  padding: 1.21em 2.14em;
+}
+@layer utilities {
+  .btn svg {
+    stroke-width: 1;
+  }
+  .btn-lg svg {
+    @apply w-4 h-4;
+  }
+}
+@layer utilities {
+  .btn-md svg {
+    width: 13px;
+    height: 13px;
+  }
 }
 @utility btn-md {
-  @apply text-mono-4xs;
+  @apply text-mono-3xs;
+  gap: 0.6em;
+  padding: 0.93em 1.42em;
 }
 @utility btn-green-solid {
-  background: linear-gradient(90deg, var(--color-malachite) 0%, var(--color-cyan) 100%);
-  background: border-image: linear-gradient(90deg, var(--color-cyan) 0%, var(--color-malachite) 100%) 1;
+  background:
+    linear-gradient(90deg, var(--color-malachite) 0%, var(--color-cyan) 100%) padding-box,
+    linear-gradient(90deg, var(--color-cyan) 0%, var(--color-malachite) 100%) border-box;
+  border: 2px solid transparent;
+  color: var(--color-moss);
 }
 @utility btn-white-solid {
-  background: linear-gradient(90deg, var(--color-smoke) 0%, var(--color-white) 100%);
-  background: border-image: linear-gradient(90deg, var(--color-white) 0%, var(--color-smoke) 100%) 1;
+  background:
+    linear-gradient(90deg, var(--color-smoke) 0%, var(--color-white) 100%) padding-box,
+    linear-gradient(90deg, var(--color-white) 0%, var(--color-smoke) 100%) border-box;
+  border: 2px solid transparent;
+  color: var(--color-tamarind);
 }
 @utility btn-white-outline {
   color: var(--color-wite);
-  background: border-image: linear-gradient(90deg, var(--color-white) 0%, var(--color-smoke) 100%) 1;
+  border: 2px solid;
+  /* background: border-image: linear-gradient(90deg, var(--color-white) 0%, var(--color-smoke) 100%) 1; */
 }

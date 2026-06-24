@@ -1,6 +1,7 @@
 ---
 import Button from '@/components/Button.astro'
 import { getNavigation } from '@/lib/payload'
+import ArrowUpRight from '@/assets/icons/arrowUpRight.svg'
 
 interface Props {
   isDark?: boolean
@@ -42,34 +43,31 @@ function linkHref(item: {
       />
     </a>
 
-    <div class="flex items-center gap-4">
-      <nav
-        id="main-nav"
-        class="fixed inset-0 z-0 flex flex-col items-center justify-center gap-8 bg-night text-ash -translate-x-full transition-transform duration-300 data-open:translate-x-0 md:static md:inset-auto md:z-auto md:flex-row md:items-center md:gap-6 md:bg-transparent md:text-inherit md:translate-x-0 md:transition-none"
-        aria-label="Main navigation"
-      >
-        {
-          links.map((link) => (
-            <a href={linkHref(link)} class="text-condensed-md">
-              {link.label}
-            </a>
-          ))
-        }
-        {
-          btn?.label && (
-            <Button href={linkHref(btn)} size="md" colour="green" style="solid">
-              {btn.label}
-            </Button>
-          )
-        }
-      </nav>
+    <nav class="hidden lg:flex items-center gap-6" aria-label="Main navigation">
+      {
+        links.map((link) => (
+          <a href={linkHref(link)} class="text-mono-3xs">
+            {link.label}
+          </a>
+        ))
+      }
+    </nav>
 
+    <div class="flex items-center gap-4">
+      {
+        btn?.label && (
+          <Button href={linkHref(btn)} size="md" colour="white" style="solid">
+            {btn.label}
+            <ArrowUpRight />
+          </Button>
+        )
+      }
       <button
         id="nav-toggle"
-        class="relative z-10 md:hidden flex flex-col items-center justify-center gap-1.5 size-8 cursor-pointer"
+        class="lg:hidden flex flex-col items-center justify-center gap-1.5 size-8 cursor-pointer"
         aria-label="Open menu"
         aria-expanded="false"
-        aria-controls="main-nav"
+        aria-controls="mobile-nav"
       >
         <span class="block w-6 h-0.5 bg-current transition-all duration-200 origin-center"></span>
         <span class="block w-6 h-0.5 bg-current transition-all duration-200 origin-center"></span>
@@ -79,9 +77,31 @@ function linkHref(item: {
   </div>
 </header>
 
+<nav
+  id="mobile-nav"
+  class="fixed inset-0 z-40 flex flex-col items-center justify-center gap-8 bg-night text-white -translate-x-full transition-transform duration-300 data-open:translate-x-0 lg:hidden"
+  aria-label="Mobile navigation"
+>
+  {
+    links.map((link) => (
+      <a href={linkHref(link)} class="text-mono-3xs">
+        {link.label}
+      </a>
+    ))
+  }
+  {
+    btn?.label && (
+      <Button href={linkHref(btn)} size="md" colour="white" style="solid">
+        {btn.label}
+        <ArrowUpRight />
+      </Button>
+    )
+  }
+</nav>
+
 <script>
   const toggle = document.getElementById('nav-toggle')!
-  const nav = document.getElementById('main-nav')!
+  const nav = document.getElementById('mobile-nav')!
   const bars = toggle.querySelectorAll<HTMLElement>('span')
 
   const openNav = () => {
@@ -115,7 +135,7 @@ function linkHref(item: {
 
   nav.querySelectorAll('a').forEach((a) => a.addEventListener('click', closeNav))
 
-  window.matchMedia('(min-width: 768px)').addEventListener('change', ({ matches }) => {
+  window.matchMedia('(min-width: 1024px)').addEventListener('change', ({ matches }) => {
     if (matches) closeNav()
   })
 </script>

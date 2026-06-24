@@ -34,7 +34,8 @@ const solidClasses: Record<string, string> = {
 }
 
 const outlineClasses: Record<string, string> = {
-  green: 'btn-white-outline',
+  green: 'btn-green-outline',
+  white: 'btn-white-outline',
 }
 
 const colourClass = style === 'outline' ? outlineClasses[colour] : solidClasses[colour]
@@ -44,15 +45,11 @@ const classes = clsx('btn', colourClass, className, sizeClasses[size])
 {
   href ? (
     <a href={href} class={classes} target={target} rel={rel} {...rest}>
-      <span>
-        <slot />
-      </span>
+      <slot />
     </a>
   ) : (
     <button type={type} class={classes} {...rest}>
-      <span>
-        <slot />
-      </span>
+      <slot />
     </button>
   )
 }
