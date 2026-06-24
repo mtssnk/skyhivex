@@ -132,8 +132,7 @@ export type MediaBlock = BlockPadding & {
   blockType: 'media'
   id?: string | null
   mediaType: 'image' | 'video'
-  image?: Media | null
-  video?: Media | null
+  media: Media | null
   openVideo?: Media | null
   heading?: string | null
   headingStyle?: string | null
@@ -302,6 +301,7 @@ export type Navigation = {
 }
 
 export type SiteSettings = {
+  companyName?: string | null
   contactName?: string | null
   contactEmail?: string | null
   contactPhone?: string | null

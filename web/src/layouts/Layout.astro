@@ -107,7 +107,7 @@ if (settings?.socialLinks?.length) orgSchema.sameAs = settings.socialLinks.map((
         </div>
       )
     }
-    <Header isDark={isDark} />
+    <Header isDark={isDark} companyName={settings?.companyName ?? undefined} />
     <main>
       <slot />
     </main>

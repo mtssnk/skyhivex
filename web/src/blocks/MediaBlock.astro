@@ -13,7 +13,6 @@ const {
 } = Astro.props as MediaBlock
 const paddingClass = blockPaddingClass(paddingWhere, paddingSize)
 
-console.log({ paddingClass })
 const ratioClass: Record<string, string> = {
   auto: '',
   '16/9': 'aspect-video',
@@ -26,7 +25,7 @@ const wrapClass = ratioClass[aspectRatio ?? 'auto'] ?? ''
 <section id={anchorId ?? undefined} class="section-media bg-ash">
   <div class={clsx('container', paddingClass)}>
     <div class={wrapClass}>
-      <MediaItem {media} sizes="100vw" class="w-full h-full object-cover block" />
+      {media && <MediaItem {media} sizes="100vw" class="w-full h-full object-cover block" />}
     </div>
   </div>
 </section>
