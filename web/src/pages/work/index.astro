@@ -2,10 +2,10 @@
 import Layout from '@/layouts/Layout.astro'
 import CardLink from '@/components/CardLink.astro'
 import BlockRenderer from '@/blocks/BlockRenderer.astro'
-import { getWork, getWorkPage } from '@/lib/payload'
+import { getProjects, getProjectsPage } from '@/lib/payload'
 import MeshGradientBackground from '@/components/MeshGradientBackground.tsx'
 
-const [works, workPage] = await Promise.all([getWork(), getWorkPage()])
+const [works, workPage] = await Promise.all([getProjects(), getProjectsPage()])
 ---
 
 <Layout
@@ -34,8 +34,8 @@ const [works, workPage] = await Promise.all([getWork(), getWorkPage()])
             <div class="col-span-12 md:col-span-4">
               <CardLink
                 href={`/work/${work.slug}`}
-                media={work.listingMedia}
-                label={work.projectName}
+                media={work.listingMedia ?? work.listingImage}
+                label={work.projectName ?? work.title}
                 sizes="(max-width: 768px) 100vw, 33vw"
               />
             </div>

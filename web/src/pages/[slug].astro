@@ -1,12 +1,15 @@
 ---
 import Layout from '@/layouts/Layout.astro'
 import BlockRenderer from '@/blocks/BlockRenderer.astro'
-import { getPageBySlug } from '@/lib/payload'
+import { getPages, getPageBySlug } from '@/lib/payload'
+
+export async function getStaticPaths() {
+  const pages = await getPages()
+  return pages.map((p) => ({ params: { slug: p.slug } }))
+}
 
 const { slug } = Astro.params
-const isPreview = Astro.cookies.get('__preview')?.value === 'true'
-const apiKey = isPreview ? (import.meta.env.PAYLOAD_API_KEY as string) : undefined
-const page = await getPageBySlug(slug!, { draft: isPreview, apiKey })
+const page = await getPageBySlug(slug!)
 if (!page) return new Response(null, { status: 404 })
 ---
 
@@ -15,7 +18,6 @@ if (!page) return new Response(null, { status: 404 })
   isDark={page.isDark ?? false}
   description={page.metaDescription ?? undefined}
   ogImage={page.ogImage?.url ?? undefined}
-  isPreview={isPreview}
 >
   <BlockRenderer blocks={page.blocks} />
 </Layout>

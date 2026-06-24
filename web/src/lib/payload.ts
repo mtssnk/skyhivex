@@ -93,9 +93,10 @@ type BlockPadding = {
 export type HeroBlock = BlockPadding & {
   blockType: 'hero'
   id?: string | null
-  heading: string
-  subtitle?: string | null
+  headingPart1: string
+  headingPart2?: string | null
   intro?: string | null
+  body?: string | null
   backgroundMedia?: 'image' | 'video' | 'shader' | null
   backgroundImage?: Media | null
   backgroundVideo?: Media | null
@@ -334,6 +335,11 @@ async function get<T>(
   } catch {
     return null
   }
+}
+
+export async function getPages(): Promise<Page[]> {
+  const data = await get<{ docs: Page[] }>('/pages', { depth: '0', limit: '100' })
+  return data?.docs ?? []
 }
 
 export async function getPageBySlug(
