@@ -6,7 +6,7 @@ import preact from '@astrojs/preact'
 import astroConsent from 'astro-consent'
 
 export default defineConfig({
-  output: 'server',
+  output: 'static',
   site: process.env.PUBLIC_SITE_URL || 'http://localhost:4321',
 
   adapter: node({

@@ -7,7 +7,7 @@ Headless CMS + Astro frontend monorepo.
 ```text
 skyhivex/
 ├── cms/        # Payload 3 CMS (Next.js 16)
-└── web/        # Frontend (Astro 6, Node runtime; render strategy TBD)
+└── web/        # Frontend (Astro 6, Node runtime; output: static / hybrid)
 ```
 
 Package manager: **pnpm workspaces**
@@ -30,7 +30,7 @@ cd cms && docker compose up
 | Layer    | Tech                                        |
 | -------- | ------------------------------------------- |
 | CMS      | Payload 3.83, Next.js 16, React 19          |
-| Frontend | Astro 6, Node runtime (render strategy TBD) |
+| Frontend | Astro 6, Node runtime (`output: 'static'`) |
 | Database | MongoDB (Mongoose adapter)                  |
 | Storage  | Cloudflare R2 (S3-compatible)               |
 | Images   | Sharp                                       |
@@ -180,7 +180,7 @@ See `cms/CLAUDE.md` for Payload-specific guidance and the skill reference at `cm
 CMS has a multi-stage Dockerfile (Node 22 alpine, standalone Next.js output). Web uses Railpack via `web/nixpacks.toml`.
 
 Current deployment target: **Railway for both CMS and web** while architecture is being finalised.  
-Final Astro render strategy (**SSR/static/hybrid**) is **TBD**.
+**Astro render strategy**: `output: 'static'` — pages prerender by default (served as static HTML). Server routes (`/preview`, `/api/contact`) opt out with `export const prerender = false`. Note: Astro v5+ merged the old `hybrid` mode into `static`; there is no separate `hybrid` output value.
 
 ### Payload version pinning
 

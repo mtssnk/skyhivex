@@ -206,7 +206,7 @@ When the heading is clicked, the body is revealed.
 | --- | ------------------------------------------- | -------- | ---------- | ----- |
 | D-1 | Payload CMS + Astro frontend                | Accepted | 2026-06-19 | Team  |
 | D-2 | Deploy CMS + web on Railway (initially)     | Accepted | 2026-06-19 | Team  |
-| D-3 | Astro render strategy (SSR/static/hybrid)   | Proposed | 2026-06-19 | Team  |
+| D-3 | Astro render strategy: `output: 'static'`   | Accepted | 2026-06-24 | Team  |
 | D-4 | Template exceptions (News/Projects/Contact) | Proposed | 2026-06-19 | Team  |
 
 ## Assumptions / unknowns
