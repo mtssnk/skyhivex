@@ -2,7 +2,7 @@ import type { CollectionConfig } from 'payload'
 import { Hero } from '../blocks/Hero'
 import { MediaText } from '../blocks/MediaText'
 import { Media } from '../blocks/Media'
-import { Testimonial } from '../blocks/Testimonial'
+import { Quote } from '../blocks/Quote'
 import { BodyCopy } from '../blocks/BodyCopy'
 import { CTA } from '../blocks/CTA'
 import { PersonList } from '../blocks/PersonList'
@@ -175,7 +175,7 @@ export const Projects: CollectionConfig = {
       blocks: [
         MediaText,
         Media,
-        Testimonial,
+        Quote,
         BodyCopy,
         CTA,
         PersonList,

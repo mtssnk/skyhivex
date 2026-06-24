@@ -1,16 +1,15 @@
 ---
-import type { PageBlock, WorkBlock } from '@/lib/payload'
+import type { PageBlock, ProjectBlock } from '@/lib/payload'
 import Hero from '@/blocks/Hero.astro'
 import LogoList from '@/blocks/LogoList.astro'
-import WorkList from '@/blocks/WorkList.astro'
+import ProjectList from '@/blocks/ProjectList.astro'
 import CardList from '@/blocks/CardList.astro'
-import ContactForm from '@/blocks/ContactForm.astro'
 import MediaText from '@/blocks/MediaText.astro'
 import MediaBlock from '@/blocks/MediaBlock.astro'
 import Quote from '@/blocks/Quote.astro'
 
 interface Props {
-  blocks: (PageBlock | WorkBlock)[] | null | undefined
+  blocks: (PageBlock | ProjectBlock)[] | null | undefined
 }
 
 const { blocks } = Astro.props
@@ -21,9 +20,8 @@ const { blocks } = Astro.props
     <>
       {block.blockType === 'hero' && <Hero {...block} />}
       {block.blockType === 'logoList' && <LogoList {...block} />}
-      {block.blockType === 'workList' && <WorkList {...block} />}
+      {block.blockType === 'projectList' && <ProjectList {...block} />}
       {block.blockType === 'cardList' && <CardList {...block} />}
-      {block.blockType === 'contactForm' && <ContactForm {...block} />}
       {block.blockType === 'mediaText' && <MediaText {...block} />}
       {block.blockType === 'media' && <MediaBlock {...block} />}
       {block.blockType === 'quote' && <Quote {...block} />}

@@ -127,7 +127,7 @@ Valid types: `feat`, `fix`, `chore`, `docs`, `style`, `refactor`, `test`, `perf`
 
 ## Web key files
 
-- `web/src/lib/payload.ts` — typed CMS fetch helpers (`getPageBySlug`, `getWork`, `getWorkBySlug`) + all response types
+- `web/src/lib/payload.ts` — typed CMS fetch helpers (`getPageBySlug`, `getProjects`, `getProjectBySlug`, `getPosts`, `getPostBySlug`) + all response types
 - `web/src/lib/lexical.ts` — Lexical JSON → HTML serialiser for rich text fields
 - `web/src/layouts/Layout.astro` — base HTML shell (`title`, `description`, `isDark` props)
 - `web/src/blocks/BlockRenderer.astro` — renders the correct block component per `blockType`

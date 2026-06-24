@@ -52,10 +52,12 @@ export type Category = {
 export type Project = {
   id: string
   title: string
+  projectName?: string | null
   client: string
   slug: string
   categories?: Category[] | null
   listingImage: Media
+  listingMedia?: Media | null
   heroMedia?: {
     type?: 'image' | 'video' | null
     image?: Media | null
@@ -139,8 +141,8 @@ export type MediaBlock = BlockPadding & {
   aspectRatio?: 'auto' | '4/3' | '16/9' | '1/1' | '3/4' | null
 }
 
-export type TestimonialBlock = BlockPadding & {
-  blockType: 'testimonial'
+export type QuoteBlock = BlockPadding & {
+  blockType: 'quote'
   id?: string | null
   quoteStyle: 'default' | 'large'
   quote: string
@@ -174,6 +176,8 @@ export type ProjectListBlock = BlockPadding & {
   blockType: 'projectList'
   id?: string | null
   selectionMode: 'manual' | 'category' | 'latest'
+  heading?: string | null
+  viewAllLabel?: string | null
   projects?: Project[] | null
   category?: Category | null
   count?: number | null
@@ -234,7 +238,7 @@ export type AccordionListBlock = BlockPadding & {
 export type SharedBlock =
   | MediaTextBlock
   | MediaBlock
-  | TestimonialBlock
+  | QuoteBlock
   | BodyCopyBlock
   | CTABlock
   | PersonListBlock

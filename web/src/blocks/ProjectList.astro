@@ -1,13 +1,13 @@
 ---
-import type { WorkListBlock } from '@/lib/payload'
+import type { ProjectListBlock } from '@/lib/payload'
 import { clsx } from 'clsx'
 import Button from '@/components/Button.astro'
 import HeadingUnderline from '@/components/HeadingUnderline.astro'
 import CardLink from '@/components/CardLink.astro'
 import { blockPaddingClass } from '@/lib/blocks'
 
-const { heading, works, viewAllLabel, anchorId, paddingWhere, paddingSize } =
-  Astro.props as WorkListBlock
+const { heading, projects, viewAllLabel, anchorId, paddingWhere, paddingSize } =
+  Astro.props as ProjectListBlock
 const paddingClass = blockPaddingClass(paddingWhere, paddingSize)
 ---
 
@@ -22,12 +22,12 @@ const paddingClass = blockPaddingClass(paddingWhere, paddingSize)
     }
     <ul class="grid grid-cols-3" role="list">
       {
-        works.map((work) => (
+        projects?.map((project) => (
           <li>
             <CardLink
-              href={`/work/${work.slug}`}
-              media={work.listingMedia}
-              label={work.projectName}
+              href={`/work/${project.slug}`}
+              media={project.listingMedia}
+              label={project.projectName}
               sizes="(max-width: 768px) 100vw, 33vw"
             />
           </li>

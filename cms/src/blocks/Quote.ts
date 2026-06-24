@@ -1,9 +1,9 @@
 import type { Block } from 'payload'
 import { withBlockTabs } from './fields/blockFields'
 
-export const Testimonial: Block = {
-  slug: 'testimonial',
-  labels: { singular: 'Testimonial', plural: 'Testimonials' },
+export const Quote: Block = {
+  slug: 'quote',
+  labels: { singular: 'Quote', plural: 'Quotes' },
   fields: withBlockTabs([
     {
       name: 'quoteStyle',

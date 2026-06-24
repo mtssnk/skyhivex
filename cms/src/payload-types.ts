@@ -516,7 +516,7 @@ export interface Page {
             paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
             id?: string | null;
             blockName?: string | null;
-            blockType: 'testimonial';
+            blockType: 'quote';
           }
         | {
             content: {
@@ -929,7 +929,7 @@ export interface Project {
             paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
             id?: string | null;
             blockName?: string | null;
-            blockType: 'testimonial';
+            blockType: 'quote';
           }
         | {
             content: {
@@ -1399,7 +1399,7 @@ export interface Post {
         paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
         id?: string | null;
         blockName?: string | null;
-        blockType: 'testimonial';
+        blockType: 'quote';
       }
     | {
         content: {
@@ -2009,7 +2009,7 @@ export interface PagesSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
-        testimonial?:
+        quote?:
           | T
           | {
               quoteStyle?: T;
@@ -2184,7 +2184,7 @@ export interface ProjectsSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
-        testimonial?:
+        quote?:
           | T
           | {
               quoteStyle?: T;
@@ -2378,7 +2378,7 @@ export interface PostsSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
-        testimonial?:
+        quote?:
           | T
           | {
               quoteStyle?: T;
@@ -2579,7 +2579,7 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
  */
 export interface SiteSetting {
   id: string;
-  contactName?: string | null;
+  companyName?: string | null;
   contactEmail?: string | null;
   contactPhone?: string | null;
   /**
@@ -2760,7 +2760,7 @@ export interface ProjectsPage {
             paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
             id?: string | null;
             blockName?: string | null;
-            blockType: 'testimonial';
+            blockType: 'quote';
           }
         | {
             content: {
@@ -3131,7 +3131,7 @@ export interface Navigation {
  * via the `definition` "site-settings_select".
  */
 export interface SiteSettingsSelect<T extends boolean = true> {
-  contactName?: T;
+  companyName?: T;
   contactEmail?: T;
   contactPhone?: T;
   contactAddress?: T;
@@ -3202,7 +3202,7 @@ export interface ProjectsPageSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
-        testimonial?:
+        quote?:
           | T
           | {
               quoteStyle?: T;

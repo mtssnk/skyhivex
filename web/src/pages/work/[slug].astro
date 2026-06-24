@@ -1,13 +1,16 @@
 ---
 import Layout from '@/layouts/Layout.astro'
 import BlockRenderer from '@/blocks/BlockRenderer.astro'
-import { getWorkBySlug } from '@/lib/payload'
+import { getProjects, getProjectBySlug } from '@/lib/payload'
 import Hero from '@/blocks/Hero.astro'
 
+export async function getStaticPaths() {
+  const projects = await getProjects()
+  return projects.map((p) => ({ params: { slug: p.slug } }))
+}
+
 const { slug } = Astro.params
-const isPreview = Astro.cookies.get('__preview')?.value === 'true'
-const apiKey = isPreview ? (import.meta.env.PAYLOAD_API_KEY as string) : undefined
-const work = await getWorkBySlug(slug!, { draft: isPreview, apiKey })
+const work = await getProjectBySlug(slug!)
 if (!work) return new Response(null, { status: 404 })
 
 const heroMedia = work.heroMedia ?? work.listingMedia
@@ -40,7 +43,6 @@ const heroButtons = [
   description={metaDescription}
   isDark={isDark}
   {ogImage}
-  {isPreview}
   {jsonLd}
 >
   <Hero heading={work.title} {prefix} backgroundMedia={heroMedia} buttons={heroButtons} />

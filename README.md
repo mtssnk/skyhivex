@@ -7,7 +7,7 @@ Monorepo — Payload CMS (`/cms`) + Astro frontend (`/web`)
 ### Launch checklist
 
 - **Test Open Graph** — use [opengraph.xyz](https://www.opengraph.xyz) or the Facebook Sharing Debugger to verify `og:title`, `og:description`, and `og:image` render correctly for key pages. Upload OG images in the CMS for any page without a natural fallback image.
-- **Resend sending domain** — verify `snookstudio.co.uk` in the Resend dashboard (Domains → Add domain); add the SPF, DKIM, and DMARC DNS records at your DNS provider. Once verified, set `RESEND_FROM=Snook Studio <hello@snookstudio.co.uk>` in the production environment. Currently using `onboarding@resend.dev` which only delivers to the Resend account email.
+- **Resend sending domain** — verify `snookstudio.co.uk` in the Resend dashboard (Domains → Add domain); add the SPF, DKIM, and DMARC DNS records at your DNS provider. Once verified, set `RESEND_FROM=SkyHive X <hello@snookstudio.co.uk>` in the production environment. Currently using `onboarding@resend.dev` which only delivers to the Resend account email.
 - **Favicon** — `web/public/favicon.svg` is the default Astro placeholder; replace with the studio mark
 - **robots.txt** — add `web/public/robots.txt`
 - **Sitemap** — install `@astrojs/sitemap` and add to `astro.config.mjs`; configure it to exclude admin and API routes

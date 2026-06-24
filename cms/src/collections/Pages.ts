@@ -4,7 +4,7 @@ import { LogoList } from '../blocks/LogoList'
 import { MediaText } from '../blocks/MediaText'
 import { Media } from '../blocks/Media'
 import { CardList } from '../blocks/CardList'
-import { Testimonial } from '../blocks/Testimonial'
+import { Quote } from '../blocks/Quote'
 import { BodyCopy } from '../blocks/BodyCopy'
 import { CTA } from '../blocks/CTA'
 import { PersonList } from '../blocks/PersonList'
@@ -88,7 +88,7 @@ export const Pages: CollectionConfig = {
         MediaText,
         Media,
         CardList,
-        Testimonial,
+        Quote,
         BodyCopy,
         CTA,
         PersonList,

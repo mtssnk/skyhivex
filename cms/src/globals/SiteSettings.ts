@@ -8,9 +8,9 @@ export const SiteSettings: GlobalConfig = {
   },
   fields: [
     {
-      name: 'contactName',
+      name: 'companyName',
       type: 'text',
-      label: 'Contact Name',
+      label: 'Company Name',
     },
     {
       name: 'contactEmail',
