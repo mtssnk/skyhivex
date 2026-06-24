@@ -26,8 +26,8 @@ const paddingClass = blockPaddingClass(paddingWhere, paddingSize)
           <li>
             <CardLink
               href={`/work/${project.slug}`}
-              media={project.listingMedia}
-              label={project.projectName}
+              media={project.listingMedia ?? project.listingImage}
+              label={project.projectName ?? project.title}
               sizes="(max-width: 768px) 100vw, 33vw"
             />
           </li>
@@ -35,7 +35,7 @@ const paddingClass = blockPaddingClass(paddingWhere, paddingSize)
       }
     </ul>
     <div class="flex justify-center">
-      <Button href="/work" style="outline" size="sm" colour="dark">
+      <Button href="/work" style="outline" size="sm" colour="green">
         {viewAllLabel ?? 'View all work'}
       </Button>
     </div>

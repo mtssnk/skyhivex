@@ -66,6 +66,7 @@ export type Project = {
   } | null
   intro?: string | null
   summary?: { label: string; value: string; id?: string | null }[] | null
+  url?: string | null
   blocks?: ProjectBlock[] | null
   isDark?: boolean | null
   metaDescription?: string | null

@@ -10,43 +10,50 @@ export async function getStaticPaths() {
 }
 
 const { slug } = Astro.params
-const work = await getProjectBySlug(slug!)
-if (!work) return new Response(null, { status: 404 })
+const project = await getProjectBySlug(slug!)
+if (!project) return new Response(null, { status: 404 })
 
-const heroMedia = work.heroMedia ?? work.listingMedia
-const metaDescription = work.metaDescription ?? `${work.client} — ${work.title}`
-const ogImage = work.ogImage?.url ?? heroMedia?.url ?? undefined
-const isDark = work.isDark ?? true
-const services = work.services?.map((s) => s.service).join(', ')
-const prefix = services ? `${work.client} — ${services}` : work.client
+const metaDescription = project.metaDescription ?? `${project.client} — ${project.title}`
+const ogImage = project.ogImage?.url ?? project.heroMedia?.image?.url ?? project.listingMedia?.url
+const isDark = project.isDark ?? true
+
+const heroMediaType = project.heroMedia?.type ?? (project.listingMedia ? 'image' : undefined)
+const heroBackgroundImage = project.heroMedia?.image ?? project.listingMedia ?? undefined
+const heroBackgroundVideo = project.heroMedia?.video ?? undefined
 
 const jsonLd: Record<string, unknown> = {
   '@context': 'https://schema.org',
   '@type': 'CreativeWork',
-  name: work.projectName,
+  name: project.projectName ?? project.title,
   description: metaDescription,
   url: Astro.url.href,
   creator: { '@type': 'Organization', name: 'Snook Studio', url: Astro.url.origin },
 }
 if (ogImage) jsonLd.image = ogImage
 
-const heroButtons = [
-  { label: 'Find out more', type: 'scroll' as const, anchorId: 'work-content' },
-  ...(work.url
-    ? [{ label: 'View project', type: 'page' as const, url: work.url, target: '_blank' as const }]
+const heroButtons: NonNullable<Parameters<typeof Hero>[0]['buttons']> = [
+  { label: 'Find out more', type: 'anchor', anchorTarget: 'work-content', variant: 'solid', colour: 'white' },
+  ...(project.url
+    ? [{ label: 'View project', type: 'link' as const, linkUrl: project.url, variant: 'outline' as const, colour: 'white' as const }]
     : []),
 ]
 ---
 
 <Layout
-  title={`${work.client} — ${work.title}`}
+  title={`${project.client} — ${project.title}`}
   description={metaDescription}
   isDark={isDark}
   {ogImage}
   {jsonLd}
 >
-  <Hero heading={work.title} {prefix} backgroundMedia={heroMedia} buttons={heroButtons} />
+  <Hero
+    heading={project.title}
+    backgroundMedia={heroMediaType}
+    backgroundImage={heroBackgroundImage}
+    backgroundVideo={heroBackgroundVideo}
+    buttons={heroButtons}
+  />
 
   <div id="work-content"></div>
-  <BlockRenderer blocks={work.body} />
+  <BlockRenderer blocks={project.blocks} />
 </Layout>
