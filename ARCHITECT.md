@@ -80,8 +80,8 @@ Each block has an **Anchor ID** field for hash-link navigation.
 
 ### Hero
 
-- **Heading**: Text field with optional emphasis syntax using double curly braces, e.g. `This is the {{hero block}}`.
-- **Subtitle**: Text field.
+- **Heading Part 1**: One text style
+- **Heading Part 2**: Another text style
 - **Intro**: Textarea field.
 - **Buttons**: Array field. Each button includes:
   - Label/text
@@ -102,7 +102,6 @@ Two variants:
 Fields:
 
 - Heading text field (supports double-curly-brace emphasis)
-- Heading style selection
 - Body copy (WYSIWYG)
 - Media position (left or right)
 - Media type (image or self-hosted video, muted/loop/autoplay)

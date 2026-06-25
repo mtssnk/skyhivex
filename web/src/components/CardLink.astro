@@ -1,7 +1,7 @@
 ---
 import type { Media } from '@/lib/payload'
 import MediaItem from '@/components/MediaItem.astro'
-import ArrowRight from '@/assets/icons/arrowRight.astro'
+import ArrowUpRight from '@/assets/icons/arrowUpRight.astro'
 
 interface Props {
   href: string
@@ -19,6 +19,6 @@ const { href, media, label, sizes = '(max-width: 768px) 100vw, 33vw' } = Astro.p
   </div>
   <div class="flex items-center gap-2 text-night">
     <span class="text-wide-sm">{label}</span>
-    <span class="inline-block size-6"><ArrowRight class="size-6 shrink-0" /></span>
+    <span class="inline-block size-6"><ArrowUpRight class="size-6 shrink-0" /></span>
   </div>
 </a>

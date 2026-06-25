@@ -2,6 +2,8 @@
 import type { HeroBlock } from '@/lib/payload'
 import MediaItem from '@/components/MediaItem.astro'
 import Button from '@/components/Button.astro'
+import ArrowDownRight from '@/assets/icons/arrowDownRight.astro'
+import Play from '@/assets/icons/play.astro'
 import HexShader from '@/components/HexShader.astro'
 
 interface Props extends Omit<HeroBlock, 'blockType'> {}
@@ -55,24 +57,28 @@ const bgMedia =
       aria-hidden="true"
     >
     </div>
-    <div class="relative z-10">
-      {
-        headingPart1 || headingPart2 ? (
-          <h1 class="text-white space-y-5xs">
-            {headingPart1 && (
-              <span class="text-extended-xl w-full inline-flex justify-center">{headingPart1}</span>
-            )}
-            {headingPart2 && (
-              <p class="text-serif-5xl w-full inline-flex justify-center">{headingPart2}</p>
-            )}
-          </h1>
-        ) : null
-      }
-      {intro && <p class="text-extended-md mx-auto max-w-[24em]">{intro}</p>}
-      {body && <p class="text-body-sm mx-auto max-w-[36em] text-balance">{body}</p>}
+    <div class="relative z-10 space-y-2xs">
+      <div class="space-y-5xs">
+        {
+          headingPart1 || headingPart2 ? (
+            <h1 class="text-white space-y-5xs">
+              {headingPart1 && (
+                <span class="text-extended-xl uppercase w-full inline-flex justify-center">
+                  {headingPart1}
+                </span>
+              )}
+              {headingPart2 && (
+                <p class="text-serif-5xl w-full inline-flex justify-center">{headingPart2}</p>
+              )}
+            </h1>
+          ) : null
+        }
+        {intro && <p class="text-extended-md mx-auto max-w-[24em]">{intro}</p>}
+        {body && <p class="text-body-sm mx-auto max-w-[36em] text-balance">{body}</p>}
+      </div>
       {
         buttons && buttons.length > 0 && (
-          <div class="flex flex-wrap gap-y-4 gap-x-8 items-center justify-center mt-4">
+          <div class="flex flex-wrap gap-y-4 gap-3xs items-center justify-center">
             {buttons.map((btn) => {
               if (btn.type === 'video') {
                 return (
@@ -83,6 +89,7 @@ const bgMedia =
                     data-video-url={btn.videoFile?.url ?? ''}
                   >
                     {btn.label}
+                    <Play />
                   </Button>
                 )
               }
@@ -91,6 +98,7 @@ const bgMedia =
               return (
                 <Button href={href} colour={btn.colour} style={btn.variant} size="lg">
                   {btn.label}
+                  {btn.type === 'anchor' && <ArrowDownRight />}
                 </Button>
               )
             })}

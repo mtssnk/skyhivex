@@ -66,7 +66,6 @@
   font-size: clamp(2.25rem, 1.8rem + 1.5vw, 3rem); /* 36px → 48px */
   line-height: 1.1;
   letter-spacing: 0.04em;
-  text-transform: uppercase;
 }
 
 @utility text-extended-xl {
@@ -174,7 +173,9 @@
   p,
   ol,
   ul {
-    @apply text-body-xs text-mist mb-[1em];
+    &:not(:last-child) {
+      @apply mb-[1em];
+    }
   }
   h2,
   h3 {

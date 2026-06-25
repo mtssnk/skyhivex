@@ -3,19 +3,21 @@ import type { MediaTextBlock } from '@/lib/payload'
 import MediaItem from '@/components/MediaItem.astro'
 import { lexicalToHtml } from '@/lib/lexical'
 import clsx from 'clsx'
-import { blockPaddingClass } from '@/lib/blocks'
+import { blockPaddingClass, injectSpans } from '@/lib/blocks'
 
 const {
-  media,
-  text,
+  mediaType,
+  image,
+  video,
+  heading,
+  body,
   mediaPosition,
   aspectRatio,
   anchorId,
   paddingWhere,
   paddingSize,
-  verticallyCentreText,
 } = Astro.props as MediaTextBlock
-const html = lexicalToHtml(text)
+const html = body ? lexicalToHtml(body) : ''
 const isMediaLeft = mediaPosition === 'left'
 const paddingClass = blockPaddingClass(paddingWhere, paddingSize)
 ---
@@ -28,16 +30,39 @@ const paddingClass = blockPaddingClass(paddingWhere, paddingSize)
         'col-span-12 md:col-span-6 lg:col-span-5',
       )}
     >
-      <MediaItem {media} aspectRatio={aspectRatio ?? 'auto'} class="w-full h-auto block" />
+      {
+        mediaType === 'image' && image && (
+          <MediaItem
+            media={image}
+            aspectRatio={aspectRatio ?? 'auto'}
+            class="w-full h-auto block"
+          />
+        )
+      }
+      {
+        mediaType === 'video' && video && (
+          <MediaItem
+            media={video}
+            aspectRatio={aspectRatio ?? 'auto'}
+            class="w-full h-auto block"
+          />
+        )
+      }
     </div>
     <div
       class={clsx(
-        'wysiwyg col-span-12 md:col-span-6 lg:col-span-5',
+        'wysiwyg col-span-12 md:col-span-6 lg:col-span-5 flex flex-col justify-center ',
         isMediaLeft ? 'lg:col-start-7' : 'lg:col-start-2',
-        verticallyCentreText && 'flex items-center',
       )}
     >
-      <div class="max-w-[450px]"><Fragment set:html={html} /></div>
+      <div class="max-w-[450px] space-y-2xs">
+        {
+          heading && (
+            <h2 class="text-extended-xl text-smoke !font-light" set:html={injectSpans(heading)} />
+          )
+        }
+        <Fragment class="text-body-xs text-mist" set:html={html} />
+      </div>
     </div>
   </div>
 </section>

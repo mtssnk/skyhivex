@@ -95,16 +95,16 @@ Every block includes these fields:
 
 ### Hero
 
-| Field             | Type           | Required    | Notes                                                                       |
-| ----------------- | -------------- | ----------- | --------------------------------------------------------------------------- |
-| `heading`         | Text           | Yes         | Wrap text in `{{double curly braces}}` to apply serif/italic emphasis style |
-| `subtitle`        | Text           | No          |                                                                             |
-| `intro`           | Textarea       | No          |                                                                             |
-| `buttons`         | Array          | No          | See button fields below                                                     |
-| `backgroundMedia` | Select         | Yes         | `image`, `video`, `shader`                                                  |
-| `backgroundImage` | Upload (Media) | Conditional | Required when `backgroundMedia` is `image`                                  |
-| `backgroundVideo` | Upload (Media) | Conditional | Required when `backgroundMedia` is `video` — muted, looped, autoplay        |
-| `overlayAlpha`    | Number         | No          | 0–1. Controls dark overlay opacity for text contrast                        |
+| Field             | Type           | Required    | Notes                                                                |
+| ----------------- | -------------- | ----------- | -------------------------------------------------------------------- |
+| `headingPart1`    | Text           | No          |
+| `headingPart2`    | Text           | No          |
+| `intro`           | Textarea       | No          |                                                                      |
+| `buttons`         | Array          | No          | See button fields below                                              |
+| `backgroundMedia` | Select         | Yes         | `image`, `video`, `shader`                                           |
+| `backgroundImage` | Upload (Media) | Conditional | Required when `backgroundMedia` is `image`                           |
+| `backgroundVideo` | Upload (Media) | Conditional | Required when `backgroundMedia` is `video` — muted, looped, autoplay |
+| `overlayAlpha`    | Number         | No          | 0–1. Controls dark overlay opacity for text contrast                 |
 
 **Button fields (per item):**
 

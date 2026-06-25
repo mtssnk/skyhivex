@@ -9,9 +9,6 @@ export const Hero: Block = {
       name: 'headingPart1',
       type: 'textarea',
       required: true,
-      admin: {
-        description: 'Wrap text in {{double curly braces}} to apply serif/italic emphasis style.',
-      },
     },
     {
       name: 'headingPart2',
@@ -25,7 +22,8 @@ export const Hero: Block = {
       name: 'body',
       type: 'textarea',
       admin: {
-        description: 'Body text in body font — for content-heavy heroes (e.g. FAQs). Not used alongside intro.',
+        description:
+          'Body text in body font — for content-heavy heroes (e.g. FAQs). Not used alongside intro.',
       },
     },
     {

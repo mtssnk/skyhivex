@@ -1,3 +1,7 @@
+export function injectSpans(text: string, spanClass = 'font-semibold'): string {
+  return text.replace(/\{\{(.+?)\}\}/g, `<span class="${spanClass}">$1</span>`)
+}
+
 const paddingClasses: Record<string, Record<string, string>> = {
   both: { xl: 'py-xl', lg: 'py-lg', md: 'py-md', sm: 'py-sm' },
   top: { xl: 'pt-xl', lg: 'pt-lg', md: 'pt-md', sm: 'pt-sm' },

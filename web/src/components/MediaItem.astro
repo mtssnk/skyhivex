@@ -3,7 +3,7 @@ import type { Media } from '@/lib/payload'
 
 interface Props {
   media: Media
-  aspectRatio?: 'auto' | '4/3' | '1/1' | '16/9'
+  aspectRatio?: 'auto' | '4/3' | '3/4' | '1/1' | '16/9'
   muted?: boolean
   class?: string
   sizes?: string
@@ -21,6 +21,7 @@ const srcset = media.sizes
 
 const ratioClasses: Record<string, string> = {
   '4/3': 'aspect-[4/3]',
+  '3/4': 'aspect-[3/4]',
   '1/1': 'aspect-square',
   '16/9': 'aspect-video',
 }
@@ -29,7 +30,7 @@ const wrapClass = aspectRatio && aspectRatio !== 'auto' ? ratioClasses[aspectRat
 
 {
   wrapClass ? (
-    <div class={`${wrapClass} overflow-hidden`}>
+    <div class={`${wrapClass} w-full overflow-hidden`}>
       {isVideo ? (
         <video
           src={media.url ?? ''}

@@ -1,8 +1,8 @@
 @utility btn {
   @apply inline-flex items-center justify-center rounded-full focus:outline-none;
   box-shadow:
-    3px -2px 0 2px rgba(41, 48, 255, 0.6),
-    -3px 2px 0 2px rgba(255, 0, 0, 0.5);
+    1.5px -1px 0 2px rgba(41, 48, 255, 0.6),
+    -1.5px 1px 0 2px rgba(255, 0, 0, 0.5);
 }
 @utility btn-lg {
   @apply text-mono-3xs;
@@ -43,7 +43,10 @@
   color: var(--color-tamarind);
 }
 @utility btn-white-outline {
-  color: var(--color-wite);
+  color: var(--color-white);
   border: 2px solid;
-  /* background: border-image: linear-gradient(90deg, var(--color-white) 0%, var(--color-smoke) 100%) 1; */
+  /* text-shadow: 0 0 4px var(--color-night); */
+  text-shadow:
+    var(--color-night) 0 0 10px,
+    var(--color-night) 0 0 4px;
 }

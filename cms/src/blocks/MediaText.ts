@@ -1,5 +1,5 @@
 import type { Block } from 'payload'
-import { headingStyleField, withBlockTabs } from './fields/blockFields'
+import { withBlockTabs } from './fields/blockFields'
 
 export const MediaText: Block = {
   slug: 'mediaText',
@@ -11,8 +11,8 @@ export const MediaText: Block = {
       required: true,
       defaultValue: 'contained',
       options: [
-        { label: 'Contained (grid)', value: 'contained' },
-        { label: 'Split viewport (50vw / 100vh)', value: 'split' },
+        { label: 'Contained', value: 'contained' },
+        { label: 'Full width', value: 'split' },
       ],
     },
     {
@@ -22,7 +22,6 @@ export const MediaText: Block = {
         description: 'Wrap text in {{double curly braces}} to apply serif/italic emphasis style.',
       },
     },
-    headingStyleField,
     {
       name: 'body',
       type: 'richText',
