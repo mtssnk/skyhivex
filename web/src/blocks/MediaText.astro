@@ -10,59 +10,108 @@ const {
   image,
   video,
   heading,
+  headingTag,
   body,
   mediaPosition,
+  variant,
   aspectRatio,
   anchorId,
   paddingWhere,
   paddingSize,
 } = Astro.props as MediaTextBlock
+const HeadingTag = (headingTag ?? 'h2') as 'h1' | 'h2' | 'h3' | 'h4'
 const html = body ? lexicalToHtml(body) : ''
 const isMediaLeft = mediaPosition === 'left'
 const paddingClass = blockPaddingClass(paddingWhere, paddingSize)
 ---
 
 <section id={anchorId ?? undefined} class="section-mediatext bg-ash">
-  <div class={clsx('container grid grid-cols-12', paddingClass)}>
-    <div
-      class={clsx(
-        isMediaLeft ? '' : 'lg:col-start-8 md:order-2',
-        'col-span-12 md:col-span-6 lg:col-span-5',
-      )}
-    >
-      {
-        mediaType === 'image' && image && (
-          <MediaItem
-            media={image}
-            aspectRatio={aspectRatio ?? 'auto'}
-            class="w-full h-auto block"
-          />
-        )
-      }
-      {
-        mediaType === 'video' && video && (
-          <MediaItem
-            media={video}
-            aspectRatio={aspectRatio ?? 'auto'}
-            class="w-full h-auto block"
-          />
-        )
-      }
-    </div>
-    <div
-      class={clsx(
-        'wysiwyg col-span-12 md:col-span-6 lg:col-span-5 flex flex-col justify-center ',
-        isMediaLeft ? 'lg:col-start-7' : 'lg:col-start-2',
-      )}
-    >
-      <div class="max-w-[450px] space-y-2xs">
-        {
-          heading && (
-            <h2 class="text-extended-xl text-smoke !font-light" set:html={injectSpans(heading)} />
-          )
-        }
-        <Fragment class="text-body-xs text-mist" set:html={html} />
+  {
+    variant === 'contained' ? (
+      <div class={clsx('container grid grid-cols-12', paddingClass)}>
+        <div
+          class={clsx(isMediaLeft ? '' : 'lg:col-start-7 md:order-2', 'col-span-12 md:col-span-6')}
+        >
+          {mediaType === 'image' && image && (
+            <MediaItem
+              media={image}
+              aspectRatio={aspectRatio ?? 'auto'}
+              class="w-full h-auto block"
+            />
+          )}
+          {mediaType === 'video' && video && (
+            <MediaItem
+              media={video}
+              muted={true}
+              autoplay={true}
+              aspectRatio={aspectRatio ?? 'auto'}
+              class="w-full h-auto block"
+            />
+          )}
+        </div>
+        <div
+          class={clsx(
+            'col-span-12 md:col-span-6 flex flex-col justify-center',
+            isMediaLeft ? 'lg:col-start-7' : 'lg:col-start-1',
+          )}
+        >
+          <div class="max-w-[450px] space-y-2xs">
+            {heading && (
+              <HeadingTag
+                class="text-extended-xl text-white font-light!"
+                set:html={injectSpans(heading)}
+              />
+            )}
+            <div class="wysiwyg">
+              <Fragment class="text-body-xs text-mist" set:html={html} />
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
+    ) : (
+      <div class="grid grid-cols-12 gap-0">
+        <div
+          class={clsx(
+            'col-span-12 md:col-span-6 lg:col-span-5 flex flex-col justify-center py-xs md:py-lg',
+            isMediaLeft
+              ? 'md:col-start-7 lg:col-start-8 pr-(--container-inset)'
+              : 'pl-(--container-inset)',
+          )}
+        >
+          <div
+            class={clsx(
+              'max-w-[450px] space-y-2xs',
+              isMediaLeft ? 'pl-[var(--gutter)]' : 'pr-[var(--gutter)]',
+            )}
+          >
+            {heading && (
+              <HeadingTag
+                class="text-extended-xl text-white font-light!"
+                set:html={injectSpans(heading)}
+              />
+            )}
+            <Fragment class="wysiwyg text-body-xs text-mist" set:html={html} />
+          </div>
+        </div>
+        <figure
+          class={clsx(
+            'col-span-12 md:col-span-6 lg:col-span-7 relative min-h-[60vw] md:min-h-0 order-first md:order-0',
+            isMediaLeft ? 'md:col-start-1 md:row-start-1' : 'md:col-start-7 lg:col-start-6',
+          )}
+        >
+          {mediaType === 'image' && image && (
+            <MediaItem media={image} class="absolute inset-0 w-full h-full object-cover" />
+          )}
+          {mediaType === 'video' && video && (
+            <MediaItem
+              media={video}
+              muted={true}
+              autoplay={true}
+              class="absolute inset-0 w-full h-full object-cover"
+            />
+          )}
+        </figure>
+      </div>
+    )
+  }
 </section>

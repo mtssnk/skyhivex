@@ -68,14 +68,6 @@
   letter-spacing: 0.04em;
 }
 
-@utility text-extended-xl {
-  font-family: var(--font-extended);
-  font-weight: 600;
-  font-size: clamp(2.25rem, 1.8rem + 1.5vw, 3rem); /* 36px → 48px */
-  line-height: 1.1;
-  letter-spacing: 0.04em;
-}
-
 @utility text-extended-lg {
   font-family: var(--font-extended);
   font-weight: 600;

@@ -16,6 +16,20 @@ export const MediaText: Block = {
       ],
     },
     {
+      name: 'headingTag',
+      type: 'select',
+      defaultValue: 'h2',
+      options: [
+        { label: 'H1', value: 'h1' },
+        { label: 'H2', value: 'h2' },
+        { label: 'H3', value: 'h3' },
+        { label: 'H4', value: 'h4' },
+      ],
+      admin: {
+        condition: (_, sibling) => Boolean(sibling?.heading),
+      },
+    },
+    {
       name: 'heading',
       type: 'text',
       admin: {

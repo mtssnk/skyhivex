@@ -55,6 +55,8 @@
 :root {
   --gutter: 32px;
   --content-max: 1216px;
+  /* left edge of content inside a .container at any viewport width */
+  --container-inset: max(var(--gutter), calc((100vw - var(--content-max)) / 2));
 }
 body {
   -webkit-font-smoothing: antialiased;

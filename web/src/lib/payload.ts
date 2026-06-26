@@ -120,6 +120,7 @@ export type MediaTextBlock = BlockPadding & {
   id?: string | null
   variant: 'contained' | 'split'
   heading?: string | null
+  headingTag?: 'h1' | 'h2' | 'h3' | 'h4' | null
   headingStyle?: string | null
   body?: LexicalContent | null
   mediaPosition: 'left' | 'right'

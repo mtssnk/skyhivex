@@ -5,11 +5,12 @@ interface Props {
   media: Media
   aspectRatio?: 'auto' | '4/3' | '3/4' | '1/1' | '16/9'
   muted?: boolean
+  autoplay?: boolean
   class?: string
   sizes?: string
 }
 
-const { media, aspectRatio, class: className, sizes, muted } = Astro.props
+const { media, aspectRatio, class: className, sizes, muted, autoplay } = Astro.props
 const isVideo = media.mimeType?.startsWith('video/')
 
 const srcset = media.sizes
@@ -34,7 +35,7 @@ const wrapClass = aspectRatio && aspectRatio !== 'auto' ? ratioClasses[aspectRat
       {isVideo ? (
         <video
           src={media.url ?? ''}
-          autoplay
+          autoplay={autoplay ?? true}
           muted={muted ?? true}
           loop
           playsinline
