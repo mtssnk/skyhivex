@@ -68,6 +68,12 @@ Upload collection for SVG assets used in illustrations and icons. Kept separate 
 
 ---
 
+### Navigations
+
+These will consist of a text heading field and an array field of page links. They are used for SEO pages and list a group of related pages.
+
+---
+
 ### Categories
 
 Shared taxonomy used by both Projects and Posts.
@@ -199,6 +205,15 @@ Every block includes these fields:
 | `buttonLabel`   | Text                    | No          | If empty, button linking to projects index is hidden           |
 
 ---
+
+### Linked content
+
+| Field         | Type                      | Required |
+| ------------- | ------------------------- | -------- |
+| `navigation`  | Relationship (navigation) | Yes      |
+| `bodyContent` | RichText                  | Yes      |
+
+Your Astro front end should be outputting LocalBusiness or Service schema on each page with the areaServed property set to the specific state (using schema.org's State type). This is easy to automate from the CMS data and gives you a meaningful SEO edge over competitors not doing it.
 
 ### Body Copy
 
