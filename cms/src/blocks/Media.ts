@@ -1,10 +1,33 @@
 import type { Block } from 'payload'
-import { headingStyleField, withBlockTabs } from './fields/blockFields'
+import { withBlockTabs } from './fields/blockFields'
 
 export const Media: Block = {
   slug: 'media',
   labels: { singular: 'Media', plural: 'Media Blocks' },
   fields: withBlockTabs([
+    {
+      name: 'size',
+      type: 'select',
+      required: true,
+      defaultValue: 'large',
+      options: [
+        { label: 'Full screen', value: 'fullscreen' },
+        { label: 'Large (container width)', value: 'large' },
+        { label: 'Small', value: 'small' },
+      ],
+    },
+    {
+      name: 'aspectRatio',
+      type: 'select',
+      defaultValue: 'auto',
+      options: [
+        { label: 'Auto', value: 'auto' },
+        { label: '4:3', value: '4/3' },
+        { label: '16:9', value: '16/9' },
+        { label: '1:1', value: '1/1' },
+        { label: '3:4', value: '3/4' },
+      ],
+    },
     {
       name: 'mediaType',
       type: 'select',
@@ -56,31 +79,8 @@ export const Media: Block = {
       admin: {
         description: 'Dark overlay opacity (0–1). Only relevant when heading is set.',
         step: 0.05,
-        condition: (_, sibling) => Boolean(sibling?.heading) && Boolean(sibling?.openVideo),
+        condition: (_, sibling) => Boolean(sibling?.openVideo),
       },
-    },
-    {
-      name: 'size',
-      type: 'select',
-      required: true,
-      defaultValue: 'large',
-      options: [
-        { label: 'Full screen', value: 'fullscreen' },
-        { label: 'Large (container width)', value: 'large' },
-        { label: 'Small', value: 'small' },
-      ],
-    },
-    {
-      name: 'aspectRatio',
-      type: 'select',
-      defaultValue: 'auto',
-      options: [
-        { label: 'Auto', value: 'auto' },
-        { label: '4:3', value: '4/3' },
-        { label: '16:9', value: '16/9' },
-        { label: '1:1', value: '1/1' },
-        { label: '3:4', value: '3/4' },
-      ],
     },
   ]),
 }

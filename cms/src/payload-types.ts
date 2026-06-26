@@ -394,6 +394,8 @@ export interface Page {
             blockType: 'mediaText';
           }
         | {
+            size: 'fullscreen' | 'large' | 'small';
+            aspectRatio?: ('auto' | '4/3' | '16/9' | '1/1' | '3/4') | null;
             mediaType: 'image' | 'video';
             image?: (string | null) | Media;
             /**
@@ -409,8 +411,6 @@ export interface Page {
              * Dark overlay opacity (0–1). Only relevant when heading is set.
              */
             overlayAlpha?: number | null;
-            size: 'fullscreen' | 'large' | 'small';
-            aspectRatio?: ('auto' | '4/3' | '16/9' | '1/1' | '3/4') | null;
             /**
              * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
              */
@@ -833,6 +833,8 @@ export interface Project {
             blockType: 'mediaText';
           }
         | {
+            size: 'fullscreen' | 'large' | 'small';
+            aspectRatio?: ('auto' | '4/3' | '16/9' | '1/1' | '3/4') | null;
             mediaType: 'image' | 'video';
             image?: (string | null) | Media;
             /**
@@ -848,8 +850,6 @@ export interface Project {
              * Dark overlay opacity (0–1). Only relevant when heading is set.
              */
             overlayAlpha?: number | null;
-            size: 'fullscreen' | 'large' | 'small';
-            aspectRatio?: ('auto' | '4/3' | '16/9' | '1/1' | '3/4') | null;
             /**
              * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
              */
@@ -1275,6 +1275,8 @@ export interface Post {
         blockType: 'mediaText';
       }
     | {
+        size: 'fullscreen' | 'large' | 'small';
+        aspectRatio?: ('auto' | '4/3' | '16/9' | '1/1' | '3/4') | null;
         mediaType: 'image' | 'video';
         image?: (string | null) | Media;
         /**
@@ -1290,8 +1292,6 @@ export interface Post {
          * Dark overlay opacity (0–1). Only relevant when heading is set.
          */
         overlayAlpha?: number | null;
-        size: 'fullscreen' | 'large' | 'small';
-        aspectRatio?: ('auto' | '4/3' | '16/9' | '1/1' | '3/4') | null;
         /**
          * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
          */
@@ -1892,14 +1892,14 @@ export interface PagesSelect<T extends boolean = true> {
         media?:
           | T
           | {
+              size?: T;
+              aspectRatio?: T;
               mediaType?: T;
               image?: T;
               video?: T;
               openVideo?: T;
               heading?: T;
               overlayAlpha?: T;
-              size?: T;
-              aspectRatio?: T;
               anchorId?: T;
               paddingWhere?: T;
               paddingSize?: T;
@@ -2093,14 +2093,14 @@ export interface ProjectsSelect<T extends boolean = true> {
         media?:
           | T
           | {
+              size?: T;
+              aspectRatio?: T;
               mediaType?: T;
               image?: T;
               video?: T;
               openVideo?: T;
               heading?: T;
               overlayAlpha?: T;
-              size?: T;
-              aspectRatio?: T;
               anchorId?: T;
               paddingWhere?: T;
               paddingSize?: T;
@@ -2289,14 +2289,14 @@ export interface PostsSelect<T extends boolean = true> {
         media?:
           | T
           | {
+              size?: T;
+              aspectRatio?: T;
               mediaType?: T;
               image?: T;
               video?: T;
               openVideo?: T;
               heading?: T;
               overlayAlpha?: T;
-              size?: T;
-              aspectRatio?: T;
               anchorId?: T;
               paddingWhere?: T;
               paddingSize?: T;
@@ -2615,6 +2615,8 @@ export interface ProjectsPage {
             blockType: 'mediaText';
           }
         | {
+            size: 'fullscreen' | 'large' | 'small';
+            aspectRatio?: ('auto' | '4/3' | '16/9' | '1/1' | '3/4') | null;
             mediaType: 'image' | 'video';
             image?: (string | null) | Media;
             /**
@@ -2630,8 +2632,6 @@ export interface ProjectsPage {
              * Dark overlay opacity (0–1). Only relevant when heading is set.
              */
             overlayAlpha?: number | null;
-            size: 'fullscreen' | 'large' | 'small';
-            aspectRatio?: ('auto' | '4/3' | '16/9' | '1/1' | '3/4') | null;
             /**
              * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
              */
@@ -3087,14 +3087,14 @@ export interface ProjectsPageSelect<T extends boolean = true> {
         media?:
           | T
           | {
+              size?: T;
+              aspectRatio?: T;
               mediaType?: T;
               image?: T;
               video?: T;
               openVideo?: T;
               heading?: T;
               overlayAlpha?: T;
-              size?: T;
-              aspectRatio?: T;
               anchorId?: T;
               paddingWhere?: T;
               paddingSize?: T;

@@ -10,6 +10,7 @@ const {
   mediaType,
   image,
   video,
+  size,
   openVideo,
   heading,
   overlayAlpha,
@@ -20,7 +21,7 @@ const {
 } = Astro.props as MediaBlock
 const paddingClass = blockPaddingClass(paddingWhere, paddingSize)
 const media = mediaType === 'image' ? image : video
-const hasOverlay = Boolean(heading && openVideo)
+const hasOverlay = Boolean(openVideo)
 
 const ratioClass: Record<string, string> = {
   auto: '',
@@ -32,7 +33,13 @@ const wrapClass = ratioClass[aspectRatio ?? 'auto'] ?? ''
 ---
 
 <section id={anchorId ?? undefined} class="section-media bg-ash">
-  <div class={clsx('container', paddingClass)}>
+  <div
+    class={clsx(
+      size === 'fullscreen' && 'w-full',
+      size === 'large' && ['container', paddingClass],
+      size === 'small' && ['container', paddingClass, 'max-w-3xl!'],
+    )}
+  >
     <div class={clsx(wrapClass, hasOverlay && 'relative')}>
       {media && <MediaItem {media} sizes="100vw" class="w-full h-full object-cover block" />}
       {
@@ -43,8 +50,8 @@ const wrapClass = ratioClass[aspectRatio ?? 'auto'] ?? ''
               style={`opacity: ${overlayAlpha ?? 0.3}`}
               aria-hidden="true"
             />
-            <div class="absolute inset-0 flex flex-col items-center justify-center gap-4xs text-white text-center">
-              <p class="text-extended-2xl max-w-[558px] mx-auto">{heading}</p>
+            <div class="absolute p-3xs inset-0 flex flex-col items-center justify-center gap-4xs text-white text-center">
+              {heading && <p class="text-extended-2xl max-w-[558px] mx-auto">{heading}</p>}
               <Button
                 data-video-url={openVideo!.url ?? ''}
                 aria-label="Play video"
