@@ -50,3 +50,13 @@
     var(--color-night) 0 0 10px,
     var(--color-night) 0 0 4px;
 }
+@utility btn-green-text {
+  color: var(--color-malachite);
+  padding: 0;
+  box-shadow: none;
+}
+@utility btn-white-text {
+  color: var(--color-white);
+  padding: 0;
+  box-shadow: none;
+}

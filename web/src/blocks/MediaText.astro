@@ -3,7 +3,9 @@ import type { MediaTextBlock } from '@/lib/payload'
 import MediaItem from '@/components/MediaItem.astro'
 import { lexicalToHtml } from '@/lib/lexical'
 import clsx from 'clsx'
+import ArrowDownRight from '@/assets/icons/arrowDownRight.astro'
 import { blockPaddingClass, injectSpans } from '@/lib/blocks'
+import Button from '@/components/Button.astro'
 
 const {
   mediaType,
@@ -12,6 +14,10 @@ const {
   heading,
   headingTag,
   body,
+  linkLabel,
+  linkType,
+  linkUrl,
+  linkPage,
   mediaPosition,
   variant,
   aspectRatio,
@@ -21,6 +27,11 @@ const {
 } = Astro.props as MediaTextBlock
 const HeadingTag = (headingTag ?? 'h2') as 'h1' | 'h2' | 'h3' | 'h4'
 const html = body ? lexicalToHtml(body) : ''
+const linkHref = linkLabel
+  ? linkType === 'internal'
+    ? `/${linkPage?.slug ?? ''}`
+    : (linkUrl ?? '#')
+  : null
 const isMediaLeft = mediaPosition === 'left'
 const paddingClass = blockPaddingClass(paddingWhere, paddingSize)
 ---
@@ -30,7 +41,11 @@ const paddingClass = blockPaddingClass(paddingWhere, paddingSize)
     variant === 'contained' ? (
       <div class={clsx('container grid grid-cols-12', paddingClass)}>
         <div
-          class={clsx(isMediaLeft ? '' : 'lg:col-start-7 md:order-2', 'col-span-12 md:col-span-6')}
+          class={clsx(
+            'flex items-center',
+            isMediaLeft ? '' : 'lg:col-start-7 md:order-2',
+            'col-span-12 md:col-span-6',
+          )}
         >
           {mediaType === 'image' && image && (
             <MediaItem
@@ -55,7 +70,7 @@ const paddingClass = blockPaddingClass(paddingWhere, paddingSize)
             isMediaLeft ? 'lg:col-start-7' : 'lg:col-start-1',
           )}
         >
-          <div class="max-w-[450px] space-y-2xs">
+          <div class="mx-auto max-w-[450px] space-y-2xs">
             {heading && (
               <HeadingTag
                 class="text-extended-xl text-white font-light!"
@@ -63,8 +78,14 @@ const paddingClass = blockPaddingClass(paddingWhere, paddingSize)
               />
             )}
             <div class="wysiwyg">
-              <Fragment class="text-body-xs text-mist" set:html={html} />
+              <div class="wysiwyg text-body-xs text-mist" set:html={html} />
             </div>
+            {linkHref && (
+              <Button href={linkHref} size="lg" style="text" colour="green">
+                {linkLabel}
+                <ArrowDownRight />
+              </Button>
+            )}
           </div>
         </div>
       </div>
@@ -81,7 +102,7 @@ const paddingClass = blockPaddingClass(paddingWhere, paddingSize)
           <div
             class={clsx(
               'max-w-[450px] space-y-2xs',
-              isMediaLeft ? 'pl-[var(--gutter)]' : 'pr-[var(--gutter)]',
+              isMediaLeft ? 'pl-(--gutter)' : 'pr-(--gutter)',
             )}
           >
             {heading && (
@@ -90,7 +111,13 @@ const paddingClass = blockPaddingClass(paddingWhere, paddingSize)
                 set:html={injectSpans(heading)}
               />
             )}
-            <Fragment class="wysiwyg text-body-xs text-mist" set:html={html} />
+            <div class="wysiwyg max-w-[420px] text-body-xs text-mist" set:html={html} />
+            {linkHref && (
+              <Button href={linkHref} size="lg" style="text" colour="green">
+                {linkLabel}
+                <ArrowDownRight />
+              </Button>
+            )}
           </div>
         </div>
         <figure

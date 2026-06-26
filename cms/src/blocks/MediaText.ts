@@ -41,6 +41,37 @@ export const MediaText: Block = {
       type: 'richText',
     },
     {
+      name: 'linkLabel',
+      type: 'text',
+    },
+    {
+      name: 'linkType',
+      type: 'select',
+      defaultValue: 'internal',
+      options: [
+        { label: 'Page', value: 'internal' },
+        { label: 'External URL', value: 'external' },
+      ],
+      admin: {
+        condition: (_, sibling) => Boolean(sibling?.linkLabel),
+      },
+    },
+    {
+      name: 'linkUrl',
+      type: 'text',
+      admin: {
+        condition: (_, sibling) => Boolean(sibling?.linkLabel) && sibling?.linkType !== 'internal',
+      },
+    },
+    {
+      name: 'linkPage',
+      type: 'relationship',
+      relationTo: ['pages', 'projects', 'posts'],
+      admin: {
+        condition: (_, sibling) => Boolean(sibling?.linkLabel) && sibling?.linkType === 'internal',
+      },
+    },
+    {
       name: 'mediaPosition',
       type: 'select',
       required: true,
@@ -72,6 +103,9 @@ export const MediaText: Block = {
       name: 'video',
       type: 'upload',
       relationTo: 'media',
+      filterOptions: {
+        mimeType: { contains: 'video' },
+      },
       admin: {
         description: 'Muted, looped, autoplayed.',
         condition: (_, sibling) => sibling?.mediaType === 'video',

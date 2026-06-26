@@ -123,6 +123,10 @@ export type MediaTextBlock = BlockPadding & {
   headingTag?: 'h1' | 'h2' | 'h3' | 'h4' | null
   headingStyle?: string | null
   body?: LexicalContent | null
+  linkLabel?: string | null
+  linkType?: 'external' | 'internal' | null
+  linkUrl?: string | null
+  linkPage?: { id: string; slug: string; title: string } | null
   mediaPosition: 'left' | 'right'
   mediaType: 'image' | 'video'
   image?: Media | null

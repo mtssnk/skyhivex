@@ -350,6 +350,22 @@ export interface Page {
               };
               [k: string]: unknown;
             } | null;
+            linkLabel?: string | null;
+            linkType?: ('internal' | 'external') | null;
+            linkUrl?: string | null;
+            linkPage?:
+              | ({
+                  relationTo: 'pages';
+                  value: string | Page;
+                } | null)
+              | ({
+                  relationTo: 'projects';
+                  value: string | Project;
+                } | null)
+              | ({
+                  relationTo: 'posts';
+                  value: string | Post;
+                } | null);
             mediaPosition: 'left' | 'right';
             mediaType: 'image' | 'video';
             image?: (string | null) | Media;
@@ -802,6 +818,22 @@ export interface Project {
               };
               [k: string]: unknown;
             } | null;
+            linkLabel?: string | null;
+            linkType?: ('internal' | 'external') | null;
+            linkUrl?: string | null;
+            linkPage?:
+              | ({
+                  relationTo: 'pages';
+                  value: string | Page;
+                } | null)
+              | ({
+                  relationTo: 'projects';
+                  value: string | Project;
+                } | null)
+              | ({
+                  relationTo: 'posts';
+                  value: string | Post;
+                } | null);
             mediaPosition: 'left' | 'right';
             mediaType: 'image' | 'video';
             image?: (string | null) | Media;
@@ -1257,6 +1289,22 @@ export interface Post {
           };
           [k: string]: unknown;
         } | null;
+        linkLabel?: string | null;
+        linkType?: ('internal' | 'external') | null;
+        linkUrl?: string | null;
+        linkPage?:
+          | ({
+              relationTo: 'pages';
+              value: string | Page;
+            } | null)
+          | ({
+              relationTo: 'projects';
+              value: string | Project;
+            } | null)
+          | ({
+              relationTo: 'posts';
+              value: string | Post;
+            } | null);
         mediaPosition: 'left' | 'right';
         mediaType: 'image' | 'video';
         image?: (string | null) | Media;
@@ -1913,6 +1961,10 @@ export interface PagesSelect<T extends boolean = true> {
               headingTag?: T;
               heading?: T;
               body?: T;
+              linkLabel?: T;
+              linkType?: T;
+              linkUrl?: T;
+              linkPage?: T;
               mediaPosition?: T;
               mediaType?: T;
               image?: T;
@@ -2112,6 +2164,10 @@ export interface ProjectsSelect<T extends boolean = true> {
               headingTag?: T;
               heading?: T;
               body?: T;
+              linkLabel?: T;
+              linkType?: T;
+              linkUrl?: T;
+              linkPage?: T;
               mediaPosition?: T;
               mediaType?: T;
               image?: T;
@@ -2306,6 +2362,10 @@ export interface PostsSelect<T extends boolean = true> {
               headingTag?: T;
               heading?: T;
               body?: T;
+              linkLabel?: T;
+              linkType?: T;
+              linkUrl?: T;
+              linkPage?: T;
               mediaPosition?: T;
               mediaType?: T;
               image?: T;
@@ -2604,6 +2664,22 @@ export interface ProjectsPage {
               };
               [k: string]: unknown;
             } | null;
+            linkLabel?: string | null;
+            linkType?: ('internal' | 'external') | null;
+            linkUrl?: string | null;
+            linkPage?:
+              | ({
+                  relationTo: 'pages';
+                  value: string | Page;
+                } | null)
+              | ({
+                  relationTo: 'projects';
+                  value: string | Project;
+                } | null)
+              | ({
+                  relationTo: 'posts';
+                  value: string | Post;
+                } | null);
             mediaPosition: 'left' | 'right';
             mediaType: 'image' | 'video';
             image?: (string | null) | Media;
@@ -3115,6 +3191,10 @@ export interface ProjectsPageSelect<T extends boolean = true> {
               headingTag?: T;
               heading?: T;
               body?: T;
+              linkLabel?: T;
+              linkType?: T;
+              linkUrl?: T;
+              linkPage?: T;
               mediaPosition?: T;
               mediaType?: T;
               image?: T;
