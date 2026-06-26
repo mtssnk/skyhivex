@@ -3,7 +3,7 @@ import clsx from 'clsx'
 interface Props {
   colour?: 'green' | 'white'
   size?: 'lg' | 'md' | 'sm'
-  style?: 'solid' | 'outline' | 'text'
+  style?: 'solid' | 'outline' | 'text' | 'icon'
   href?: string
   target?: string
   rel?: string
@@ -43,8 +43,19 @@ const textClasses: Record<string, string> = {
   white: 'btn-white-text',
 }
 
+const iconClasses: Record<string, string> = {
+  green: 'btn-green-icon',
+  white: 'btn-white-icon',
+}
+
 const colourClass =
-  style === 'outline' ? outlineClasses[colour] : style === 'text' ? textClasses[colour] : solidClasses[colour]
+  style === 'outline'
+    ? outlineClasses[colour]
+    : style === 'text'
+      ? textClasses[colour]
+      : style === 'icon'
+        ? iconClasses[colour]
+        : solidClasses[colour]
 const classes = clsx('btn', colourClass, className, sizeClasses[size])
 ---
 

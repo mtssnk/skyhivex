@@ -138,7 +138,8 @@ export type MediaBlock = BlockPadding & {
   blockType: 'media'
   id?: string | null
   mediaType: 'image' | 'video'
-  media: Media | null
+  image?: Media | null
+  video?: Media | null
   openVideo?: Media | null
   heading?: string | null
   headingStyle?: string | null

@@ -405,22 +405,6 @@ export interface Page {
              */
             openVideo?: (string | null) | Media;
             heading?: string | null;
-            headingStyle?:
-              | (
-                  | 'text-serif-5xl'
-                  | 'text-serif-2xl'
-                  | 'text-serif-md'
-                  | 'text-serif-sm'
-                  | 'text-extended-3xl'
-                  | 'text-extended-2xl'
-                  | 'text-extended-xl-semibold'
-                  | 'text-extended-xl-light'
-                  | 'text-extended-lg'
-                  | 'text-extended-lg-light'
-                  | 'text-extended-md'
-                  | 'text-extended-2xs'
-                )
-              | null;
             /**
              * Dark overlay opacity (0–1). Only relevant when heading is set.
              */
@@ -559,19 +543,6 @@ export interface Page {
              */
             overlayAlpha?: number | null;
             text: string;
-            textStyle:
-              | 'text-serif-5xl'
-              | 'text-serif-2xl'
-              | 'text-serif-md'
-              | 'text-serif-sm'
-              | 'text-extended-3xl'
-              | 'text-extended-2xl'
-              | 'text-extended-xl-semibold'
-              | 'text-extended-xl-light'
-              | 'text-extended-lg'
-              | 'text-extended-lg-light'
-              | 'text-extended-md'
-              | 'text-extended-2xs';
             button: {
               label: string;
               url: string;
@@ -873,22 +844,6 @@ export interface Project {
              */
             openVideo?: (string | null) | Media;
             heading?: string | null;
-            headingStyle?:
-              | (
-                  | 'text-serif-5xl'
-                  | 'text-serif-2xl'
-                  | 'text-serif-md'
-                  | 'text-serif-sm'
-                  | 'text-extended-3xl'
-                  | 'text-extended-2xl'
-                  | 'text-extended-xl-semibold'
-                  | 'text-extended-xl-light'
-                  | 'text-extended-lg'
-                  | 'text-extended-lg-light'
-                  | 'text-extended-md'
-                  | 'text-extended-2xs'
-                )
-              | null;
             /**
              * Dark overlay opacity (0–1). Only relevant when heading is set.
              */
@@ -973,19 +928,6 @@ export interface Project {
              */
             overlayAlpha?: number | null;
             text: string;
-            textStyle:
-              | 'text-serif-5xl'
-              | 'text-serif-2xl'
-              | 'text-serif-md'
-              | 'text-serif-sm'
-              | 'text-extended-3xl'
-              | 'text-extended-2xl'
-              | 'text-extended-xl-semibold'
-              | 'text-extended-xl-light'
-              | 'text-extended-lg'
-              | 'text-extended-lg-light'
-              | 'text-extended-md'
-              | 'text-extended-2xs';
             button: {
               label: string;
               url: string;
@@ -1344,22 +1286,6 @@ export interface Post {
          */
         openVideo?: (string | null) | Media;
         heading?: string | null;
-        headingStyle?:
-          | (
-              | 'text-serif-5xl'
-              | 'text-serif-2xl'
-              | 'text-serif-md'
-              | 'text-serif-sm'
-              | 'text-extended-3xl'
-              | 'text-extended-2xl'
-              | 'text-extended-xl-semibold'
-              | 'text-extended-xl-light'
-              | 'text-extended-lg'
-              | 'text-extended-lg-light'
-              | 'text-extended-md'
-              | 'text-extended-2xs'
-            )
-          | null;
         /**
          * Dark overlay opacity (0–1). Only relevant when heading is set.
          */
@@ -1444,19 +1370,6 @@ export interface Post {
          */
         overlayAlpha?: number | null;
         text: string;
-        textStyle:
-          | 'text-serif-5xl'
-          | 'text-serif-2xl'
-          | 'text-serif-md'
-          | 'text-serif-sm'
-          | 'text-extended-3xl'
-          | 'text-extended-2xl'
-          | 'text-extended-xl-semibold'
-          | 'text-extended-xl-light'
-          | 'text-extended-lg'
-          | 'text-extended-lg-light'
-          | 'text-extended-md'
-          | 'text-extended-2xs';
         button: {
           label: string;
           url: string;
@@ -1984,7 +1897,6 @@ export interface PagesSelect<T extends boolean = true> {
               video?: T;
               openVideo?: T;
               heading?: T;
-              headingStyle?: T;
               overlayAlpha?: T;
               size?: T;
               aspectRatio?: T;
@@ -2046,7 +1958,6 @@ export interface PagesSelect<T extends boolean = true> {
               backgroundImage?: T;
               overlayAlpha?: T;
               text?: T;
-              textStyle?: T;
               button?:
                 | T
                 | {
@@ -2187,7 +2098,6 @@ export interface ProjectsSelect<T extends boolean = true> {
               video?: T;
               openVideo?: T;
               heading?: T;
-              headingStyle?: T;
               overlayAlpha?: T;
               size?: T;
               aspectRatio?: T;
@@ -2225,7 +2135,6 @@ export interface ProjectsSelect<T extends boolean = true> {
               backgroundImage?: T;
               overlayAlpha?: T;
               text?: T;
-              textStyle?: T;
               button?:
                 | T
                 | {
@@ -2385,7 +2294,6 @@ export interface PostsSelect<T extends boolean = true> {
               video?: T;
               openVideo?: T;
               heading?: T;
-              headingStyle?: T;
               overlayAlpha?: T;
               size?: T;
               aspectRatio?: T;
@@ -2423,7 +2331,6 @@ export interface PostsSelect<T extends boolean = true> {
               backgroundImage?: T;
               overlayAlpha?: T;
               text?: T;
-              textStyle?: T;
               button?:
                 | T
                 | {
@@ -2719,22 +2626,6 @@ export interface ProjectsPage {
              */
             openVideo?: (string | null) | Media;
             heading?: string | null;
-            headingStyle?:
-              | (
-                  | 'text-serif-5xl'
-                  | 'text-serif-2xl'
-                  | 'text-serif-md'
-                  | 'text-serif-sm'
-                  | 'text-extended-3xl'
-                  | 'text-extended-2xl'
-                  | 'text-extended-xl-semibold'
-                  | 'text-extended-xl-light'
-                  | 'text-extended-lg'
-                  | 'text-extended-lg-light'
-                  | 'text-extended-md'
-                  | 'text-extended-2xs'
-                )
-              | null;
             /**
              * Dark overlay opacity (0–1). Only relevant when heading is set.
              */
@@ -2819,19 +2710,6 @@ export interface ProjectsPage {
              */
             overlayAlpha?: number | null;
             text: string;
-            textStyle:
-              | 'text-serif-5xl'
-              | 'text-serif-2xl'
-              | 'text-serif-md'
-              | 'text-serif-sm'
-              | 'text-extended-3xl'
-              | 'text-extended-2xl'
-              | 'text-extended-xl-semibold'
-              | 'text-extended-xl-light'
-              | 'text-extended-lg'
-              | 'text-extended-lg-light'
-              | 'text-extended-md'
-              | 'text-extended-2xs';
             button: {
               label: string;
               url: string;
@@ -3214,7 +3092,6 @@ export interface ProjectsPageSelect<T extends boolean = true> {
               video?: T;
               openVideo?: T;
               heading?: T;
-              headingStyle?: T;
               overlayAlpha?: T;
               size?: T;
               aspectRatio?: T;
@@ -3252,7 +3129,6 @@ export interface ProjectsPageSelect<T extends boolean = true> {
               backgroundImage?: T;
               overlayAlpha?: T;
               text?: T;
-              textStyle?: T;
               button?:
                 | T
                 | {

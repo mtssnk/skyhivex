@@ -1,17 +1,26 @@
 ---
 import type { MediaBlock } from '@/lib/payload'
+import Button from '@/components/Button.astro'
 import clsx from 'clsx'
 import MediaItem from '@/components/MediaItem.astro'
 import { blockPaddingClass } from '@/lib/blocks'
+import Play from '@/assets/icons/play.astro'
 
 const {
-  media,
+  mediaType,
+  image,
+  video,
+  openVideo,
+  heading,
+  overlayAlpha,
   aspectRatio = 'auto',
   anchorId,
   paddingWhere,
   paddingSize,
 } = Astro.props as MediaBlock
 const paddingClass = blockPaddingClass(paddingWhere, paddingSize)
+const media = mediaType === 'image' ? image : video
+const hasOverlay = Boolean(heading && openVideo)
 
 const ratioClass: Record<string, string> = {
   auto: '',
@@ -24,8 +33,31 @@ const wrapClass = ratioClass[aspectRatio ?? 'auto'] ?? ''
 
 <section id={anchorId ?? undefined} class="section-media bg-ash">
   <div class={clsx('container', paddingClass)}>
-    <div class={wrapClass}>
+    <div class={clsx(wrapClass, hasOverlay && 'relative')}>
       {media && <MediaItem {media} sizes="100vw" class="w-full h-full object-cover block" />}
+      {
+        hasOverlay && (
+          <>
+            <div
+              class="absolute inset-0 bg-black"
+              style={`opacity: ${overlayAlpha ?? 0.3}`}
+              aria-hidden="true"
+            />
+            <div class="absolute inset-0 flex flex-col items-center justify-center gap-4xs text-white text-center">
+              <p class="text-extended-2xl max-w-[558px] mx-auto">{heading}</p>
+              <Button
+                data-video-url={openVideo!.url ?? ''}
+                aria-label="Play video"
+                size="lg"
+                colour="green"
+                style="icon"
+              >
+                <Play />
+              </Button>
+            </div>
+          </>
+        )
+      }
     </div>
   </div>
 </section>

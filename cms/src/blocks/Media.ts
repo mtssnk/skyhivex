@@ -44,11 +44,8 @@ export const Media: Block = {
     {
       name: 'heading',
       type: 'text',
-    },
-    {
-      ...headingStyleField,
       admin: {
-        condition: (_, sibling) => Boolean(sibling?.heading),
+        condition: (_, sibling) => Boolean(sibling?.openVideo),
       },
     },
     {
@@ -59,7 +56,7 @@ export const Media: Block = {
       admin: {
         description: 'Dark overlay opacity (0–1). Only relevant when heading is set.',
         step: 0.05,
-        condition: (_, sibling) => Boolean(sibling?.heading),
+        condition: (_, sibling) => Boolean(sibling?.heading) && Boolean(sibling?.openVideo),
       },
     },
     {

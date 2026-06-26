@@ -1,5 +1,5 @@
 import type { Block } from 'payload'
-import { headingStyleOptions, withBlockTabs } from './fields/blockFields'
+import { withBlockTabs } from './fields/blockFields'
 
 export const CTA: Block = {
   slug: 'cta',
@@ -25,13 +25,6 @@ export const CTA: Block = {
       name: 'text',
       type: 'text',
       required: true,
-    },
-    {
-      name: 'textStyle',
-      type: 'select',
-      required: true,
-      defaultValue: 'text-extended-lg',
-      options: headingStyleOptions,
     },
     {
       name: 'button',

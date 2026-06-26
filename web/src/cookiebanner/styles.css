@@ -1,5 +1,4 @@
 @reference "../styles/global.css";
-@reference "../styles/button.css";
 
 .cb-mode-banner {
   @apply max-w-[340px] shadow-md fixed bottom-0 left-0 bg-white text-night px-4 py-6 z-40 animate-fade-in;
@@ -12,12 +11,30 @@
   @apply text-body-xs;
 }
 
+.cb-accept,
+.cb-reject {
+  @apply text-mono-3xs inline-flex items-center justify-center rounded-full focus:outline-none;
+  gap: 0.6em;
+  padding: 0.93em 1.42em;
+  box-shadow:
+    1.5px -1px 0 2px rgba(41, 48, 255, 0.6),
+    -1.5px 1px 0 2px rgba(255, 0, 0, 0.5);
+}
+
 .cb-accept {
-  @apply btn btn-md btn-green-solid;
+  background:
+    linear-gradient(90deg, var(--color-malachite) 0%, var(--color-cyan) 100%) padding-box,
+    linear-gradient(90deg, var(--color-cyan) 0%, var(--color-malachite) 100%) border-box;
+  border: 2px solid transparent;
+  color: var(--color-moss);
 }
 
 .cb-reject {
-  @apply btn btn-md btn-white-outline;
+  color: var(--color-white);
+  border: 2px solid;
+  text-shadow:
+    var(--color-night) 0 0 10px,
+    var(--color-night) 0 0 4px;
 }
 .cb-actions {
   @apply flex gap-3 flex-wrap mt-4;
