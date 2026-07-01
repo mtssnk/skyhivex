@@ -1,13 +1,12 @@
 ---
 import clsx from 'clsx'
 interface Props {
-  colour?: string
   class?: string
 }
 
 const { class: className } = Astro.props
 ---
 
-<div class={clsx('border-b-2 border-congo', className)}>
+<div class={clsx('border-b-2 border-congo text-gravel', className)}>
   <div class="inline-flex border-b-6 border-congo text-mono-3xs pb-3xs -mb-0.5"><slot /></div>
 </div>

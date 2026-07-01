@@ -1,0 +1,69 @@
+---
+import type { NewsCardListBlock } from '@/lib/payload'
+import HeadingUnderline from '@/components/HeadingUnderline.astro'
+import Numbered from '@/components/Numbered.astro'
+import MediaItem from '@/components/MediaItem.astro'
+import Button from '@/components/Button.astro'
+import ArrowUpRight from '@/assets/icons/arrowUpRight.astro'
+import clsx from 'clsx'
+import { blockPaddingClass } from '@/lib/blocks'
+import { getPosts } from '@/lib/payload'
+import type { Post } from '@/lib/payload'
+
+const { articles, selectionMode, category, buttonLabel, anchorId, paddingWhere, paddingSize } =
+  Astro.props as NewsCardListBlock
+const paddingClass = blockPaddingClass(paddingWhere, paddingSize)
+
+let resolvedArticles: Post[] = articles ?? []
+
+if (selectionMode !== 'manual') {
+  const allPosts = await getPosts()
+  const filtered =
+    selectionMode === 'category' && category
+      ? allPosts.filter((p) => p.categories?.some((c) => c.id === category.id))
+      : allPosts
+  resolvedArticles = filtered.slice(0, 3)
+}
+---
+
+<section id={anchorId ?? undefined} class={clsx('section-newscardlist bg-ash', paddingClass)}>
+  <div class="container space-y-2xs">
+    <header>
+      <HeadingUnderline><h2>news</h2></HeadingUnderline>
+    </header>
+    <ul class="grid grid-cols-1 md:grid-cols-3 md:gap-0" role="list">
+      {
+        resolvedArticles.map((article, i) => (
+          <li class="border-congo border-2 md:border-r-0 last:border-r-2 last:border-b-2 md:border-b-2">
+            <a href={`/news/${article.slug}`} class="block bg-night group">
+              <div class="aspect-[4/3] overflow-hidden">
+                <MediaItem
+                  media={article.listingImage}
+                  aspectRatio="4/3"
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                  class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+              </div>
+              <div class="flex justify-end bg-grid-congo border-congo border-b-1">
+                <Numbered class="-mb-0.5">{String(i + 1).padStart(3, '0')}</Numbered>
+              </div>
+              <div class="p-4xs">
+                <h3 class="text-serif-sm text-white">{article.title}</h3>
+              </div>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+    {
+      buttonLabel && (
+        <div class="flex justify-center">
+          <Button href="/news" size="lg" style="solid" colour="green">
+            {buttonLabel}
+            <ArrowUpRight />
+          </Button>
+        </div>
+      )
+    }
+  </div>
+</section>

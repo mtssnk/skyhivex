@@ -1,0 +1,21 @@
+---
+import clsx from 'clsx'
+interface Props {
+  class?: string
+  bgColour?: string
+  textColour?: string
+}
+
+const { class: className, bgColour, textColour } = Astro.props
+---
+
+<div
+  class={clsx(
+    'text-mono-4xs py-3 px-3.5',
+    bgColour ? bgColour : 'bg-night',
+    textColour ? textColour : 'text-gravel',
+    className,
+  )}
+>
+  <slot />
+</div>
