@@ -1,39 +1,13 @@
 ---
+import clsx from 'clsx'
 interface Props {
   colour?: string
   class?: string
-  textClass?: string
 }
 
-const { class: className, textClass } = Astro.props
-
-const classes = ['mb-4', 'w-fit', className, textClass ?? 'text-condensed-sm']
-  .filter(Boolean)
-  .join(' ')
+const { class: className } = Astro.props
 ---
 
-<div data-heading-text class={classes}>
-  <slot />
+<div class={clsx('border-b-2 border-congo', className)}>
+  <div class="inline-flex border-b-6 border-congo text-mono-3xs pb-3xs -mb-0.5"><slot /></div>
 </div>
-<div data-heading-line class="h-0.5 bg-current w-0"></div>
-
-<script>
-  function init() {
-    document.querySelectorAll<HTMLElement>('[data-heading-text]').forEach((textEl) => {
-      const line = textEl.nextElementSibling as HTMLElement | null
-      if (!line) return
-
-      const update = () => {
-        const textRect = textEl.getBoundingClientRect()
-        line.style.marginLeft = `-${textRect.left}px`
-        line.style.width = `${textRect.right}px`
-        line.dataset.width = `${textRect.right}`
-      }
-
-      update()
-      window.addEventListener('resize', update, { passive: true })
-    })
-  }
-
-  init()
-</script>

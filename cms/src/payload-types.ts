@@ -702,6 +702,49 @@ export interface Page {
             blockName?: string | null;
             blockType: 'newsCardList';
           }
+        | {
+            heading?: string | null;
+            headingTag?: ('h1' | 'h2' | 'h3' | 'h4') | null;
+            items?:
+              | {
+                  icon?: (string | null) | Svg;
+                  heading: string;
+                  body?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            linkLabel?: string | null;
+            linkType?: ('internal' | 'external') | null;
+            linkUrl?: string | null;
+            linkPage?:
+              | ({
+                  relationTo: 'pages';
+                  value: string | Page;
+                } | null)
+              | ({
+                  relationTo: 'projects';
+                  value: string | Project;
+                } | null)
+              | ({
+                  relationTo: 'posts';
+                  value: string | Post;
+                } | null);
+            /**
+             * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
+             */
+            anchorId?: string | null;
+            /**
+             * Which side(s) the vertical padding is applied to.
+             */
+            paddingWhere?: ('both' | 'top' | 'bottom') | null;
+            /**
+             * Size of the vertical padding.
+             */
+            paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'featureList';
+          }
       )[]
     | null;
   /**
@@ -2032,6 +2075,29 @@ export interface PagesSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
+        featureList?:
+          | T
+          | {
+              heading?: T;
+              headingTag?: T;
+              items?:
+                | T
+                | {
+                    icon?: T;
+                    heading?: T;
+                    body?: T;
+                    id?: T;
+                  };
+              linkLabel?: T;
+              linkType?: T;
+              linkUrl?: T;
+              linkPage?: T;
+              anchorId?: T;
+              paddingWhere?: T;
+              paddingSize?: T;
+              id?: T;
+              blockName?: T;
+            };
       };
   metaDescription?: T;
   ogImage?: T;
@@ -2942,6 +3008,49 @@ export interface ProjectsPage {
             blockName?: string | null;
             blockType: 'logoList';
           }
+        | {
+            heading?: string | null;
+            headingTag?: ('h1' | 'h2' | 'h3' | 'h4') | null;
+            items?:
+              | {
+                  icon?: (string | null) | Svg;
+                  heading: string;
+                  body?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            linkLabel?: string | null;
+            linkType?: ('internal' | 'external') | null;
+            linkUrl?: string | null;
+            linkPage?:
+              | ({
+                  relationTo: 'pages';
+                  value: string | Page;
+                } | null)
+              | ({
+                  relationTo: 'projects';
+                  value: string | Project;
+                } | null)
+              | ({
+                  relationTo: 'posts';
+                  value: string | Post;
+                } | null);
+            /**
+             * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
+             */
+            anchorId?: string | null;
+            /**
+             * Which side(s) the vertical padding is applied to.
+             */
+            paddingWhere?: ('both' | 'top' | 'bottom') | null;
+            /**
+             * Size of the vertical padding.
+             */
+            paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'featureList';
+          }
       )[]
     | null;
   /**
@@ -3232,6 +3341,29 @@ export interface ProjectsPageSelect<T extends boolean = true> {
           | {
               heading?: T;
               logos?: T;
+              anchorId?: T;
+              paddingWhere?: T;
+              paddingSize?: T;
+              id?: T;
+              blockName?: T;
+            };
+        featureList?:
+          | T
+          | {
+              heading?: T;
+              headingTag?: T;
+              items?:
+                | T
+                | {
+                    icon?: T;
+                    heading?: T;
+                    body?: T;
+                    id?: T;
+                  };
+              linkLabel?: T;
+              linkType?: T;
+              linkUrl?: T;
+              linkPage?: T;
               anchorId?: T;
               paddingWhere?: T;
               paddingSize?: T;

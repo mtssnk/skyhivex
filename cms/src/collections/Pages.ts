@@ -11,6 +11,7 @@ import { PersonList } from '../blocks/PersonList'
 import { AccordionList } from '../blocks/AccordionList'
 import { ProjectList } from '../blocks/ProjectList'
 import { NewsCardList } from '../blocks/NewsCardList'
+import { FeatureList } from '../blocks/FeatureList'
 
 export const Pages: CollectionConfig = {
   slug: 'pages',
@@ -95,6 +96,7 @@ export const Pages: CollectionConfig = {
         AccordionList,
         ProjectList,
         NewsCardList,
+        FeatureList,
       ],
     },
     {

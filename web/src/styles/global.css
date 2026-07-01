@@ -136,3 +136,9 @@ main {
     left: calc(-1 * var(--container-inset));
   }
 }
+
+.bg-plus-congo {
+  background-image: url('../assets/img/bg/plus-congo.svg');
+  background-repeat: repeat;
+  background-size: 21px 21px;
+}

@@ -11,6 +11,7 @@ import { CardList } from '../blocks/CardList'
 import { ProjectList } from '../blocks/ProjectList'
 import { NewsCardList } from '../blocks/NewsCardList'
 import { LogoList } from '../blocks/LogoList'
+import { FeatureList } from '../blocks/FeatureList'
 
 export const ProjectsPage: GlobalConfig = {
   slug: 'projects-page',
@@ -43,6 +44,7 @@ export const ProjectsPage: GlobalConfig = {
         ProjectList,
         NewsCardList,
         LogoList,
+        FeatureList,
       ],
     },
     {

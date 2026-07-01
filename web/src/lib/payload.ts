@@ -242,6 +242,23 @@ export type AccordionListBlock = BlockPadding & {
   }[]
 }
 
+export type FeatureListBlock = BlockPadding & {
+  blockType: 'featureList'
+  id?: string | null
+  heading?: string | null
+  headingTag?: 'h1' | 'h2' | 'h3' | 'h4' | null
+  items: {
+    icon?: Svg | null
+    heading: string
+    body?: string | null
+    id?: string | null
+  }[]
+  linkLabel?: string | null
+  linkType?: 'internal' | 'external' | null
+  linkUrl?: string | null
+  linkPage?: { slug: string } | null
+}
+
 export type SharedBlock =
   | MediaTextBlock
   | MediaBlock
@@ -254,6 +271,7 @@ export type SharedBlock =
   | ProjectListBlock
   | NewsCardListBlock
   | LogoListBlock
+  | FeatureListBlock
 
 export type PageBlock = HeroBlock | SharedBlock
 export type ProjectBlock = SharedBlock
