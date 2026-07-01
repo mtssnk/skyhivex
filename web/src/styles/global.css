@@ -122,3 +122,17 @@ main {
   margin-inline: auto;
   padding-inline: var(--gutter);
 }
+
+.media-bleed-right,
+.media-bleed-left {
+  position: absolute;
+  inset: 0;
+}
+@media (min-width: 1024px) {
+  .media-bleed-right {
+    right: calc(-1 * var(--container-inset));
+  }
+  .media-bleed-left {
+    left: calc(-1 * var(--container-inset));
+  }
+}

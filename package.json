@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "db": "cd cms && docker compose up -d mongo",
     "dev:cms": "cd cms && pnpm dev",
     "dev:web": "cd web && pnpm dev",
     "dev:killport": "cd cms && lsof -ti :3000 | xargs kill",

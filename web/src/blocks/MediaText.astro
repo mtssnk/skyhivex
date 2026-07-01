@@ -36,7 +36,7 @@ const isMediaLeft = mediaPosition === 'left'
 const paddingClass = blockPaddingClass(paddingWhere, paddingSize)
 ---
 
-<section id={anchorId ?? undefined} class="section-mediatext bg-ash">
+<section id={anchorId ?? undefined} class="section-mediatext bg-ash overflow-x-clip">
   {
     variant === 'contained' ? (
       <div class={clsx('container grid grid-cols-12', paddingClass)}>
@@ -90,21 +90,13 @@ const paddingClass = blockPaddingClass(paddingWhere, paddingSize)
         </div>
       </div>
     ) : (
-      <div class="grid grid-cols-12 gap-0">
+      <div class="container grid grid-cols-12">
         <div
           class={clsx(
-            'col-span-12 md:col-span-6 lg:col-span-5 flex flex-col justify-center py-xs md:py-lg',
-            isMediaLeft
-              ? 'md:col-start-7 lg:col-start-8 pr-(--container-inset)'
-              : 'pl-(--container-inset)',
+            'col-span-12 lg:col-span-5 flex flex-col justify-center pb-md pt-4xs lg:py-lg',
           )}
         >
-          <div
-            class={clsx(
-              'max-w-[450px] space-y-2xs',
-              isMediaLeft ? 'pl-(--gutter)' : 'pr-(--gutter)',
-            )}
-          >
+          <div class={clsx('max-w-[450px] space-y-2xs lg:mx-auto')}>
             {heading && (
               <HeadingTag
                 class="text-extended-xl text-white font-light!"
@@ -122,21 +114,23 @@ const paddingClass = blockPaddingClass(paddingWhere, paddingSize)
         </div>
         <figure
           class={clsx(
-            'col-span-12 md:col-span-6 lg:col-span-7 relative min-h-[60vw] md:min-h-0 order-first md:order-0',
-            isMediaLeft ? 'md:col-start-1 md:row-start-1' : 'md:col-start-7 lg:col-start-6',
+            'col-span-12 lg:col-span-7 relative min-h-[60vw] lg:min-h-0 order-first lg:order-0',
+            isMediaLeft ? 'lg:col-start-1 lg:row-start-1' : 'lg:col-start-6',
           )}
         >
-          {mediaType === 'image' && image && (
-            <MediaItem media={image} class="absolute inset-0 w-full h-full object-cover" />
-          )}
-          {mediaType === 'video' && video && (
-            <MediaItem
-              media={video}
-              muted={true}
-              autoplay={true}
-              class="absolute inset-0 w-full h-full object-cover"
-            />
-          )}
+          <div class={isMediaLeft ? 'media-bleed-left' : 'media-bleed-right'}>
+            {mediaType === 'image' && image && (
+              <MediaItem media={image} class="w-full h-full object-cover" />
+            )}
+            {mediaType === 'video' && video && (
+              <MediaItem
+                media={video}
+                muted={true}
+                autoplay={true}
+                class="w-full h-full object-cover"
+              />
+            )}
+          </div>
         </figure>
       </div>
     )

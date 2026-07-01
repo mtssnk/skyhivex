@@ -75,7 +75,7 @@ export const MediaText: Block = {
       name: 'mediaPosition',
       type: 'select',
       required: true,
-      defaultValue: 'left',
+      defaultValue: 'right',
       options: [
         { label: 'Media on left', value: 'left' },
         { label: 'Media on right', value: 'right' },
