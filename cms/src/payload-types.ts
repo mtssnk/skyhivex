@@ -2578,7 +2578,7 @@ export interface SiteSetting {
   contactAddress?: string | null;
   socialLinks?:
     | {
-        platform: 'instagram' | 'linkedin';
+        platform: 'instagram' | 'linkedin' | 'x' | 'facebook' | 'youtube';
         url: string;
         id?: string | null;
       }[]

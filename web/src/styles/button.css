@@ -1,11 +1,14 @@
 @layer components {
   .btn {
     @apply inline-flex items-center justify-center rounded-full focus:outline-none cursor-pointer;
+    /* text-box: trim-both cap alphabetic; */
+    text-box: trim-both text;
     box-shadow:
       1.5px -1px 0 2px rgba(41, 48, 255, 0.6),
       -1.5px 1px 0 2px rgba(255, 0, 0, 0.5);
   }
   .btn svg {
+    display: block;
     stroke-width: 1;
   }
 

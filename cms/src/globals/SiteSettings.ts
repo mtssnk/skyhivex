@@ -42,6 +42,9 @@ export const SiteSettings: GlobalConfig = {
           options: [
             { label: 'Instagram', value: 'instagram' },
             { label: 'LinkedIn', value: 'linkedin' },
+            { label: 'X', value: 'x' },
+            { label: 'Facebook', value: 'facebook' },
+            { label: 'YouTube', value: 'youtube' },
           ],
         },
         {
