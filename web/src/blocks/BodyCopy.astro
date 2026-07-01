@@ -1,0 +1,14 @@
+---
+import clsx from 'clsx'
+import { lexicalToHtml } from '@/lib/lexical'
+const { content, paddingWhere, paddingSize, anchorId } = Astro.props
+const paddingClass = blockPaddingClass(paddingWhere, paddingSize)
+const html = content ? lexicalToHtml(content) : ''
+import { blockPaddingClass } from '@/lib/blocks'
+---
+
+<section id={anchorId ?? undefined} class={clsx('section-bodycopy bg-ash ', paddingClass)}>
+  <div class="wysiwyg !max-w-[622px] container">
+    <div set:html={html} />
+  </div>
+</section>

@@ -169,15 +169,23 @@
       @apply mb-[1em];
     }
   }
+  h1,
   h2,
-  h3 {
-    @apply mb-[1em];
+  h3,
+  h4 {
+    @apply mb-[1em] text-smoke;
   }
   h2 {
-    @apply text-extended-lg;
+    @apply text-extended-xl font-light;
+  }
+  h2 {
+    @apply text-extended-lg font-light;
   }
   h3 {
-    @apply text-extended-md;
+    @apply text-extended-md font-light;
+  }
+  h4 {
+    @apply text-extended-sm font-light;
   }
   a {
     @apply underline;

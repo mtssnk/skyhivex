@@ -77,9 +77,9 @@ const paddingClass = blockPaddingClass(paddingWhere, paddingSize)
                 set:html={injectSpans(heading)}
               />
             )}
-            <div class="wysiwyg">
-              <div class="wysiwyg text-body-xs text-mist" set:html={html} />
-            </div>
+
+            <div class="wysiwyg text-body-xs text-mist" set:html={html} />
+
             {linkHref && (
               <Button href={linkHref} size="lg" style="text" colour="green">
                 {linkLabel}

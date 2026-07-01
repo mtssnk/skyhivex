@@ -1,0 +1,35 @@
+---
+import Layout from '@/layouts/Layout.astro'
+import BlockRenderer from '@/blocks/BlockRenderer.astro'
+import { getPosts, getPostBySlug } from '@/lib/payload'
+import Hero from '@/blocks/Hero.astro'
+
+export async function getStaticPaths() {
+  const posts = await getPosts()
+  return posts.map((p) => ({ params: { slug: p.slug } }))
+}
+
+const { slug } = Astro.params
+const preview = Astro.cookies.get('__preview')?.value === 'true'
+const apiKey = preview ? import.meta.env.PAYLOAD_API_KEY : undefined
+const post = await getPostBySlug(slug!, { draft: preview, apiKey })
+if (!post) return new Response(null, { status: 404 })
+
+const metaDescription = post.metaDescription ?? post.title
+const ogImage = post.ogImage?.url ?? post.listingImage?.url ?? undefined
+
+const jsonLd: Record<string, unknown> = {
+  '@context': 'https://schema.org',
+  '@type': 'NewsArticle',
+  headline: post.title,
+  description: metaDescription,
+  url: Astro.url.href,
+  ...(ogImage ? { image: ogImage } : {}),
+}
+console.log(post.blocks)
+---
+
+<Layout title={post.title} description={metaDescription} isDark={true} {ogImage} {jsonLd}>
+  <Hero headingPart1={post.title} backgroundMedia="image" backgroundImage={post.listingImage} />
+  <BlockRenderer blocks={post.blocks} />
+</Layout>
