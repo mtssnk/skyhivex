@@ -162,3 +162,9 @@ main {
   background-position: center left;
   background-size: 12px 12px;
 }
+.bg-hexagon-obsidian {
+  background-image: url('../assets/img/bg/hexagon-obsidian.svg');
+  background-repeat: repeat;
+  background-position: center left;
+  background-size: 43px 50px;
+}

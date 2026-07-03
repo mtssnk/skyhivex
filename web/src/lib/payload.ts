@@ -303,7 +303,7 @@ export type ContactPage = {
   ogImage?: Media | null
 }
 
-export type SocialPlatform = 'instagram' | 'linkedin'
+export type SocialPlatform = 'instagram' | 'linkedin' | 'x' | 'facebook' | 'youtube'
 
 type NavLinkType = 'page' | 'projects' | 'news' | 'url'
 
@@ -316,13 +316,19 @@ type NavLink = {
 }
 
 export type Navigation = {
-  links?: NavLink[] | null
-  button?: {
-    enabled?: boolean | null
-    label?: string | null
-    type?: NavLinkType | null
-    page?: { slug: string } | null
-    url?: string | null
+  header?: {
+    links?: NavLink[] | null
+    button?: {
+      enabled?: boolean | null
+      label?: string | null
+      type?: NavLinkType | null
+      page?: { slug: string } | null
+      url?: string | null
+    } | null
+  } | null
+  footer?: {
+    nav1?: NavLink[] | null
+    nav2?: NavLink[] | null
   } | null
 }
 
@@ -332,9 +338,9 @@ export type SiteSettings = {
   contactEmail?: string | null
   contactPhone?: string | null
   contactAddress?: string | null
+  googleMapsUrl?: string | null
   logo?: Media | null
   socialLinks?: { platform: SocialPlatform; url: string; id?: string | null }[] | null
-  legalLinks?: { label: string; url: string; id?: string | null }[] | null
   adobeFontsId?: string | null
   allowIndexing?: boolean | null
 }

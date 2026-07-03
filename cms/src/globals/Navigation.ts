@@ -32,6 +32,23 @@ function linkFields(): Field[] {
   ]
 }
 
+function navArrayField(name: string, label: string): Field {
+  return {
+    name,
+    type: 'array',
+    label,
+    labels: { singular: 'Link', plural: 'Links' },
+    fields: [
+      {
+        name: 'label',
+        type: 'text',
+        required: true,
+      },
+      ...linkFields(),
+    ],
+  }
+}
+
 export const Navigation: GlobalConfig = {
   slug: 'navigation',
   label: 'Navigation',
@@ -40,36 +57,47 @@ export const Navigation: GlobalConfig = {
   },
   fields: [
     {
-      name: 'links',
-      type: 'array',
-      label: 'Nav Links',
-      fields: [
+      type: 'tabs',
+      tabs: [
         {
-          name: 'label',
-          type: 'text',
-          required: true,
+          name: 'header',
+          label: 'Header',
+          fields: [
+            navArrayField('links', 'Navigation'),
+            {
+              type: 'collapsible',
+              label: 'CTA Button',
+              admin: {
+                description: 'Optional call-to-action button shown at the end of the nav.',
+                initCollapsed: true,
+              },
+              fields: [
+                {
+                  name: 'button',
+                  type: 'group',
+                  label: false,
+                  fields: [
+                    {
+                      name: 'enabled',
+                      type: 'checkbox',
+                      defaultValue: false,
+                    },
+                    {
+                      name: 'label',
+                      type: 'text',
+                    },
+                    ...linkFields(),
+                  ],
+                },
+              ],
+            },
+          ],
         },
-        ...linkFields(),
-      ],
-    },
-    {
-      name: 'button',
-      type: 'group',
-      label: 'CTA Button',
-      admin: {
-        description: 'Optional call-to-action button shown at the end of the nav.',
-      },
-      fields: [
         {
-          name: 'enabled',
-          type: 'checkbox',
-          defaultValue: false,
+          name: 'footer',
+          label: 'Footer',
+          fields: [navArrayField('nav1', 'Navigation 1'), navArrayField('nav2', 'Navigation 2')],
         },
-        {
-          name: 'label',
-          type: 'text',
-        },
-        ...linkFields(),
       ],
     },
   ],

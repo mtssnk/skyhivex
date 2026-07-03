@@ -10,8 +10,8 @@ interface Props {
 const { isDark, companyName } = Astro.props
 
 const nav = await getNavigation()
-const links = nav?.links ?? []
-const btn = nav?.button?.enabled ? nav.button : null
+const links = nav?.header?.links ?? []
+const btn = nav?.header?.button?.enabled ? nav.header!.button : null
 
 function linkHref(item: {
   type?: string | null

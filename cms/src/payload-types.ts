@@ -2578,9 +2578,13 @@ export interface SiteSetting {
   contactEmail?: string | null;
   contactPhone?: string | null;
   /**
-   * Displayed on the contact page.
+   * Displayed on the contact page and footer.
    */
   contactAddress?: string | null;
+  /**
+   * If set, the postal address in the footer links to this URL.
+   */
+  googleMapsUrl?: string | null;
   socialLinks?:
     | {
         platform: 'instagram' | 'linkedin' | 'x' | 'facebook' | 'youtube';
@@ -2600,13 +2604,6 @@ export interface SiteSetting {
    * When unchecked, a noindex meta tag and a blocking robots.txt are served. Enable only when the site is ready to go public.
    */
   allowIndexing?: boolean | null;
-  legalLinks?:
-    | {
-        label: string;
-        url: string;
-        id?: string | null;
-      }[]
-    | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -3114,24 +3111,43 @@ export interface ContactPage {
  */
 export interface Navigation {
   id: string;
-  links?:
-    | {
-        label: string;
-        type: 'page' | 'projects' | 'news' | 'url';
-        page?: (string | null) | Page;
-        url?: string | null;
-        id?: string | null;
-      }[]
-    | null;
-  /**
-   * Optional call-to-action button shown at the end of the nav.
-   */
-  button: {
-    enabled?: boolean | null;
-    label?: string | null;
-    type: 'page' | 'projects' | 'news' | 'url';
-    page?: (string | null) | Page;
-    url?: string | null;
+  header: {
+    links?:
+      | {
+          label: string;
+          type: 'page' | 'projects' | 'news' | 'url';
+          page?: (string | null) | Page;
+          url?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+    button: {
+      enabled?: boolean | null;
+      label?: string | null;
+      type: 'page' | 'projects' | 'news' | 'url';
+      page?: (string | null) | Page;
+      url?: string | null;
+    };
+  };
+  footer?: {
+    nav1?:
+      | {
+          label: string;
+          type: 'page' | 'projects' | 'news' | 'url';
+          page?: (string | null) | Page;
+          url?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+    nav2?:
+      | {
+          label: string;
+          type: 'page' | 'projects' | 'news' | 'url';
+          page?: (string | null) | Page;
+          url?: string | null;
+          id?: string | null;
+        }[]
+      | null;
   };
   updatedAt?: string | null;
   createdAt?: string | null;
@@ -3145,6 +3161,7 @@ export interface SiteSettingsSelect<T extends boolean = true> {
   contactEmail?: T;
   contactPhone?: T;
   contactAddress?: T;
+  googleMapsUrl?: T;
   socialLinks?:
     | T
     | {
@@ -3155,13 +3172,6 @@ export interface SiteSettingsSelect<T extends boolean = true> {
   logo?: T;
   adobeFontsId?: T;
   allowIndexing?: T;
-  legalLinks?:
-    | T
-    | {
-        label?: T;
-        url?: T;
-        id?: T;
-      };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
@@ -3400,23 +3410,49 @@ export interface ContactPageSelect<T extends boolean = true> {
  * via the `definition` "navigation_select".
  */
 export interface NavigationSelect<T extends boolean = true> {
-  links?:
+  header?:
     | T
     | {
-        label?: T;
-        type?: T;
-        page?: T;
-        url?: T;
-        id?: T;
+        links?:
+          | T
+          | {
+              label?: T;
+              type?: T;
+              page?: T;
+              url?: T;
+              id?: T;
+            };
+        button?:
+          | T
+          | {
+              enabled?: T;
+              label?: T;
+              type?: T;
+              page?: T;
+              url?: T;
+            };
       };
-  button?:
+  footer?:
     | T
     | {
-        enabled?: T;
-        label?: T;
-        type?: T;
-        page?: T;
-        url?: T;
+        nav1?:
+          | T
+          | {
+              label?: T;
+              type?: T;
+              page?: T;
+              url?: T;
+              id?: T;
+            };
+        nav2?:
+          | T
+          | {
+              label?: T;
+              type?: T;
+              page?: T;
+              url?: T;
+              id?: T;
+            };
       };
   updatedAt?: T;
   createdAt?: T;

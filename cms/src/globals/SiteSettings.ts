@@ -27,7 +27,15 @@ export const SiteSettings: GlobalConfig = {
       type: 'textarea',
       label: 'Postal Address',
       admin: {
-        description: 'Displayed on the contact page.',
+        description: 'Displayed on the contact page and footer.',
+      },
+    },
+    {
+      name: 'googleMapsUrl',
+      type: 'text',
+      label: 'Google Maps URL',
+      admin: {
+        description: 'If set, the postal address in the footer links to this URL.',
       },
     },
     {
@@ -80,23 +88,6 @@ export const SiteSettings: GlobalConfig = {
         description:
           'When unchecked, a noindex meta tag and a blocking robots.txt are served. Enable only when the site is ready to go public.',
       },
-    },
-    {
-      name: 'legalLinks',
-      type: 'array',
-      label: 'Legal Links',
-      fields: [
-        {
-          name: 'label',
-          type: 'text',
-          required: true,
-        },
-        {
-          name: 'url',
-          type: 'text',
-          required: true,
-        },
-      ],
     },
   ],
 }

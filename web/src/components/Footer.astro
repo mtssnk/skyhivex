@@ -1,83 +1,185 @@
 ---
-import SnkLogomark from '@/assets/icons/snkLogomark.astro'
+import { getSiteSettings, getNavigation } from '@/lib/payload'
+import type { SocialPlatform } from '@/lib/payload'
+import Facebook from '@/assets/icons/facebook.astro'
 import Instagram from '@/assets/icons/instagram.astro'
 import LinkedIn from '@/assets/icons/linkedin.astro'
-import { getSiteSettings } from '@/lib/payload'
-import type { SocialPlatform } from '@/lib/payload'
+import X from '@/assets/icons/x.astro'
+import YouTube from '@/assets/icons/youtube.astro'
+import SnkLogomark from '@/assets/icons/snkLogomark.astro'
 
 const year = new Date().getFullYear()
-const settings = await getSiteSettings()
+const [settings, nav] = await Promise.all([getSiteSettings(), getNavigation()])
 
 const email = settings?.contactEmail ?? ''
 const phone = settings?.contactPhone ?? ''
+const address = settings?.contactAddress ?? ''
+const mapsUrl = settings?.googleMapsUrl ?? ''
+const companyName = settings?.companyName ?? ''
 const socialLinks = settings?.socialLinks ?? []
-const legalLinks = settings?.legalLinks ?? []
+const footerNav1 = nav?.footer?.nav1 ?? []
+const footerNav2 = nav?.footer?.nav2 ?? []
 
 const socialLabels: Record<SocialPlatform, string> = {
   instagram: 'Instagram',
   linkedin: 'LinkedIn',
+  x: 'X (Twitter)',
+  facebook: 'Facebook',
+  youtube: 'YouTube',
 }
 
 function enc(str: string) {
   return btoa(str)
 }
+
+function linkHref(item: {
+  type?: string | null
+  page?: { slug: string } | null
+  url?: string | null
+}): string {
+  if (item.type === 'page' && item.page?.slug) {
+    return item.page.slug === 'home' ? '/' : `/${item.page.slug}`
+  }
+  if (item.type === 'projects') return '/work'
+  if (item.type === 'news') return '/news'
+  if (item.type === 'url' && item.url) return item.url
+  return '#'
+}
 ---
 
-<footer class="bg-night text-ash py-lg">
+<footer class="bg-night text-smoke pt-[112px] border-congo border-t-2">
   <div class="container grid">
-    <div class="col-span-12 md:col-span-6 flex flex-col md:flex-row gap-xs">
-      <figure class="inline-block w-6 h-7.25">
-        <SnkLogomark />
-      </figure>
-      <p class="text-wide-md">
-        Built to perform. <br />Built to impress. <br />
-        Built to last.
-      </p>
-    </div>
-    <div class="col-span-12 md:col-span-6 flex flex-col gap-2 text-body-md">
-      {email && <a href="#" data-obf-href={enc(`mailto:${email}`)} data-obf-text={enc(email)} />}
-      {
-        phone && (
-          <a
-            href="#"
-            data-obf-href={enc(`tel:${phone.replace(/\s/g, '')}`)}
-            data-obf-text={enc(phone)}
-          />
-        )
-      }
+    <!-- Logo + socials -->
+    <div class="col-span-12 md:col-span-6 lg:col-span-3 flex flex-col gap-8">
+      <a
+        href="/"
+        aria-label={companyName ? `${companyName} home` : 'Home'}
+        class="block w-42 lg:w-50 xl:w-60"
+      >
+        <img
+          src="/src/assets/img/skyhive-logo-colour.png"
+          alt={companyName || 'SkyHive X'}
+          class="w-full h-auto"
+          loading="lazy"
+        />
+      </a>
       {
         socialLinks.length > 0 && (
-          <div class="flex gap-4 mt-2">
+          <div class="flex items-center gap-4">
             {socialLinks.map(({ platform, url }) => (
               <a
                 href={url}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={socialLabels[platform]}
-                class="inline-block size-6 text-ash hover:text-white"
+                class="inline-block size-6 text-gravel hover:text-smoke transition-colors duration-200"
               >
                 {platform === 'instagram' && <Instagram />}
                 {platform === 'linkedin' && <LinkedIn />}
+                {platform === 'x' && <X />}
+                {platform === 'facebook' && <Facebook />}
+                {platform === 'youtube' && <YouTube />}
               </a>
             ))}
           </div>
         )
       }
     </div>
-    <div class="col-span-12 text-body-sm text-smoke flex flex-wrap items-center gap-6 mt-sm">
-      <p>&copy; {year} Snook Studio</p>
+
+    <!-- Contact details -->
+    <div
+      class="col-span-12 md:col-span-6 lg:col-span-3 md:pt-3.5 flex flex-col gap-4 text-mono-3xs"
+    >
       {
-        legalLinks.length > 0 && (
-          <nav class="flex gap-6" aria-label="Legal">
-            {legalLinks.map(({ label, url }) => (
-              <a href={url}>{label}</a>
-            ))}
-          </nav>
+        phone && (
+          <a
+            href="#"
+            data-obf-href={enc(`tel:${phone.replace(/\s/g, '')}`)}
+            data-obf-text={enc(phone)}
+            class="hover:text-white transition-colors duration-200"
+          />
+        )
+      }
+      {
+        email && (
+          <a
+            href="#"
+            data-obf-href={enc(`mailto:${email}`)}
+            data-obf-text={enc(email)}
+            class="hover:text-white transition-colors duration-200"
+          />
+        )
+      }
+      {
+        address && mapsUrl ? (
+          <a
+            href={mapsUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="whitespace-pre-line text-balance hover:text-smoke transition-colors duration-200"
+          >
+            {address}
+          </a>
+        ) : (
+          address && <p class="whitespace-pre-line text-balance">{address}</p>
         )
       }
     </div>
+
+    <!-- Footer navigation 1 -->
+    {
+      footerNav1.length > 0 && (
+        <nav
+          class="col-span-12 md:col-span-6 lg:col-span-3 md:pt-3.5 flex flex-col gap-4 text-mono-3xs"
+          aria-label="Footer navigation"
+        >
+          {footerNav1.map((link) => (
+            <a href={linkHref(link)} class="hover:text-white transition-colors duration-200">
+              {link.label}
+            </a>
+          ))}
+        </nav>
+      )
+    }
+
+    <!-- Footer navigation 2 -->
+    {
+      footerNav2.length > 0 && (
+        <nav
+          class="col-span-12 md:col-span-3 flex md:pt-3.5 flex-col gap-4 text-mono-3xs"
+          aria-label="Footer navigation 2"
+        >
+          {footerNav2.map((link) => (
+            <a href={linkHref(link)} class="hover:text-white transition-colors duration-200">
+              {link.label}
+            </a>
+          ))}
+        </nav>
+      )
+    }
+
+    <!-- Bottom bar -->
+    <div class="mt-2xs col-span-12 text-mono-4xs text-gravel flex flex-wrap gap-x-10 gap-y-4">
+      <p>&copy; {year} {companyName}</p>
+      <a
+        href="https://www.snookstudio.co.uk/"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="hover:text-smoke transition-colors duration-200 flex items-center"
+      >
+        <span>site by</span>
+        <SnkLogomark class="inline-block size-4 ml-2 mr-1" />
+        <span>snook studio</span>
+      </a>
+    </div>
+  </div>
+  <div
+    role="presentation"
+    class="bg-hexagon-obsidian w-full h-[75px] border-congo border-t-2 mt-[70px]"
+  >
   </div>
 </footer>
+
 <script>
   document.querySelectorAll<HTMLAnchorElement>('[data-obf-href]').forEach((el) => {
     el.href = atob(el.dataset.obfHref ?? '')
