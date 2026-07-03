@@ -1,5 +1,6 @@
 import type { Block } from 'payload'
 import { withBlockTabs } from './fields/blockFields'
+import { overlayAlphaField } from '../fields/overlayAlpha'
 
 export const Hero: Block = {
   slug: 'hero',
@@ -54,16 +55,7 @@ export const Hero: Block = {
         condition: (_, sibling) => sibling?.backgroundMedia === 'video',
       },
     },
-    {
-      name: 'overlayAlpha',
-      type: 'number',
-      min: 0,
-      max: 1,
-      admin: {
-        description: 'Dark overlay opacity (0–1) to improve text contrast.',
-        step: 0.05,
-      },
-    },
+    overlayAlphaField(),
     {
       name: 'buttons',
       type: 'array',

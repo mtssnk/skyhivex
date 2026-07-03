@@ -1,6 +1,7 @@
 import type { CollectionConfig } from 'payload'
 import { Hero } from '../blocks/Hero'
 import { MediaText } from '../blocks/MediaText'
+import { overlayAlphaField } from '../fields/overlayAlpha'
 import { Media } from '../blocks/Media'
 import { Quote } from '../blocks/Quote'
 import { BodyCopy } from '../blocks/BodyCopy'
@@ -90,17 +91,7 @@ export const Posts: CollectionConfig = {
         description: 'Image shown on the news index card and at the top of the post.',
       },
     },
-    {
-      name: 'overlayAlpha',
-      type: 'number',
-      min: 0,
-      max: 1,
-      defaultValue: 0.4,
-      admin: {
-        description: 'Dark overlay opacity (0–1) to improve text contrast.',
-        step: 0.05,
-      },
-    },
+    overlayAlphaField({ defaultValue: 0.4 }),
     {
       name: 'blocks',
       type: 'blocks',

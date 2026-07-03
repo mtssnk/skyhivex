@@ -1,5 +1,6 @@
 import type { Block } from 'payload'
 import { withBlockTabs } from './fields/blockFields'
+import { overlayAlphaField } from '../fields/overlayAlpha'
 
 export const Media: Block = {
   slug: 'media',
@@ -71,16 +72,9 @@ export const Media: Block = {
         condition: (_, sibling) => Boolean(sibling?.openVideo),
       },
     },
-    {
-      name: 'overlayAlpha',
-      type: 'number',
-      min: 0,
-      max: 1,
-      admin: {
-        description: 'Dark overlay opacity (0–1). Only relevant when heading is set.',
-        step: 0.05,
-        condition: (_, sibling) => Boolean(sibling?.openVideo),
-      },
-    },
+    overlayAlphaField({
+      description: 'Dark overlay opacity (0–1). Only relevant when heading is set.',
+      condition: (_, sibling) => Boolean(sibling?.openVideo),
+    }),
   ]),
 }

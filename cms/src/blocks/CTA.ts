@@ -1,5 +1,6 @@
 import type { Block } from 'payload'
 import { withBlockTabs } from './fields/blockFields'
+import { overlayAlphaField } from '../fields/overlayAlpha'
 
 export const CTA: Block = {
   slug: 'cta',
@@ -11,16 +12,7 @@ export const CTA: Block = {
       relationTo: 'media',
       required: true,
     },
-    {
-      name: 'overlayAlpha',
-      type: 'number',
-      min: 0,
-      max: 1,
-      admin: {
-        description: 'Dark overlay opacity (0–1) to improve text contrast.',
-        step: 0.05,
-      },
-    },
+    overlayAlphaField(),
     {
       name: 'text',
       type: 'text',
