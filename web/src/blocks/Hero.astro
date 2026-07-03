@@ -51,19 +51,22 @@ const bgMedia =
   }
 
   <div class="container relative py-sm flex flex-col items-center text-center gap-5xs">
-    <div
-      class="absolute inset-0 z-0pointer-events-none"
-      style="background: radial-gradient(ellipse at center, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0) 70%)"
-      aria-hidden="true"
-    >
-    </div>
+    {
+      backgroundMedia === 'shader' && (
+        <div
+          class="absolute inset-0 z-0 pointer-events-none"
+          style="background: radial-gradient(ellipse at center, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0) 70%)"
+          aria-hidden="true"
+        />
+      )
+    }
     <div class="relative z-10 space-y-2xs">
       <div class="space-y-5xs">
         {
           headingPart1 || headingPart2 ? (
             <h1 class="text-white space-y-5xs">
               {headingPart1 && (
-                <span class="text-extended-xl uppercase w-full inline-flex justify-center">
+                <span class="text-extended-xl uppercase w-full inline-flex justify-center max-w-[28em] text-balance">
                   {headingPart1}
                 </span>
               )}

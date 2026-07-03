@@ -79,6 +79,7 @@ export type Post = {
   slug: string
   categories?: Category[] | null
   listingImage: Media
+  overlayAlpha?: number | null
   blocks?: PostBlock[] | null
   metaDescription?: string | null
   ogImage?: Media | null

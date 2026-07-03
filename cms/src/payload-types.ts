@@ -1251,6 +1251,10 @@ export interface Post {
    * Image shown on the news index card and at the top of the post.
    */
   listingImage: string | Media;
+  /**
+   * Dark overlay opacity (0–1) to improve text contrast.
+   */
+  overlayAlpha?: number | null;
   blocks: (
     | {
         variant: 'contained' | 'split';
@@ -2327,6 +2331,7 @@ export interface PostsSelect<T extends boolean = true> {
   slug?: T;
   categories?: T;
   listingImage?: T;
+  overlayAlpha?: T;
   blocks?:
     | T
     | {

@@ -91,6 +91,17 @@ export const Posts: CollectionConfig = {
       },
     },
     {
+      name: 'overlayAlpha',
+      type: 'number',
+      min: 0,
+      max: 1,
+      defaultValue: 0.4,
+      admin: {
+        description: 'Dark overlay opacity (0–1) to improve text contrast.',
+        step: 0.05,
+      },
+    },
+    {
       name: 'blocks',
       type: 'blocks',
       required: true,
@@ -122,7 +133,8 @@ export const Posts: CollectionConfig = {
       relationTo: 'media',
       admin: {
         position: 'sidebar',
-        description: 'Social share image (OG). Recommended: 1200×630px. Falls back to listing image.',
+        description:
+          'Social share image (OG). Recommended: 1200×630px. Falls back to listing image.',
       },
     },
   ],

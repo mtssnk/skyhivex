@@ -14,7 +14,7 @@ const preview = Astro.cookies.get('__preview')?.value === 'true'
 const apiKey = preview ? import.meta.env.PAYLOAD_API_KEY : undefined
 const post = await getPostBySlug(slug!, { draft: preview, apiKey })
 if (!post) return new Response(null, { status: 404 })
-
+console.log({ post })
 const metaDescription = post.metaDescription ?? post.title
 const ogImage = post.ogImage?.url ?? post.listingImage?.url ?? undefined
 
@@ -26,10 +26,14 @@ const jsonLd: Record<string, unknown> = {
   url: Astro.url.href,
   ...(ogImage ? { image: ogImage } : {}),
 }
-console.log(post.blocks)
 ---
 
 <Layout title={post.title} description={metaDescription} isDark={true} {ogImage} {jsonLd}>
-  <Hero headingPart1={post.title} backgroundMedia="image" backgroundImage={post.listingImage} />
+  <Hero
+    headingPart1={post.title}
+    backgroundMedia="image"
+    backgroundImage={post.listingImage}
+    overlayAlpha={post.overlayAlpha}
+  />
   <BlockRenderer blocks={post.blocks} />
 </Layout>
