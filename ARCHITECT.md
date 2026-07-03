@@ -37,6 +37,26 @@ Notes:
 - SSR: newly published pages can go live without a frontend rebuild.
 - Static/hybrid: may require rebuild/deploy hooks depending on prerender strategy.
 
+### Global layouts
+
+#### Footer
+
+##### Logo
+
+This is hard coded, the image sits in the src/assets/img/folder. Below the logo, the social media links are listed. These are edited via the Site Settings section in the CMS.
+
+##### Contact details
+
+Phone, email and address are in the Site Settings section in the CMS. Output these links using obfuscation to help prevent bot scraping.
+
+##### Navigation
+
+There are two navigation lists which are arrays of page links.
+
+##### Bottom text
+
+Copyright information with the current year and the Company Name from the Site Settings CMS section and a SEO friendly link to https://www.snookstudio.co.uk/
+
 ### Collections
 
 - Projects - Each project requires a listing image, a heading and a client name. The project page will display the heading in the hero and the listing image in the background if another media item isn't specified in the CMS (can be image or video with alpha opacity options). We can utilise the hero block on the front end. There is an optional intro section (textarea) which is displayed before the project summary section. The project summary section consists of an array field consisting of label and value. A project can have a category or more than one.
