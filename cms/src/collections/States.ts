@@ -6,6 +6,7 @@ export const States: CollectionConfig = {
   admin: {
     useAsTitle: 'name',
     defaultColumns: ['name', 'slug', 'region'],
+    group: 'Categories',
   },
   access: {
     read: () => true,

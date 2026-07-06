@@ -6,6 +6,7 @@ export const Cities: CollectionConfig = {
   admin: {
     useAsTitle: 'name',
     defaultColumns: ['name', 'slug', 'state', 'region'],
+    group: 'Categories',
   },
   access: {
     read: () => true,
