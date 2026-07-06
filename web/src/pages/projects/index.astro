@@ -3,39 +3,37 @@ import Layout from '@/layouts/Layout.astro'
 import CardLink from '@/components/CardLink.astro'
 import BlockRenderer from '@/blocks/BlockRenderer.astro'
 import { getProjects, getProjectsPage } from '@/lib/payload'
-import MeshGradientBackground from '@/components/MeshGradientBackground.tsx'
 
-const [works, workPage] = await Promise.all([getProjects(), getProjectsPage()])
+const [projects, projectsPage] = await Promise.all([getProjects(), getProjectsPage()])
 ---
 
 <Layout
   title="Projects"
-  description={workPage?.metaDescription ?? undefined}
-  ogImage={workPage?.ogImage?.url ?? undefined}
+  description={projectsPage?.metaDescription ?? undefined}
+  ogImage={projectsPage?.ogImage?.url ?? undefined}
 >
   <section class="bg-terracotta relative">
-    <MeshGradientBackground colors={['#FFD152', '#ff652c']} client:only="preact" />
     <div class="flex flex-col gap-sm py-lg relative z-10">
       {
-        (workPage?.heading || workPage?.intro) && (
+        (projectsPage?.heading || projectsPage?.intro) && (
           <div class="container grid">
             <div class="col-span-12 space-y-6 md:space-y-10 max-w-[36em] ">
-              {workPage.heading && (
-                <h1 class="text-wide-lg whitespace-pre-line">{workPage.heading}</h1>
+              {projectsPage.heading && (
+                <h1 class="text-wide-lg whitespace-pre-line">{projectsPage.heading}</h1>
               )}
-              {workPage.intro && <p class="text-body-md text-balance">{workPage.intro}</p>}
+              {projectsPage.intro && <p class="text-body-md text-balance">{projectsPage.intro}</p>}
             </div>
           </div>
         )
       }
       <div class="container grid">
         {
-          works.map((work) => (
+          projects.map((project) => (
             <div class="col-span-12 md:col-span-4">
               <CardLink
-                href={`/work/${work.slug}`}
-                media={work.listingMedia ?? work.listingImage}
-                label={work.projectName ?? work.heading}
+                href={`/projects/${project.slug}`}
+                media={project.listingMedia ?? project.listingImage}
+                label={project.projectName ?? project.heading}
                 sizes="(max-width: 768px) 100vw, 33vw"
               />
             </div>
@@ -44,5 +42,5 @@ const [works, workPage] = await Promise.all([getProjects(), getProjectsPage()])
       </div>
     </div>
   </section>
-  <BlockRenderer blocks={workPage?.blocks} />
+  <BlockRenderer blocks={projectsPage?.blocks} />
 </Layout>

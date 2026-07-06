@@ -767,14 +767,6 @@ export interface Page {
              * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
              */
             anchorId?: string | null;
-            /**
-             * Which side(s) the vertical padding is applied to.
-             */
-            paddingWhere?: ('both' | 'top' | 'bottom') | null;
-            /**
-             * Size of the vertical padding.
-             */
-            paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'featureList';
@@ -2404,8 +2396,6 @@ export interface PagesSelect<T extends boolean = true> {
               linkUrl?: T;
               linkPage?: T;
               anchorId?: T;
-              paddingWhere?: T;
-              paddingSize?: T;
               id?: T;
               blockName?: T;
             };
@@ -3479,14 +3469,6 @@ export interface ProjectsPage {
              * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
              */
             anchorId?: string | null;
-            /**
-             * Which side(s) the vertical padding is applied to.
-             */
-            paddingWhere?: ('both' | 'top' | 'bottom') | null;
-            /**
-             * Size of the vertical padding.
-             */
-            paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'featureList';
@@ -3823,8 +3805,6 @@ export interface ProjectsPageSelect<T extends boolean = true> {
               linkUrl?: T;
               linkPage?: T;
               anchorId?: T;
-              paddingWhere?: T;
-              paddingSize?: T;
               id?: T;
               blockName?: T;
             };

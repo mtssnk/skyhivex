@@ -1,6 +1,5 @@
 ---
 import type { ProjectListBlock } from '@/lib/payload'
-import { clsx } from 'clsx'
 import Button from '@/components/Button.astro'
 import HeadingUnderline from '@/components/HeadingUnderline.astro'
 import CardProject from '@/components/CardProject.astro'
@@ -28,11 +27,11 @@ if (selectionMode !== 'manual') {
 
   if (selectionMode === 'filtered') {
     if (filterCity) {
-      filtered = filtered.filter((p) => p.cities?.some((c) => c.id === filterCity.id))
+      filtered = filtered.filter((p) => p.city?.id === filterCity.id)
     } else if (filterState) {
-      filtered = filtered.filter((p) => p.states?.some((s) => s.id === filterState.id))
+      filtered = filtered.filter((p) => p.state?.id === filterState.id)
     } else if (filterRegion) {
-      filtered = filtered.filter((p) => p.regions?.some((r) => r.id === filterRegion.id))
+      filtered = filtered.filter((p) => p.region?.id === filterRegion.id)
     }
     if (filterClientType) {
       filtered = filtered.filter((p) => p.clientType?.id === filterClientType.id)
@@ -59,7 +58,7 @@ if (selectionMode !== 'manual') {
         resolvedProjects.map((project, i) => (
           <li class="w-full">
             <CardProject
-              href={`/work/${project.slug}`}
+              href={`/projects/${project.slug}`}
               media={project.listingMedia ?? project.listingImage}
               label={project.projectName ?? project.heading}
               category={project.clientType?.name}
@@ -74,7 +73,7 @@ if (selectionMode !== 'manual') {
     {
       viewAllLabel ? (
         <div class="w-full flex justify-center pt-xs">
-          <Button href="/work" style="solid" size="lg" colour="green">
+          <Button href="/projects" style="solid" size="lg" colour="green">
             {viewAllLabel}
           </Button>
         </div>

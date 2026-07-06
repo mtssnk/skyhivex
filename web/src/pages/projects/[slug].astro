@@ -14,7 +14,7 @@ const project = await getProjectBySlug(slug!)
 if (!project) return new Response(null, { status: 404 })
 
 const metaDescription = project.metaDescription ?? project.heading
-const ogImage = project.ogImage?.url ?? project.heroMedia?.image?.url ?? project.listingMedia?.url
+const ogImage = project.ogImage?.url ?? project.heroMedia?.image?.url ?? project.listingMedia?.url ?? undefined
 const isDark = project.isDark ?? true
 
 const heroMediaType = project.heroMedia?.type ?? (project.listingMedia ? 'image' : undefined)
@@ -32,9 +32,23 @@ const jsonLd: Record<string, unknown> = {
 if (ogImage) jsonLd.image = ogImage
 
 const heroButtons: NonNullable<Parameters<typeof Hero>[0]['buttons']> = [
-  { label: 'Find out more', type: 'anchor', anchorTarget: 'work-content', variant: 'solid', colour: 'white' },
+  {
+    label: 'Find out more',
+    type: 'anchor',
+    anchorTarget: 'project-content',
+    variant: 'solid',
+    colour: 'white',
+  },
   ...(project.url
-    ? [{ label: 'View project', type: 'link' as const, linkUrl: project.url, variant: 'outline' as const, colour: 'white' as const }]
+    ? [
+        {
+          label: 'View project',
+          type: 'link' as const,
+          linkUrl: project.url,
+          variant: 'outline' as const,
+          colour: 'white' as const,
+        },
+      ]
     : []),
 ]
 ---
@@ -43,8 +57,8 @@ const heroButtons: NonNullable<Parameters<typeof Hero>[0]['buttons']> = [
   title={project.projectName ?? project.heading}
   description={metaDescription}
   isDark={isDark}
-  {ogImage}
-  {jsonLd}
+  ogImage={ogImage ?? undefined}
+  jsonLd={jsonLd}
 >
   <Hero
     headingPart1={project.heading}
@@ -54,6 +68,6 @@ const heroButtons: NonNullable<Parameters<typeof Hero>[0]['buttons']> = [
     buttons={heroButtons}
   />
 
-  <div id="work-content"></div>
+  <div id="project-content"></div>
   <BlockRenderer blocks={project.blocks} />
 </Layout>

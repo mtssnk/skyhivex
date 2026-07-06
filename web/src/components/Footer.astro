@@ -40,7 +40,7 @@ function linkHref(item: {
   if (item.type === 'page' && item.page?.slug) {
     return item.page.slug === 'home' ? '/' : `/${item.page.slug}`
   }
-  if (item.type === 'projects') return '/work'
+  if (item.type === 'projects') return '/projects'
   if (item.type === 'news') return '/news'
   if (item.type === 'url' && item.url) return item.url
   return '#'

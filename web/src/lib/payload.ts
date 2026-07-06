@@ -95,9 +95,9 @@ export type Project = {
   projectName?: string | null
   slug: string
   clientType?: ClientType | null
-  regions?: Region[] | null
-  states?: State[] | null
-  cities?: City[] | null
+  region?: Region | null
+  state?: State | null
+  city?: City | null
   listingImage: Media
   listingMedia?: Media | null
   heroMedia?: {

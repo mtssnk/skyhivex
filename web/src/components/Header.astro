@@ -18,7 +18,7 @@ function linkHref(item: {
   page?: { slug: string } | null
   url?: string | null
 }): string {
-  if (item.type === 'work') return '/work'
+  if (item.type === 'work') return '/projects'
   if (item.type === 'page' && item.page?.slug) {
     return item.page.slug === 'home' ? '/' : `/${item.page.slug}`
   }
