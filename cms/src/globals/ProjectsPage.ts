@@ -1,5 +1,5 @@
 import type { GlobalConfig } from 'payload'
-import { Hero } from '../blocks/Hero'
+import { heroFields } from '../blocks/Hero'
 import { MediaText } from '../blocks/MediaText'
 import { Media } from '../blocks/Media'
 import { Quote } from '../blocks/Quote'
@@ -21,12 +21,13 @@ export const ProjectsPage: GlobalConfig = {
   },
   fields: [
     {
-      name: 'heading',
-      type: 'textarea',
-    },
-    {
-      name: 'intro',
-      type: 'textarea',
+      name: 'hero',
+      type: 'group',
+      fields: heroFields,
+      admin: {
+        description:
+          'The project list Anchor ID is project-list. Use this ID for the scroll to section Anchor ID.',
+      },
     },
     {
       name: 'blocks',

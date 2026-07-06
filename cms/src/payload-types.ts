@@ -3021,8 +3021,46 @@ export interface SiteSetting {
  */
 export interface ProjectsPage {
   id: string;
-  heading?: string | null;
-  intro?: string | null;
+  /**
+   * The project list Anchor ID is project-list. Use this ID for the scroll to section Anchor ID.
+   */
+  hero: {
+    headingPart1: string;
+    headingPart2?: string | null;
+    intro?: string | null;
+    /**
+     * Body text in body font — for content-heavy heroes (e.g. FAQs). Not used alongside intro.
+     */
+    body?: string | null;
+    backgroundMedia: 'image' | 'video' | 'shader';
+    backgroundImage?: (string | null) | Media;
+    /**
+     * Muted, looped, autoplayed as background.
+     */
+    backgroundVideo?: (string | null) | Media;
+    /**
+     * Dark overlay opacity (0–1) to improve text contrast.
+     */
+    overlayAlpha?: number | null;
+    buttons?:
+      | {
+          label: string;
+          type: 'link' | 'anchor' | 'video';
+          linkUrl?: string | null;
+          /**
+           * CSS ID of the target element, without the # symbol.
+           */
+          anchorTarget?: string | null;
+          /**
+           * Opens unmuted in a dialog.
+           */
+          videoFile?: (string | null) | Media;
+          variant: 'solid' | 'outline';
+          colour: 'white' | 'green';
+          id?: string | null;
+        }[]
+      | null;
+  };
   blocks?:
     | (
         | {
@@ -3601,8 +3639,30 @@ export interface SiteSettingsSelect<T extends boolean = true> {
  * via the `definition` "projects-page_select".
  */
 export interface ProjectsPageSelect<T extends boolean = true> {
-  heading?: T;
-  intro?: T;
+  hero?:
+    | T
+    | {
+        headingPart1?: T;
+        headingPart2?: T;
+        intro?: T;
+        body?: T;
+        backgroundMedia?: T;
+        backgroundImage?: T;
+        backgroundVideo?: T;
+        overlayAlpha?: T;
+        buttons?:
+          | T
+          | {
+              label?: T;
+              type?: T;
+              linkUrl?: T;
+              anchorTarget?: T;
+              videoFile?: T;
+              variant?: T;
+              colour?: T;
+              id?: T;
+            };
+      };
   blocks?:
     | T
     | {

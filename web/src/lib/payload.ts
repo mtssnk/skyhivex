@@ -351,9 +351,20 @@ export type Page = {
   ogImage?: Media | null
 }
 
-export type ProjectsPage = {
-  heading?: string | null
+export type ProjectsPageHero = {
+  headingPart1?: string | null
+  headingPart2?: string | null
   intro?: string | null
+  body?: string | null
+  backgroundMedia?: 'image' | 'video' | 'shader' | null
+  backgroundImage?: Media | null
+  backgroundVideo?: Media | null
+  overlayAlpha?: number | null
+  buttons?: HeroBlock['buttons']
+}
+
+export type ProjectsPage = {
+  hero?: ProjectsPageHero | null
   blocks?: SharedBlock[] | null
   metaDescription?: string | null
   ogImage?: Media | null
