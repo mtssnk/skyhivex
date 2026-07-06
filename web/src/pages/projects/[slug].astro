@@ -1,8 +1,10 @@
 ---
 import Layout from '@/layouts/Layout.astro'
 import BlockRenderer from '@/blocks/BlockRenderer.astro'
+import HeadingUnderline from '@/components/HeadingUnderline.astro'
 import { getProjects, getProjectBySlug } from '@/lib/payload'
 import Hero from '@/blocks/Hero.astro'
+import { lexicalToHtml } from '@/lib/lexical'
 
 export async function getStaticPaths() {
   const projects = await getProjects()
@@ -15,11 +17,16 @@ if (!project) return new Response(null, { status: 404 })
 
 const metaDescription = project.metaDescription ?? project.heading
 const ogImage =
-  project.ogImage?.url ?? project.heroMedia?.image?.url ?? project.listingMedia?.url ?? undefined
+  project.ogImage?.url ??
+  project.heroMedia?.image?.url ??
+  project.listingMedia?.url ??
+  project.listingImage.url ??
+  undefined
 
-const heroMediaType = project.heroMedia?.type ?? (project.listingMedia ? 'image' : undefined)
-const heroBackgroundImage = project.heroMedia?.image ?? project.listingMedia ?? undefined
+const heroMediaType = project.heroMedia?.type ?? 'image'
+const heroBackgroundImage = project.heroMedia?.image ?? project.listingMedia ?? project.listingImage
 const heroBackgroundVideo = project.heroMedia?.video ?? undefined
+const overlayAlpha = project.heroMedia?.overlayAlpha ?? 0.4
 
 const jsonLd: Record<string, unknown> = {
   '@context': 'https://schema.org',
@@ -64,9 +71,40 @@ const heroButtons: NonNullable<Parameters<typeof Hero>[0]['buttons']> = [
     backgroundMedia={heroMediaType}
     backgroundImage={heroBackgroundImage}
     backgroundVideo={heroBackgroundVideo}
+    overlayAlpha={overlayAlpha}
     buttons={heroButtons}
   />
 
   <div id="project-content"></div>
+
+  {
+    (project.intro || project.body || project.summary?.length) && (
+      <div class="space-y-sm py-sm container !max-w-[640px] ">
+        {(project.intro || project.summary?.length) && (
+          <section class="section-project-intro space-y-2xs">
+            {project.intro && <p class="text-body-md">{project.intro}</p>}
+            {project.summary?.length && (
+              <dl class="grid grid-cols-1 md:grid-cols-2 lg:gap-x-xs lg:gap-y-3xs">
+                {project.summary.map((item) => (
+                  <div class="space-y-5xs">
+                    <HeadingUnderline spacing="sm">
+                      <dt>{item.label}</dt>
+                    </HeadingUnderline>
+                    <dd class="text-body-xs">{item.value}</dd>
+                  </div>
+                ))}
+              </dl>
+            )}
+          </section>
+        )}
+
+        {project.body && (
+          <div class="wysiwyg">
+            <div set:html={lexicalToHtml(project.body)} />
+          </div>
+        )}
+      </div>
+    )
+  }
   <BlockRenderer blocks={project.blocks} />
 </Layout>

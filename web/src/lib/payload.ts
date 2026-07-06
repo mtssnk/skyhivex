@@ -108,6 +108,7 @@ export type Project = {
   } | null
   intro?: string | null
   summary?: { label: string; value: string; id?: string | null }[] | null
+  body?: LexicalContent | null
   url?: string | null
   blocks?: ProjectBlock[] | null
   metaDescription?: string | null

@@ -872,6 +872,24 @@ export interface Project {
       }[]
     | null;
   /**
+   * Rich text displayed below the summary.
+   */
+  body?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
    * Appended after the summary section.
    */
   blocks?:
@@ -2439,6 +2457,7 @@ export interface ProjectsSelect<T extends boolean = true> {
         value?: T;
         id?: T;
       };
+  body?: T;
   blocks?:
     | T
     | {

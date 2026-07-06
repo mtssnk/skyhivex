@@ -52,7 +52,7 @@ export const heroFields: Field[] = [
       condition: (_, sibling) => sibling?.backgroundMedia === 'video',
     },
   },
-  overlayAlphaField(),
+  overlayAlphaField({ defaultValue: 0.4 }),
   {
     name: 'buttons',
     type: 'array',

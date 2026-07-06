@@ -152,7 +152,7 @@ export const Projects: CollectionConfig = {
             condition: (_, sibling) => sibling?.type === 'video',
           },
         },
-        overlayAlphaField(),
+        overlayAlphaField({ defaultValue: 0.4 }),
       ],
     },
     {
@@ -180,6 +180,13 @@ export const Projects: CollectionConfig = {
           required: true,
         },
       ],
+    },
+    {
+      name: 'body',
+      type: 'richText',
+      admin: {
+        description: 'Rich text displayed below the summary.',
+      },
     },
     {
       name: 'blocks',
