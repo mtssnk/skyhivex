@@ -110,7 +110,6 @@ export type Project = {
   summary?: { label: string; value: string; id?: string | null }[] | null
   url?: string | null
   blocks?: ProjectBlock[] | null
-  isDark?: boolean | null
   metaDescription?: string | null
   ogImage?: Media | null
 }
@@ -345,7 +344,6 @@ export type Page = {
   regions?: Region[] | null
   states?: State[] | null
   cities?: City[] | null
-  isDark?: boolean | null
   blocks?: PageBlock[] | null
   metaDescription?: string | null
   ogImage?: Media | null

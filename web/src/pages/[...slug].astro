@@ -6,9 +6,7 @@ import type { City, State, Region } from '@/lib/payload'
 
 export async function getStaticPaths() {
   const pages = await getPages()
-  return pages
-    .filter((p) => p.slug !== 'home')
-    .map((p) => ({ params: { slug: p.slug } }))
+  return pages.filter((p) => p.slug !== 'home').map((p) => ({ params: { slug: p.slug } }))
 }
 
 const { slug } = Astro.params
@@ -47,7 +45,6 @@ const jsonLd = areaServed
 
 <Layout
   title={page.title}
-  isDark={page.isDark ?? false}
   description={page.metaDescription ?? undefined}
   ogImage={page.ogImage?.url ?? undefined}
   jsonLd={jsonLd}

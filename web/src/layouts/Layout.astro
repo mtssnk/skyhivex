@@ -12,12 +12,11 @@ interface Props {
   title: string
   description?: string
   ogImage?: string
-  isDark?: boolean
   isPreview?: boolean
   jsonLd?: Record<string, unknown>
 }
 
-const { title, description, ogImage, isDark = false, isPreview = false, jsonLd } = Astro.props
+const { title, description, ogImage, isPreview = false, jsonLd } = Astro.props
 const siteName = 'Snook Studio'
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? Astro.url).href
 const pageTitle = `${title} — ${siteName}`
@@ -107,7 +106,7 @@ if (settings?.socialLinks?.length) orgSchema.sameAs = settings.socialLinks.map((
         </div>
       )
     }
-    <Header isDark={isDark} companyName={settings?.companyName ?? undefined} />
+    <Header companyName={settings?.companyName ?? undefined} />
     <main>
       <slot />
     </main>

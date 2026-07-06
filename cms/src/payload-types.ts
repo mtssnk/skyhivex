@@ -265,10 +265,6 @@ export interface Page {
    * Parent page for hierarchical navigation. The slug must include the parent path.
    */
   parent?: (string | null) | Page;
-  /**
-   * If enabled, the header will use the dark variant with white text.
-   */
-  isDark?: boolean | null;
   blocks?:
     | (
         | {
@@ -1335,10 +1331,6 @@ export interface Project {
       )[]
     | null;
   /**
-   * If enabled, the header will use the dark variant with white text.
-   */
-  isDark?: boolean | null;
-  /**
    * SEO meta description (max 160 characters).
    */
   metaDescription?: string | null;
@@ -2164,7 +2156,6 @@ export interface PagesSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
   parent?: T;
-  isDark?: T;
   blocks?:
     | T
     | {
@@ -2644,7 +2635,6 @@ export interface ProjectsSelect<T extends boolean = true> {
               blockName?: T;
             };
       };
-  isDark?: T;
   metaDescription?: T;
   ogImage?: T;
   updatedAt?: T;

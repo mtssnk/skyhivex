@@ -80,15 +80,8 @@ export const Pages: CollectionConfig = {
       relationTo: 'pages',
       admin: {
         position: 'sidebar',
-        description: 'Parent page for hierarchical navigation. The slug must include the parent path.',
-      },
-    },
-    {
-      name: 'isDark',
-      type: 'checkbox',
-      defaultValue: true,
-      admin: {
-        description: 'If enabled, the header will use the dark variant with white text.',
+        description:
+          'Parent page for hierarchical navigation. The slug must include the parent path.',
       },
     },
     {

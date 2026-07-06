@@ -4,10 +4,9 @@ import { getNavigation } from '@/lib/payload'
 import ArrowUpRight from '@/assets/icons/arrowUpRight.astro'
 
 interface Props {
-  isDark?: boolean
   companyName?: string
 }
-const { isDark, companyName } = Astro.props
+const { companyName } = Astro.props
 
 const nav = await getNavigation()
 const links = nav?.header?.links ?? []
@@ -27,9 +26,7 @@ function linkHref(item: {
 }
 ---
 
-<header
-  class={`snk-header flex items-center fixed w-full z-50 top-0 left-0 ${isDark ? 'text-white' : 'text-night'}`}
->
+<header class="snk-header flex items-center fixed w-full z-50 top-0 left-0 text-white">
   <div class="container flex items-center justify-between">
     <a
       href="/"

@@ -27,14 +27,14 @@ cd cms && docker compose up
 
 ## Tech stack
 
-| Layer    | Tech                                        |
-| -------- | ------------------------------------------- |
-| CMS      | Payload 3.83, Next.js 16, React 19          |
+| Layer    | Tech                                       |
+| -------- | ------------------------------------------ |
+| CMS      | Payload 3.83, Next.js 16, React 19         |
 | Frontend | Astro 6, Node runtime (`output: 'static'`) |
-| Database | MongoDB (Mongoose adapter)                  |
-| Storage  | Cloudflare R2 (S3-compatible)               |
-| Images   | Sharp                                       |
-| Editor   | Lexical (rich text)                         |
+| Database | MongoDB (Mongoose adapter)                 |
+| Storage  | Cloudflare R2 (S3-compatible)              |
+| Images   | Sharp                                      |
+| Editor   | Lexical (rich text)                        |
 
 ## Environment variables
 
@@ -129,7 +129,7 @@ Valid types: `feat`, `fix`, `chore`, `docs`, `style`, `refactor`, `test`, `perf`
 
 - `web/src/lib/payload.ts` — typed CMS fetch helpers (`getPageBySlug`, `getProjects`, `getProjectBySlug`, `getPosts`, `getPostBySlug`) + all response types
 - `web/src/lib/lexical.ts` — Lexical JSON → HTML serialiser for rich text fields
-- `web/src/layouts/Layout.astro` — base HTML shell (`title`, `description`, `isDark` props)
+- `web/src/layouts/Layout.astro` — base HTML shell (`title`, `description` props)
 - `web/src/blocks/BlockRenderer.astro` — renders the correct block component per `blockType`
 - `web/src/styles/global.css` — Tailwind v4 with design tokens (`--color-*`, `--font-*`)
 

@@ -1,0 +1,30 @@
+input[type='text'],
+input[type='number'],
+input[type='email'],
+input[type='password'],
+input[type='search'],
+input[type='tel'],
+input[type='url'],
+textarea,
+select {
+  @apply text-mono-3xs px-4 py-2.5;
+  border-radius: 3px;
+  border: 2px solid var(--color-smoke);
+  box-shadow:
+    1.5px -1px 0 2px rgba(41, 48, 255, 0.6),
+    -1.5px 1px 0 2px rgba(255, 0, 0, 0.5);
+}
+
+select {
+  appearance: none;
+  color: var(--color-white);
+  background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbDpzcGFjZT0icHJlc2VydmUiIHZpZXdCb3g9IjAgMCA0MCA0MCI+PHBhdGggZD0iTTIwIDI0LjEgMTIuOSAxN2wuNy0uNyA2LjQgNi40IDYuNC02LjQuNy43eiIgc3R5bGU9ImZpbGw6I2ZmZiIvPjwvc3ZnPg==');
+  padding-right: 45px;
+  background-position: right center;
+  background-repeat: no-repeat;
+  background-size: 40px;
+}
+
+select:focus {
+  outline: none;
+}

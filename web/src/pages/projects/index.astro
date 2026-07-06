@@ -2,11 +2,19 @@
 import Layout from '@/layouts/Layout.astro'
 import BlockRenderer from '@/blocks/BlockRenderer.astro'
 import Hero from '@/blocks/Hero.astro'
-import ProjectList from '@/blocks/ProjectList.astro'
-import { getProjectsPage } from '@/lib/payload'
+import CardProject from '@/components/CardProject.astro'
+import { getProjectsPage, getProjects } from '@/lib/payload'
+import HeadingUnderline from '@/components/HeadingUnderline.astro'
+import type { ClientType } from '@/lib/payload'
 
-const projectsPage = await getProjectsPage()
+const [projectsPage, projects] = await Promise.all([getProjectsPage(), getProjects()])
 const hero = projectsPage?.hero
+
+const clientTypeMap = new Map<string, ClientType>()
+for (const project of projects) {
+  if (project.clientType) clientTypeMap.set(project.clientType.id, project.clientType)
+}
+const clientTypes = Array.from(clientTypeMap.values())
 ---
 
 <Layout
@@ -23,6 +31,55 @@ const hero = projectsPage?.hero
       />
     )
   }
-  <ProjectList blockType="projectList" selectionMode="latest" anchorId="project-list" />
+  <section id="project-list" class="section-projectlist">
+    {
+      clientTypes.length > 0 && (
+        <div class="container pt-xs">
+          <header>
+            <HeadingUnderline>
+              Filter
+              <select id="project-filter" aria-label="Filter by client type">
+                <option value="all">All</option>
+                {clientTypes.map((ct) => (
+                  <option value={ct.id}>{ct.name}</option>
+                ))}
+              </select>
+            </HeadingUnderline>
+          </header>
+        </div>
+      )
+    }
+    <div class="bg-hexagon-obsidian pt-xs pb-md">
+      <ul class="container space-y-xs" role="list">
+        {
+          projects.map((project, i) => (
+            <li data-client-type-id={project.clientType?.id ?? ''} class="w-full">
+              <CardProject
+                href={`/projects/${project.slug}`}
+                media={project.listingMedia ?? project.listingImage}
+                label={project.projectName ?? project.heading}
+                category={project.clientType?.name}
+                sizes="(max-width: 768px) 100vw, 33vw"
+                isEven={i % 2 !== 0}
+                number={i + 1}
+              />
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
   <BlockRenderer blocks={projectsPage?.blocks} />
 </Layout>
+
+<script>
+  const select = document.getElementById('project-filter') as HTMLSelectElement | null
+  const items = document.querySelectorAll<HTMLElement>('[data-client-type-id]')
+
+  select?.addEventListener('change', () => {
+    const filter = select.value
+    items.forEach((item) => {
+      item.hidden = filter !== 'all' && item.dataset.clientTypeId !== filter
+    })
+  })
+</script>

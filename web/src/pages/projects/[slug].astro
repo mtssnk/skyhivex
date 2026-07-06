@@ -14,8 +14,8 @@ const project = await getProjectBySlug(slug!)
 if (!project) return new Response(null, { status: 404 })
 
 const metaDescription = project.metaDescription ?? project.heading
-const ogImage = project.ogImage?.url ?? project.heroMedia?.image?.url ?? project.listingMedia?.url ?? undefined
-const isDark = project.isDark ?? true
+const ogImage =
+  project.ogImage?.url ?? project.heroMedia?.image?.url ?? project.listingMedia?.url ?? undefined
 
 const heroMediaType = project.heroMedia?.type ?? (project.listingMedia ? 'image' : undefined)
 const heroBackgroundImage = project.heroMedia?.image ?? project.listingMedia ?? undefined
@@ -56,7 +56,6 @@ const heroButtons: NonNullable<Parameters<typeof Hero>[0]['buttons']> = [
 <Layout
   title={project.projectName ?? project.heading}
   description={metaDescription}
-  isDark={isDark}
   ogImage={ogImage ?? undefined}
   jsonLd={jsonLd}
 >

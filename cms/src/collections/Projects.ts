@@ -204,15 +204,6 @@ export const Projects: CollectionConfig = {
       ],
     },
     {
-      name: 'isDark',
-      type: 'checkbox',
-      defaultValue: true,
-      admin: {
-        position: 'sidebar',
-        description: 'If enabled, the header will use the dark variant with white text.',
-      },
-    },
-    {
       name: 'metaDescription',
       type: 'textarea',
       admin: {
