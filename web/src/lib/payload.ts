@@ -49,13 +49,55 @@ export type Category = {
   slug: string
 }
 
+export type Region = {
+  id: string
+  name: string
+  slug: string
+}
+
+export type State = {
+  id: string
+  name: string
+  slug: string
+  region?: Region | null
+}
+
+export type City = {
+  id: string
+  name: string
+  slug: string
+  state?: State | null
+  region?: Region | null
+}
+
+export type ClientType = {
+  id: string
+  name: string
+  slug: string
+}
+
+export type NavigationItem = {
+  id: string
+  name: string
+  links?:
+    | {
+        label: string
+        page?: { id: string; slug: string; title: string } | null
+        url?: string | null
+        id?: string | null
+      }[]
+    | null
+}
+
 export type Project = {
   id: string
-  title: string
+  heading: string
   projectName?: string | null
-  client: string
   slug: string
-  categories?: Category[] | null
+  clientTypes?: ClientType[] | null
+  regions?: Region[] | null
+  states?: State[] | null
+  cities?: City[] | null
   listingImage: Media
   listingMedia?: Media | null
   heroMedia?: {
@@ -78,6 +120,9 @@ export type Post = {
   title: string
   slug: string
   categories?: Category[] | null
+  regions?: Region[] | null
+  states?: State[] | null
+  cities?: City[] | null
   listingImage: Media
   overlayAlpha?: number | null
   blocks?: PostBlock[] | null
@@ -183,11 +228,14 @@ export type LogoListBlock = BlockPadding & {
 export type ProjectListBlock = BlockPadding & {
   blockType: 'projectList'
   id?: string | null
-  selectionMode: 'manual' | 'category' | 'latest'
+  selectionMode: 'manual' | 'filtered' | 'latest'
   heading?: string | null
   viewAllLabel?: string | null
   projects?: Project[] | null
-  category?: Category | null
+  filterClientType?: ClientType | null
+  filterRegion?: Region | null
+  filterState?: State | null
+  filterCity?: City | null
   count?: number | null
   buttonLabel?: string | null
 }
@@ -195,9 +243,12 @@ export type ProjectListBlock = BlockPadding & {
 export type NewsCardListBlock = BlockPadding & {
   blockType: 'newsCardList'
   id?: string | null
-  selectionMode: 'manual' | 'category' | 'latest'
+  selectionMode: 'manual' | 'category' | 'by-geography' | 'latest'
   articles?: Post[] | null
   category?: Category | null
+  filterRegion?: Region | null
+  filterState?: State | null
+  filterCity?: City | null
   buttonLabel?: string | null
 }
 
@@ -260,6 +311,13 @@ export type FeatureListBlock = BlockPadding & {
   linkPage?: { slug: string } | null
 }
 
+export type LinkedContentBlock = BlockPadding & {
+  blockType: 'linkedContent'
+  id?: string | null
+  navigation?: NavigationItem | null
+  body?: LexicalContent | null
+}
+
 export type SharedBlock =
   | MediaTextBlock
   | MediaBlock
@@ -273,6 +331,7 @@ export type SharedBlock =
   | NewsCardListBlock
   | LogoListBlock
   | FeatureListBlock
+  | LinkedContentBlock
 
 export type PageBlock = HeroBlock | SharedBlock
 export type ProjectBlock = SharedBlock
@@ -282,6 +341,10 @@ export type Page = {
   id: string
   title: string
   slug: string
+  parent?: { id: string; slug: string; title: string } | null
+  regions?: Region[] | null
+  states?: State[] | null
+  cities?: City[] | null
   isDark?: boolean | null
   blocks?: PageBlock[] | null
   metaDescription?: string | null
@@ -379,7 +442,7 @@ export async function getPageBySlug(
 ): Promise<Page | null> {
   const params: Record<string, string> = {
     'where[slug][equals]': slug,
-    depth: '2',
+    depth: '3',
     limit: '1',
   }
   if (draft) params.draft = 'true'
@@ -450,4 +513,24 @@ export async function getProjectsPage(): Promise<ProjectsPage | null> {
 
 export async function getContactPage(): Promise<ContactPage | null> {
   return get<ContactPage>('/globals/contact-page')
+}
+
+export async function getRegions(): Promise<Region[]> {
+  const data = await get<{ docs: Region[] }>('/regions', { depth: '0', limit: '200' })
+  return data?.docs ?? []
+}
+
+export async function getStates(): Promise<State[]> {
+  const data = await get<{ docs: State[] }>('/states', { depth: '1', limit: '200' })
+  return data?.docs ?? []
+}
+
+export async function getCities(): Promise<City[]> {
+  const data = await get<{ docs: City[] }>('/cities', { depth: '1', limit: '500' })
+  return data?.docs ?? []
+}
+
+export async function getClientTypes(): Promise<ClientType[]> {
+  const data = await get<{ docs: ClientType[] }>('/client-types', { depth: '0', limit: '200' })
+  return data?.docs ?? []
 }

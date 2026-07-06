@@ -1,8 +1,8 @@
 import type { CollectionConfig } from 'payload'
 
-export const Categories: CollectionConfig = {
-  slug: 'categories',
-  labels: { singular: 'Post Category', plural: 'Post Categories' },
+export const ClientTypes: CollectionConfig = {
+  slug: 'client-types',
+  labels: { singular: 'Client Type', plural: 'Client Types' },
   admin: {
     useAsTitle: 'name',
     defaultColumns: ['name', 'slug'],

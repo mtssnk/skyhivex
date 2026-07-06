@@ -13,6 +13,11 @@ import { Pages } from './collections/Pages'
 import { Projects } from './collections/Projects'
 import { Posts } from './collections/Posts'
 import { Categories } from './collections/Categories'
+import { Regions } from './collections/Regions'
+import { States } from './collections/States'
+import { Cities } from './collections/Cities'
+import { ClientTypes } from './collections/ClientTypes'
+import { Navigations } from './collections/Navigations'
 import { SiteSettings } from './globals/SiteSettings'
 import { ProjectsPage } from './globals/ProjectsPage'
 import { ContactPage } from './globals/ContactPage'
@@ -29,7 +34,20 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, SVGs, Pages, Projects, Posts, Categories],
+  collections: [
+    Users,
+    Media,
+    SVGs,
+    Pages,
+    Projects,
+    Posts,
+    Categories,
+    Regions,
+    States,
+    Cities,
+    ClientTypes,
+    Navigations,
+  ],
   globals: [SiteSettings, ProjectsPage, ContactPage, Navigation],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',

@@ -1,11 +1,11 @@
 import type { CollectionConfig } from 'payload'
 
-export const Categories: CollectionConfig = {
-  slug: 'categories',
-  labels: { singular: 'Post Category', plural: 'Post Categories' },
+export const States: CollectionConfig = {
+  slug: 'states',
+  labels: { singular: 'State', plural: 'States' },
   admin: {
     useAsTitle: 'name',
-    defaultColumns: ['name', 'slug'],
+    defaultColumns: ['name', 'slug', 'region'],
   },
   access: {
     read: () => true,
@@ -35,6 +35,14 @@ export const Categories: CollectionConfig = {
               .replace(/(^-|-$)/g, '')
           },
         ],
+      },
+    },
+    {
+      name: 'region',
+      type: 'relationship',
+      relationTo: 'regions',
+      admin: {
+        position: 'sidebar',
       },
     },
   ],

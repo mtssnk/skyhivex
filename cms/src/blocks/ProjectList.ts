@@ -12,7 +12,7 @@ export const ProjectList: Block = {
       defaultValue: 'latest',
       options: [
         { label: 'Manual selection', value: 'manual' },
-        { label: 'By category', value: 'category' },
+        { label: 'Filtered', value: 'filtered' },
         { label: 'Latest', value: 'latest' },
       ],
     },
@@ -27,11 +27,39 @@ export const ProjectList: Block = {
       },
     },
     {
-      name: 'category',
+      name: 'filterClientType',
       type: 'relationship',
-      relationTo: 'categories',
+      relationTo: 'client-types',
       admin: {
-        condition: (_, sibling) => sibling?.selectionMode === 'category',
+        description: 'Filter by client type.',
+        condition: (_, sibling) => sibling?.selectionMode === 'filtered',
+      },
+    },
+    {
+      name: 'filterRegion',
+      type: 'relationship',
+      relationTo: 'regions',
+      admin: {
+        description: 'Filter by region.',
+        condition: (_, sibling) => sibling?.selectionMode === 'filtered',
+      },
+    },
+    {
+      name: 'filterState',
+      type: 'relationship',
+      relationTo: 'states',
+      admin: {
+        description: 'Filter by state.',
+        condition: (_, sibling) => sibling?.selectionMode === 'filtered',
+      },
+    },
+    {
+      name: 'filterCity',
+      type: 'relationship',
+      relationTo: 'cities',
+      admin: {
+        description: 'Filter by city.',
+        condition: (_, sibling) => sibling?.selectionMode === 'filtered',
       },
     },
     {
@@ -41,11 +69,15 @@ export const ProjectList: Block = {
       admin: {
         description: 'Number of projects to display.',
         condition: (_, sibling) =>
-          sibling?.selectionMode === 'category' || sibling?.selectionMode === 'latest',
+          sibling?.selectionMode === 'filtered' || sibling?.selectionMode === 'latest',
       },
     },
     {
-      name: 'buttonLabel',
+      name: 'heading',
+      type: 'text',
+    },
+    {
+      name: 'viewAllLabel',
       type: 'text',
       admin: {
         description: 'Label for the link to the projects index. Leave empty to hide.',

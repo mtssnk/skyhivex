@@ -12,6 +12,7 @@ import { AccordionList } from '../blocks/AccordionList'
 import { ProjectList } from '../blocks/ProjectList'
 import { NewsCardList } from '../blocks/NewsCardList'
 import { FeatureList } from '../blocks/FeatureList'
+import { LinkedContent } from '../blocks/LinkedContent'
 
 export const Pages: CollectionConfig = {
   slug: 'pages',
@@ -44,7 +45,7 @@ export const Pages: CollectionConfig = {
       admin: {
         position: 'sidebar',
         description:
-          'URL path for this page. Use "home" for the homepage (/), otherwise the slug becomes the URL path. Do not change after publishing.',
+          'Full URL path for this page. Use "home" for the homepage (/). For nested pages include the full path, e.g. "services/northeast/texas". Do not change after publishing.',
       },
       hooks: {
         beforeValidate: [
@@ -52,8 +53,9 @@ export const Pages: CollectionConfig = {
             const source = value || data?.title || ''
             return source
               .toLowerCase()
-              .replace(/[^a-z0-9]+/g, '-')
-              .replace(/(^-|-$)/g, '')
+              .replace(/[^a-z0-9/]+/g, '-')
+              .replace(/(^[-/]|[-/]$)/g, '')
+              .replace(/\/+/g, '/')
           },
         ],
       },
@@ -70,6 +72,15 @@ export const Pages: CollectionConfig = {
         })
         if (existing.totalDocs > 0) return 'A page with this slug already exists.'
         return true
+      },
+    },
+    {
+      name: 'parent',
+      type: 'relationship',
+      relationTo: 'pages',
+      admin: {
+        position: 'sidebar',
+        description: 'Parent page for hierarchical navigation. The slug must include the parent path.',
       },
     },
     {
@@ -97,6 +108,7 @@ export const Pages: CollectionConfig = {
         ProjectList,
         NewsCardList,
         FeatureList,
+        LinkedContent,
       ],
     },
     {
@@ -115,6 +127,34 @@ export const Pages: CollectionConfig = {
         position: 'sidebar',
         description: 'Social share image (OG). Recommended: 1200×630px.',
       },
+    },
+    {
+      type: 'collapsible',
+      label: 'Geographic categories',
+      admin: {
+        position: 'sidebar',
+        initCollapsed: true,
+      },
+      fields: [
+        {
+          name: 'regions',
+          type: 'relationship',
+          relationTo: 'regions',
+          hasMany: true,
+        },
+        {
+          name: 'states',
+          type: 'relationship',
+          relationTo: 'states',
+          hasMany: true,
+        },
+        {
+          name: 'cities',
+          type: 'relationship',
+          relationTo: 'cities',
+          hasMany: true,
+        },
+      ],
     },
   ],
 }

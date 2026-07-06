@@ -12,6 +12,7 @@ import { CardList } from '../blocks/CardList'
 import { ProjectList } from '../blocks/ProjectList'
 import { NewsCardList } from '../blocks/NewsCardList'
 import { LogoList } from '../blocks/LogoList'
+import { LinkedContent } from '../blocks/LinkedContent'
 
 export const Posts: CollectionConfig = {
   slug: 'posts',
@@ -108,6 +109,7 @@ export const Posts: CollectionConfig = {
         ProjectList,
         NewsCardList,
         LogoList,
+        LinkedContent,
       ],
     },
     {
@@ -127,6 +129,34 @@ export const Posts: CollectionConfig = {
         description:
           'Social share image (OG). Recommended: 1200×630px. Falls back to listing image.',
       },
+    },
+    {
+      type: 'collapsible',
+      label: 'Geographic categories',
+      admin: {
+        position: 'sidebar',
+        initCollapsed: true,
+      },
+      fields: [
+        {
+          name: 'regions',
+          type: 'relationship',
+          relationTo: 'regions',
+          hasMany: true,
+        },
+        {
+          name: 'states',
+          type: 'relationship',
+          relationTo: 'states',
+          hasMany: true,
+        },
+        {
+          name: 'cities',
+          type: 'relationship',
+          relationTo: 'cities',
+          hasMany: true,
+        },
+      ],
     },
   ],
 }

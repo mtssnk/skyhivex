@@ -1,0 +1,56 @@
+---
+import Layout from '@/layouts/Layout.astro'
+import BlockRenderer from '@/blocks/BlockRenderer.astro'
+import { getPages, getPageBySlug } from '@/lib/payload'
+import type { City, State, Region } from '@/lib/payload'
+
+export async function getStaticPaths() {
+  const pages = await getPages()
+  return pages
+    .filter((p) => p.slug !== 'home')
+    .map((p) => ({ params: { slug: p.slug } }))
+}
+
+const { slug } = Astro.params
+const page = await getPageBySlug(slug!)
+if (!page) return new Response(null, { status: 404 })
+
+function buildAreaServed(
+  cities?: City[] | null,
+  states?: State[] | null,
+  regions?: Region[] | null,
+): object[] | undefined {
+  if (cities?.length) {
+    return cities.map((c) => ({ '@type': 'City', name: c.name }))
+  }
+  if (states?.length) {
+    return states.map((s) => ({ '@type': 'State', name: s.name }))
+  }
+  if (regions?.length) {
+    return regions.map((r) => ({ '@type': 'AdministrativeArea', name: r.name }))
+  }
+  return undefined
+}
+
+const areaServed = buildAreaServed(page.cities, page.states, page.regions)
+
+const jsonLd = areaServed
+  ? {
+      '@context': 'https://schema.org',
+      '@type': 'WebPage',
+      name: page.title,
+      ...(page.metaDescription ? { description: page.metaDescription } : {}),
+      areaServed,
+    }
+  : undefined
+---
+
+<Layout
+  title={page.title}
+  isDark={page.isDark ?? false}
+  description={page.metaDescription ?? undefined}
+  ogImage={page.ogImage?.url ?? undefined}
+  jsonLd={jsonLd}
+>
+  <BlockRenderer blocks={page.blocks} />
+</Layout>

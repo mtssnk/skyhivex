@@ -10,6 +10,7 @@ import MediaBlock from '@/blocks/MediaBlock.astro'
 import Quote from '@/blocks/Quote.astro'
 import FeatureList from '@/blocks/FeatureList.astro'
 import NewsCardList from '@/blocks/NewsCardList.astro'
+import LinkedContent from '@/blocks/LinkedContent.astro'
 
 interface Props {
   blocks: (PageBlock | ProjectBlock)[] | null | undefined
@@ -31,6 +32,7 @@ const { blocks } = Astro.props
       {block.blockType === 'quote' && <Quote {...block} />}
       {block.blockType === 'featureList' && <FeatureList {...block} />}
       {block.blockType === 'newsCardList' && <NewsCardList {...block} />}
+      {block.blockType === 'linkedContent' && <LinkedContent {...block} />}
     </>
   ))
 }

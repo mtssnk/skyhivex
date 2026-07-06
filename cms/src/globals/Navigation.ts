@@ -51,7 +51,7 @@ function navArrayField(name: string, label: string): Field {
 
 export const Navigation: GlobalConfig = {
   slug: 'navigation',
-  label: 'Navigation',
+  label: 'Site Navigation',
   access: {
     read: () => true,
   },

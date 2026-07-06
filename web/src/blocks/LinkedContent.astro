@@ -1,0 +1,47 @@
+---
+import type { LinkedContentBlock } from '@/lib/payload'
+import { clsx } from 'clsx'
+import { blockPaddingClass } from '@/lib/blocks'
+import { lexicalToHtml } from '@/lib/lexical'
+
+const { navigation, body, anchorId, paddingWhere, paddingSize } =
+  Astro.props as LinkedContentBlock
+const paddingClass = blockPaddingClass(paddingWhere, paddingSize)
+const bodyHtml = body ? lexicalToHtml(body) : null
+---
+
+<section id={anchorId ?? undefined} class={clsx('section-linkedcontent', paddingClass)}>
+  <div class="container">
+    <div class="grid">
+      <div class="col-span-12 md:col-span-8 lg:col-span-6 flex flex-col gap-md">
+        {bodyHtml && <div class="prose" set:html={bodyHtml} />}
+        {
+          navigation?.links && navigation.links.length > 0 && (
+            <nav aria-label={navigation.name}>
+              <ul class="flex flex-col gap-4" role="list">
+                {navigation.links.map((link) => {
+                  const href = link.page?.slug
+                    ? link.page.slug === 'home'
+                      ? '/'
+                      : `/${link.page.slug}`
+                    : (link.url ?? '#')
+                  return (
+                    <li>
+                      <a
+                        href={href}
+                        class="text-mono-3xs text-smoke hover:text-white transition-colors duration-200 flex items-center gap-2 group"
+                      >
+                        <span class="inline-block w-4 h-px bg-current shrink-0 transition-all duration-200 group-hover:w-6" />
+                        {link.label}
+                      </a>
+                    </li>
+                  )
+                })}
+              </ul>
+            </nav>
+          )
+        }
+      </div>
+    </div>
+  </div>
+</section>

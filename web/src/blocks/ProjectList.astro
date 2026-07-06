@@ -5,10 +5,46 @@ import Button from '@/components/Button.astro'
 import HeadingUnderline from '@/components/HeadingUnderline.astro'
 import CardLink from '@/components/CardLink.astro'
 import { blockPaddingClass } from '@/lib/blocks'
+import { getProjects } from '@/lib/payload'
+import type { Project } from '@/lib/payload'
 
-const { heading, projects, viewAllLabel, anchorId, paddingWhere, paddingSize } =
-  Astro.props as ProjectListBlock
+const {
+  heading,
+  projects,
+  selectionMode,
+  filterClientType,
+  filterRegion,
+  filterState,
+  filterCity,
+  count,
+  viewAllLabel,
+  anchorId,
+  paddingWhere,
+  paddingSize,
+} = Astro.props as ProjectListBlock
 const paddingClass = blockPaddingClass(paddingWhere, paddingSize)
+
+let resolvedProjects: Project[] = projects ?? []
+
+if (selectionMode !== 'manual') {
+  const all = await getProjects()
+  let filtered = all
+
+  if (selectionMode === 'filtered') {
+    if (filterCity) {
+      filtered = filtered.filter((p) => p.cities?.some((c) => c.id === filterCity.id))
+    } else if (filterState) {
+      filtered = filtered.filter((p) => p.states?.some((s) => s.id === filterState.id))
+    } else if (filterRegion) {
+      filtered = filtered.filter((p) => p.regions?.some((r) => r.id === filterRegion.id))
+    }
+    if (filterClientType) {
+      filtered = filtered.filter((p) => p.clientTypes?.some((ct) => ct.id === filterClientType.id))
+    }
+  }
+
+  resolvedProjects = count ? filtered.slice(0, count) : filtered
+}
 ---
 
 <section id={anchorId ?? undefined} class="section-worklist bg-terracotta">
@@ -22,22 +58,26 @@ const paddingClass = blockPaddingClass(paddingWhere, paddingSize)
     }
     <ul class="grid grid-cols-3" role="list">
       {
-        projects?.map((project) => (
+        resolvedProjects.map((project) => (
           <li>
             <CardLink
               href={`/work/${project.slug}`}
               media={project.listingMedia ?? project.listingImage}
-              label={project.projectName ?? project.title}
+              label={project.projectName ?? project.heading}
               sizes="(max-width: 768px) 100vw, 33vw"
             />
           </li>
         ))
       }
     </ul>
-    <div class="flex justify-center">
-      <Button href="/work" style="outline" size="sm" colour="green">
-        {viewAllLabel ?? 'View all work'}
-      </Button>
-    </div>
+    {
+      viewAllLabel ? (
+        <div class="flex justify-center">
+          <Button href="/work" style="outline" size="sm" colour="green">
+            {viewAllLabel}
+          </Button>
+        </div>
+      ) : null
+    }
   </div>
 </section>

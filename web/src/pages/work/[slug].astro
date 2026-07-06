@@ -13,7 +13,7 @@ const { slug } = Astro.params
 const project = await getProjectBySlug(slug!)
 if (!project) return new Response(null, { status: 404 })
 
-const metaDescription = project.metaDescription ?? `${project.client} — ${project.title}`
+const metaDescription = project.metaDescription ?? project.heading
 const ogImage = project.ogImage?.url ?? project.heroMedia?.image?.url ?? project.listingMedia?.url
 const isDark = project.isDark ?? true
 
@@ -24,7 +24,7 @@ const heroBackgroundVideo = project.heroMedia?.video ?? undefined
 const jsonLd: Record<string, unknown> = {
   '@context': 'https://schema.org',
   '@type': 'CreativeWork',
-  name: project.projectName ?? project.title,
+  name: project.projectName ?? project.heading,
   description: metaDescription,
   url: Astro.url.href,
   creator: { '@type': 'Organization', name: 'Snook Studio', url: Astro.url.origin },
@@ -40,14 +40,14 @@ const heroButtons: NonNullable<Parameters<typeof Hero>[0]['buttons']> = [
 ---
 
 <Layout
-  title={`${project.client} — ${project.title}`}
+  title={project.projectName ?? project.heading}
   description={metaDescription}
   isDark={isDark}
   {ogImage}
   {jsonLd}
 >
   <Hero
-    headingPart1={project.title}
+    headingPart1={project.heading}
     backgroundMedia={heroMediaType}
     backgroundImage={heroBackgroundImage}
     backgroundVideo={heroBackgroundVideo}

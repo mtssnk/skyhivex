@@ -12,7 +12,8 @@ export const NewsCardList: Block = {
       defaultValue: 'latest',
       options: [
         { label: 'Manual selection', value: 'manual' },
-        { label: 'By category', value: 'category' },
+        { label: 'By post category', value: 'category' },
+        { label: 'By geography', value: 'by-geography' },
         { label: 'Latest', value: 'latest' },
       ],
     },
@@ -34,6 +35,33 @@ export const NewsCardList: Block = {
       admin: {
         description: 'Shows the latest three articles in this category.',
         condition: (_, sibling) => sibling?.selectionMode === 'category',
+      },
+    },
+    {
+      name: 'filterRegion',
+      type: 'relationship',
+      relationTo: 'regions',
+      admin: {
+        description: 'Filter articles by region.',
+        condition: (_, sibling) => sibling?.selectionMode === 'by-geography',
+      },
+    },
+    {
+      name: 'filterState',
+      type: 'relationship',
+      relationTo: 'states',
+      admin: {
+        description: 'Filter articles by state.',
+        condition: (_, sibling) => sibling?.selectionMode === 'by-geography',
+      },
+    },
+    {
+      name: 'filterCity',
+      type: 'relationship',
+      relationTo: 'cities',
+      admin: {
+        description: 'Filter articles by city.',
+        condition: (_, sibling) => sibling?.selectionMode === 'by-geography',
       },
     },
     {

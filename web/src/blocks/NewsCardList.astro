@@ -10,18 +10,38 @@ import { blockPaddingClass } from '@/lib/blocks'
 import { getPosts } from '@/lib/payload'
 import type { Post } from '@/lib/payload'
 
-const { articles, selectionMode, category, buttonLabel, anchorId, paddingWhere, paddingSize } =
-  Astro.props as NewsCardListBlock
+const {
+  articles,
+  selectionMode,
+  category,
+  filterRegion,
+  filterState,
+  filterCity,
+  buttonLabel,
+  anchorId,
+  paddingWhere,
+  paddingSize,
+} = Astro.props as NewsCardListBlock
 const paddingClass = blockPaddingClass(paddingWhere, paddingSize)
 
 let resolvedArticles: Post[] = articles ?? []
 
 if (selectionMode !== 'manual') {
   const allPosts = await getPosts()
-  const filtered =
-    selectionMode === 'category' && category
-      ? allPosts.filter((p) => p.categories?.some((c) => c.id === category.id))
-      : allPosts
+  let filtered = allPosts
+
+  if (selectionMode === 'category' && category) {
+    filtered = filtered.filter((p) => p.categories?.some((c) => c.id === category.id))
+  } else if (selectionMode === 'by-geography') {
+    if (filterCity) {
+      filtered = filtered.filter((p) => p.cities?.some((c) => c.id === filterCity.id))
+    } else if (filterState) {
+      filtered = filtered.filter((p) => p.states?.some((s) => s.id === filterState.id))
+    } else if (filterRegion) {
+      filtered = filtered.filter((p) => p.regions?.some((r) => r.id === filterRegion.id))
+    }
+  }
+
   resolvedArticles = filtered.slice(0, 3)
 }
 ---

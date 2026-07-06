@@ -35,7 +35,7 @@ const [works, workPage] = await Promise.all([getProjects(), getProjectsPage()])
               <CardLink
                 href={`/work/${work.slug}`}
                 media={work.listingMedia ?? work.listingImage}
-                label={work.projectName ?? work.title}
+                label={work.projectName ?? work.heading}
                 sizes="(max-width: 768px) 100vw, 33vw"
               />
             </div>

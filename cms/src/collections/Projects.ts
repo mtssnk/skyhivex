@@ -12,13 +12,14 @@ import { CardList } from '../blocks/CardList'
 import { ProjectList } from '../blocks/ProjectList'
 import { NewsCardList } from '../blocks/NewsCardList'
 import { LogoList } from '../blocks/LogoList'
+import { LinkedContent } from '../blocks/LinkedContent'
 
 export const Projects: CollectionConfig = {
   slug: 'projects',
   labels: { singular: 'Project', plural: 'Projects' },
   admin: {
-    useAsTitle: 'title',
-    defaultColumns: ['title', 'client', 'categories', 'updatedAt'],
+    useAsTitle: 'heading',
+    defaultColumns: ['heading', 'clientTypes', 'updatedAt'],
     preview: (doc) => {
       const slug = doc?.slug as string | undefined
       const base = process.env.WEB_URL ?? 'http://localhost:4321'
@@ -34,12 +35,7 @@ export const Projects: CollectionConfig = {
   },
   fields: [
     {
-      name: 'title',
-      type: 'text',
-      required: true,
-    },
-    {
-      name: 'client',
+      name: 'heading',
       type: 'text',
       required: true,
     },
@@ -55,7 +51,7 @@ export const Projects: CollectionConfig = {
       hooks: {
         beforeValidate: [
           ({ value, data }) => {
-            const source = value || data?.title || ''
+            const source = value || data?.heading || ''
             return source
               .toLowerCase()
               .replace(/[^a-z0-9]+/g, '-')
@@ -79,9 +75,36 @@ export const Projects: CollectionConfig = {
       },
     },
     {
-      name: 'categories',
+      name: 'clientTypes',
       type: 'relationship',
-      relationTo: 'categories',
+      relationTo: 'client-types',
+      hasMany: true,
+      admin: {
+        position: 'sidebar',
+      },
+    },
+    {
+      name: 'regions',
+      type: 'relationship',
+      relationTo: 'regions',
+      hasMany: true,
+      admin: {
+        position: 'sidebar',
+      },
+    },
+    {
+      name: 'states',
+      type: 'relationship',
+      relationTo: 'states',
+      hasMany: true,
+      admin: {
+        position: 'sidebar',
+      },
+    },
+    {
+      name: 'cities',
+      type: 'relationship',
+      relationTo: 'cities',
       hasMany: true,
       admin: {
         position: 'sidebar',
@@ -93,7 +116,8 @@ export const Projects: CollectionConfig = {
       relationTo: 'media',
       required: true,
       admin: {
-        description: 'Image shown on the projects index card. Used as hero background if no hero media is set.',
+        description:
+          'Image shown on the projects index card. Used as hero background if no hero media is set.',
       },
     },
     {
@@ -176,6 +200,7 @@ export const Projects: CollectionConfig = {
         ProjectList,
         NewsCardList,
         LogoList,
+        LinkedContent,
       ],
     },
     {

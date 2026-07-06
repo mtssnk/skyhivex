@@ -1,8 +1,8 @@
 import type { CollectionConfig } from 'payload'
 
-export const Categories: CollectionConfig = {
-  slug: 'categories',
-  labels: { singular: 'Post Category', plural: 'Post Categories' },
+export const Regions: CollectionConfig = {
+  slug: 'regions',
+  labels: { singular: 'Region', plural: 'Regions' },
   admin: {
     useAsTitle: 'name',
     defaultColumns: ['name', 'slug'],

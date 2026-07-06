@@ -59,7 +59,7 @@ Copyright information with the current year and the Company Name from the Site S
 
 ### Collections
 
-- Projects - Each project requires a listing image, a heading and a client name. The project page will display the heading in the hero and the listing image in the background if another media item isn't specified in the CMS (can be image or video with alpha opacity options). We can utilise the hero block on the front end. There is an optional intro section (textarea) which is displayed before the project summary section. The project summary section consists of an array field consisting of label and value. A project can have a category or more than one.
+- Projects - Each project requires a listing image and a heading. The project page will display the heading in the hero and the listing image in the background if another media item isn't specified in the CMS (can be image or video with alpha opacity options). We can utilise the hero block on the front end. There is an optional intro section (textarea) which is displayed before the project summary section. The project summary section consists of an array field consisting of label and value. A project can have a category or more than one.
 - Pages - see below
 - Media
 - Posts - A post requires a heading and a listing image. The rest of the news post page consists of blocks. News posts can have a category or more than one.

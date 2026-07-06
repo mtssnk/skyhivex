@@ -80,7 +80,7 @@ const RangeSlider: NumberFieldClientComponent = ({ field }) => {
           className={cls}
           min={min}
           max={max}
-          step={field.admin?.step ?? 0.05}
+          step={typeof field.admin?.step === 'number' ? field.admin.step : 0.05}
           value={current}
           onChange={(e) => setValue(parseFloat(e.target.value))}
           style={{ '--pct': pct } as React.CSSProperties}

@@ -74,6 +74,11 @@ export interface Config {
     projects: Project;
     posts: Post;
     categories: Category;
+    regions: Region;
+    states: State;
+    cities: City;
+    'client-types': ClientType;
+    navigations: Navigation;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -88,6 +93,11 @@ export interface Config {
     projects: ProjectsSelect<false> | ProjectsSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
+    regions: RegionsSelect<false> | RegionsSelect<true>;
+    states: StatesSelect<false> | StatesSelect<true>;
+    cities: CitiesSelect<false> | CitiesSelect<true>;
+    'client-types': ClientTypesSelect<false> | ClientTypesSelect<true>;
+    navigations: NavigationsSelect<false> | NavigationsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -101,7 +111,7 @@ export interface Config {
     'site-settings': SiteSetting;
     'projects-page': ProjectsPage;
     'contact-page': ContactPage;
-    navigation: Navigation;
+    navigation: Navigation1;
   };
   globalsSelect: {
     'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
@@ -248,9 +258,13 @@ export interface Page {
   id: string;
   title: string;
   /**
-   * URL path for this page. Use "home" for the homepage (/), otherwise the slug becomes the URL path. Do not change after publishing.
+   * Full URL path for this page. Use "home" for the homepage (/). For nested pages include the full path, e.g. "services/northeast/texas". Do not change after publishing.
    */
   slug: string;
+  /**
+   * Parent page for hierarchical navigation. The slug must include the parent path.
+   */
+  parent?: (string | null) | Page;
   /**
    * If enabled, the header will use the dark variant with white text.
    */
@@ -642,20 +656,36 @@ export interface Page {
             blockType: 'accordionList';
           }
         | {
-            selectionMode: 'manual' | 'category' | 'latest';
+            selectionMode: 'manual' | 'filtered' | 'latest';
             /**
              * Pick specific projects to display.
              */
             projects?: (string | Project)[] | null;
-            category?: (string | null) | Category;
+            /**
+             * Filter by client type.
+             */
+            filterClientType?: (string | null) | ClientType;
+            /**
+             * Filter by region.
+             */
+            filterRegion?: (string | null) | Region;
+            /**
+             * Filter by state.
+             */
+            filterState?: (string | null) | State;
+            /**
+             * Filter by city.
+             */
+            filterCity?: (string | null) | City;
             /**
              * Number of projects to display.
              */
             count?: number | null;
+            heading?: string | null;
             /**
              * Label for the link to the projects index. Leave empty to hide.
              */
-            buttonLabel?: string | null;
+            viewAllLabel?: string | null;
             /**
              * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
              */
@@ -673,7 +703,7 @@ export interface Page {
             blockType: 'projectList';
           }
         | {
-            selectionMode: 'manual' | 'category' | 'latest';
+            selectionMode: 'manual' | 'category' | 'by-geography' | 'latest';
             /**
              * Pick up to three articles.
              */
@@ -682,6 +712,18 @@ export interface Page {
              * Shows the latest three articles in this category.
              */
             category?: (string | null) | Category;
+            /**
+             * Filter articles by region.
+             */
+            filterRegion?: (string | null) | Region;
+            /**
+             * Filter articles by state.
+             */
+            filterState?: (string | null) | State;
+            /**
+             * Filter articles by city.
+             */
+            filterCity?: (string | null) | City;
             /**
              * Label for the link to the news index. Leave empty to hide.
              */
@@ -745,6 +787,45 @@ export interface Page {
             blockName?: string | null;
             blockType: 'featureList';
           }
+        | {
+            /**
+             * Select a navigation group to display as linked related content.
+             */
+            navigation: string | Navigation;
+            /**
+             * Optional introductory text displayed above the navigation links.
+             */
+            body?: {
+              root: {
+                type: string;
+                children: {
+                  type: any;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            /**
+             * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
+             */
+            anchorId?: string | null;
+            /**
+             * Which side(s) the vertical padding is applied to.
+             */
+            paddingWhere?: ('both' | 'top' | 'bottom') | null;
+            /**
+             * Size of the vertical padding.
+             */
+            paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'linkedContent';
+          }
       )[]
     | null;
   /**
@@ -755,6 +836,9 @@ export interface Page {
    * Social share image (OG). Recommended: 1200×630px.
    */
   ogImage?: (string | null) | Media;
+  regions?: (string | Region)[] | null;
+  states?: (string | State)[] | null;
+  cities?: (string | City)[] | null;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -765,13 +849,15 @@ export interface Page {
  */
 export interface Project {
   id: string;
-  title: string;
-  client: string;
+  heading: string;
   /**
    * Auto-generated from the title. Do not change after publishing.
    */
   slug: string;
-  categories?: (string | Category)[] | null;
+  clientTypes?: (string | ClientType)[] | null;
+  regions?: (string | Region)[] | null;
+  states?: (string | State)[] | null;
+  cities?: (string | City)[] | null;
   /**
    * Image shown on the projects index card. Used as hero background if no hero media is set.
    */
@@ -1124,20 +1210,36 @@ export interface Project {
             blockType: 'cardList';
           }
         | {
-            selectionMode: 'manual' | 'category' | 'latest';
+            selectionMode: 'manual' | 'filtered' | 'latest';
             /**
              * Pick specific projects to display.
              */
             projects?: (string | Project)[] | null;
-            category?: (string | null) | Category;
+            /**
+             * Filter by client type.
+             */
+            filterClientType?: (string | null) | ClientType;
+            /**
+             * Filter by region.
+             */
+            filterRegion?: (string | null) | Region;
+            /**
+             * Filter by state.
+             */
+            filterState?: (string | null) | State;
+            /**
+             * Filter by city.
+             */
+            filterCity?: (string | null) | City;
             /**
              * Number of projects to display.
              */
             count?: number | null;
+            heading?: string | null;
             /**
              * Label for the link to the projects index. Leave empty to hide.
              */
-            buttonLabel?: string | null;
+            viewAllLabel?: string | null;
             /**
              * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
              */
@@ -1155,7 +1257,7 @@ export interface Project {
             blockType: 'projectList';
           }
         | {
-            selectionMode: 'manual' | 'category' | 'latest';
+            selectionMode: 'manual' | 'category' | 'by-geography' | 'latest';
             /**
              * Pick up to three articles.
              */
@@ -1164,6 +1266,18 @@ export interface Project {
              * Shows the latest three articles in this category.
              */
             category?: (string | null) | Category;
+            /**
+             * Filter articles by region.
+             */
+            filterRegion?: (string | null) | Region;
+            /**
+             * Filter articles by state.
+             */
+            filterState?: (string | null) | State;
+            /**
+             * Filter articles by city.
+             */
+            filterCity?: (string | null) | City;
             /**
              * Label for the link to the news index. Leave empty to hide.
              */
@@ -1203,6 +1317,45 @@ export interface Project {
             blockName?: string | null;
             blockType: 'logoList';
           }
+        | {
+            /**
+             * Select a navigation group to display as linked related content.
+             */
+            navigation: string | Navigation;
+            /**
+             * Optional introductory text displayed above the navigation links.
+             */
+            body?: {
+              root: {
+                type: string;
+                children: {
+                  type: any;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            /**
+             * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
+             */
+            anchorId?: string | null;
+            /**
+             * Which side(s) the vertical padding is applied to.
+             */
+            paddingWhere?: ('both' | 'top' | 'bottom') | null;
+            /**
+             * Size of the vertical padding.
+             */
+            paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'linkedContent';
+          }
       )[]
     | null;
   /**
@@ -1223,15 +1376,60 @@ export interface Project {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "categories".
+ * via the `definition` "client-types".
  */
-export interface Category {
+export interface ClientType {
   id: string;
   name: string;
   /**
    * Auto-generated from name. Do not change after publishing.
    */
   slug: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "regions".
+ */
+export interface Region {
+  id: string;
+  name: string;
+  /**
+   * Auto-generated from name. Do not change after publishing.
+   */
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "states".
+ */
+export interface State {
+  id: string;
+  name: string;
+  /**
+   * Auto-generated from name. Do not change after publishing.
+   */
+  slug: string;
+  region?: (string | null) | Region;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "cities".
+ */
+export interface City {
+  id: string;
+  name: string;
+  /**
+   * Auto-generated from name. Do not change after publishing.
+   */
+  slug: string;
+  state?: (string | null) | State;
+  region?: (string | null) | Region;
   updatedAt: string;
   createdAt: string;
 }
@@ -1570,20 +1768,36 @@ export interface Post {
         blockType: 'cardList';
       }
     | {
-        selectionMode: 'manual' | 'category' | 'latest';
+        selectionMode: 'manual' | 'filtered' | 'latest';
         /**
          * Pick specific projects to display.
          */
         projects?: (string | Project)[] | null;
-        category?: (string | null) | Category;
+        /**
+         * Filter by client type.
+         */
+        filterClientType?: (string | null) | ClientType;
+        /**
+         * Filter by region.
+         */
+        filterRegion?: (string | null) | Region;
+        /**
+         * Filter by state.
+         */
+        filterState?: (string | null) | State;
+        /**
+         * Filter by city.
+         */
+        filterCity?: (string | null) | City;
         /**
          * Number of projects to display.
          */
         count?: number | null;
+        heading?: string | null;
         /**
          * Label for the link to the projects index. Leave empty to hide.
          */
-        buttonLabel?: string | null;
+        viewAllLabel?: string | null;
         /**
          * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
          */
@@ -1601,7 +1815,7 @@ export interface Post {
         blockType: 'projectList';
       }
     | {
-        selectionMode: 'manual' | 'category' | 'latest';
+        selectionMode: 'manual' | 'category' | 'by-geography' | 'latest';
         /**
          * Pick up to three articles.
          */
@@ -1610,6 +1824,18 @@ export interface Post {
          * Shows the latest three articles in this category.
          */
         category?: (string | null) | Category;
+        /**
+         * Filter articles by region.
+         */
+        filterRegion?: (string | null) | Region;
+        /**
+         * Filter articles by state.
+         */
+        filterState?: (string | null) | State;
+        /**
+         * Filter articles by city.
+         */
+        filterCity?: (string | null) | City;
         /**
          * Label for the link to the news index. Leave empty to hide.
          */
@@ -1649,6 +1875,45 @@ export interface Post {
         blockName?: string | null;
         blockType: 'logoList';
       }
+    | {
+        /**
+         * Select a navigation group to display as linked related content.
+         */
+        navigation: string | Navigation;
+        /**
+         * Optional introductory text displayed above the navigation links.
+         */
+        body?: {
+          root: {
+            type: string;
+            children: {
+              type: any;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        } | null;
+        /**
+         * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
+         */
+        anchorId?: string | null;
+        /**
+         * Which side(s) the vertical padding is applied to.
+         */
+        paddingWhere?: ('both' | 'top' | 'bottom') | null;
+        /**
+         * Size of the vertical padding.
+         */
+        paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'linkedContent';
+      }
   )[];
   /**
    * SEO meta description (max 160 characters).
@@ -1658,9 +1923,49 @@ export interface Post {
    * Social share image (OG). Recommended: 1200×630px. Falls back to listing image.
    */
   ogImage?: (string | null) | Media;
+  regions?: (string | Region)[] | null;
+  states?: (string | State)[] | null;
+  cities?: (string | City)[] | null;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "categories".
+ */
+export interface Category {
+  id: string;
+  name: string;
+  /**
+   * Auto-generated from name. Do not change after publishing.
+   */
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Curated navigation groups used in Linked Content blocks to cluster related pages.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "navigations".
+ */
+export interface Navigation {
+  id: string;
+  name: string;
+  links?:
+    | {
+        label: string;
+        page?: (string | null) | Page;
+        /**
+         * Use instead of Page for external or custom links.
+         */
+        url?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1713,6 +2018,26 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'categories';
         value: string | Category;
+      } | null)
+    | ({
+        relationTo: 'regions';
+        value: string | Region;
+      } | null)
+    | ({
+        relationTo: 'states';
+        value: string | State;
+      } | null)
+    | ({
+        relationTo: 'cities';
+        value: string | City;
+      } | null)
+    | ({
+        relationTo: 'client-types';
+        value: string | ClientType;
+      } | null)
+    | ({
+        relationTo: 'navigations';
+        value: string | Navigation;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -1870,6 +2195,7 @@ export interface SvgsSelect<T extends boolean = true> {
 export interface PagesSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
+  parent?: T;
   isDark?: T;
   blocks?:
     | T
@@ -2057,9 +2383,13 @@ export interface PagesSelect<T extends boolean = true> {
           | {
               selectionMode?: T;
               projects?: T;
-              category?: T;
+              filterClientType?: T;
+              filterRegion?: T;
+              filterState?: T;
+              filterCity?: T;
               count?: T;
-              buttonLabel?: T;
+              heading?: T;
+              viewAllLabel?: T;
               anchorId?: T;
               paddingWhere?: T;
               paddingSize?: T;
@@ -2072,6 +2402,9 @@ export interface PagesSelect<T extends boolean = true> {
               selectionMode?: T;
               articles?: T;
               category?: T;
+              filterRegion?: T;
+              filterState?: T;
+              filterCity?: T;
               buttonLabel?: T;
               anchorId?: T;
               paddingWhere?: T;
@@ -2102,9 +2435,23 @@ export interface PagesSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
+        linkedContent?:
+          | T
+          | {
+              navigation?: T;
+              body?: T;
+              anchorId?: T;
+              paddingWhere?: T;
+              paddingSize?: T;
+              id?: T;
+              blockName?: T;
+            };
       };
   metaDescription?: T;
   ogImage?: T;
+  regions?: T;
+  states?: T;
+  cities?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
@@ -2114,10 +2461,12 @@ export interface PagesSelect<T extends boolean = true> {
  * via the `definition` "projects_select".
  */
 export interface ProjectsSelect<T extends boolean = true> {
-  title?: T;
-  client?: T;
+  heading?: T;
   slug?: T;
-  categories?: T;
+  clientTypes?: T;
+  regions?: T;
+  states?: T;
+  cities?: T;
   listingImage?: T;
   heroMedia?:
     | T
@@ -2281,9 +2630,13 @@ export interface ProjectsSelect<T extends boolean = true> {
           | {
               selectionMode?: T;
               projects?: T;
-              category?: T;
+              filterClientType?: T;
+              filterRegion?: T;
+              filterState?: T;
+              filterCity?: T;
               count?: T;
-              buttonLabel?: T;
+              heading?: T;
+              viewAllLabel?: T;
               anchorId?: T;
               paddingWhere?: T;
               paddingSize?: T;
@@ -2296,6 +2649,9 @@ export interface ProjectsSelect<T extends boolean = true> {
               selectionMode?: T;
               articles?: T;
               category?: T;
+              filterRegion?: T;
+              filterState?: T;
+              filterCity?: T;
               buttonLabel?: T;
               anchorId?: T;
               paddingWhere?: T;
@@ -2308,6 +2664,17 @@ export interface ProjectsSelect<T extends boolean = true> {
           | {
               heading?: T;
               logos?: T;
+              anchorId?: T;
+              paddingWhere?: T;
+              paddingSize?: T;
+              id?: T;
+              blockName?: T;
+            };
+        linkedContent?:
+          | T
+          | {
+              navigation?: T;
+              body?: T;
               anchorId?: T;
               paddingWhere?: T;
               paddingSize?: T;
@@ -2478,9 +2845,13 @@ export interface PostsSelect<T extends boolean = true> {
           | {
               selectionMode?: T;
               projects?: T;
-              category?: T;
+              filterClientType?: T;
+              filterRegion?: T;
+              filterState?: T;
+              filterCity?: T;
               count?: T;
-              buttonLabel?: T;
+              heading?: T;
+              viewAllLabel?: T;
               anchorId?: T;
               paddingWhere?: T;
               paddingSize?: T;
@@ -2493,6 +2864,9 @@ export interface PostsSelect<T extends boolean = true> {
               selectionMode?: T;
               articles?: T;
               category?: T;
+              filterRegion?: T;
+              filterState?: T;
+              filterCity?: T;
               buttonLabel?: T;
               anchorId?: T;
               paddingWhere?: T;
@@ -2511,9 +2885,23 @@ export interface PostsSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
+        linkedContent?:
+          | T
+          | {
+              navigation?: T;
+              body?: T;
+              anchorId?: T;
+              paddingWhere?: T;
+              paddingSize?: T;
+              id?: T;
+              blockName?: T;
+            };
       };
   metaDescription?: T;
   ogImage?: T;
+  regions?: T;
+  states?: T;
+  cities?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
@@ -2525,6 +2913,66 @@ export interface PostsSelect<T extends boolean = true> {
 export interface CategoriesSelect<T extends boolean = true> {
   name?: T;
   slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "regions_select".
+ */
+export interface RegionsSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "states_select".
+ */
+export interface StatesSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  region?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "cities_select".
+ */
+export interface CitiesSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  state?: T;
+  region?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "client-types_select".
+ */
+export interface ClientTypesSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "navigations_select".
+ */
+export interface NavigationsSelect<T extends boolean = true> {
+  name?: T;
+  links?:
+    | T
+    | {
+        label?: T;
+        page?: T;
+        url?: T;
+        id?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }
@@ -2931,20 +3379,36 @@ export interface ProjectsPage {
             blockType: 'cardList';
           }
         | {
-            selectionMode: 'manual' | 'category' | 'latest';
+            selectionMode: 'manual' | 'filtered' | 'latest';
             /**
              * Pick specific projects to display.
              */
             projects?: (string | Project)[] | null;
-            category?: (string | null) | Category;
+            /**
+             * Filter by client type.
+             */
+            filterClientType?: (string | null) | ClientType;
+            /**
+             * Filter by region.
+             */
+            filterRegion?: (string | null) | Region;
+            /**
+             * Filter by state.
+             */
+            filterState?: (string | null) | State;
+            /**
+             * Filter by city.
+             */
+            filterCity?: (string | null) | City;
             /**
              * Number of projects to display.
              */
             count?: number | null;
+            heading?: string | null;
             /**
              * Label for the link to the projects index. Leave empty to hide.
              */
-            buttonLabel?: string | null;
+            viewAllLabel?: string | null;
             /**
              * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
              */
@@ -2962,7 +3426,7 @@ export interface ProjectsPage {
             blockType: 'projectList';
           }
         | {
-            selectionMode: 'manual' | 'category' | 'latest';
+            selectionMode: 'manual' | 'category' | 'by-geography' | 'latest';
             /**
              * Pick up to three articles.
              */
@@ -2971,6 +3435,18 @@ export interface ProjectsPage {
              * Shows the latest three articles in this category.
              */
             category?: (string | null) | Category;
+            /**
+             * Filter articles by region.
+             */
+            filterRegion?: (string | null) | Region;
+            /**
+             * Filter articles by state.
+             */
+            filterState?: (string | null) | State;
+            /**
+             * Filter articles by city.
+             */
+            filterCity?: (string | null) | City;
             /**
              * Label for the link to the news index. Leave empty to hide.
              */
@@ -3109,7 +3585,7 @@ export interface ContactPage {
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "navigation".
  */
-export interface Navigation {
+export interface Navigation1 {
   id: string;
   header: {
     links?:
@@ -3329,9 +3805,13 @@ export interface ProjectsPageSelect<T extends boolean = true> {
           | {
               selectionMode?: T;
               projects?: T;
-              category?: T;
+              filterClientType?: T;
+              filterRegion?: T;
+              filterState?: T;
+              filterCity?: T;
               count?: T;
-              buttonLabel?: T;
+              heading?: T;
+              viewAllLabel?: T;
               anchorId?: T;
               paddingWhere?: T;
               paddingSize?: T;
@@ -3344,6 +3824,9 @@ export interface ProjectsPageSelect<T extends boolean = true> {
               selectionMode?: T;
               articles?: T;
               category?: T;
+              filterRegion?: T;
+              filterState?: T;
+              filterCity?: T;
               buttonLabel?: T;
               anchorId?: T;
               paddingWhere?: T;
