@@ -5,22 +5,10 @@ import Button from '@/components/Button.astro'
 import ArrowUpRight from '@/assets/icons/arrowUpRight.astro'
 import Plus from '@/assets/icons/plus.astro'
 import clsx from 'clsx'
-import { blockPaddingClass } from '@/lib/blocks'
 
-const {
-  heading,
-  headingTag,
-  items,
-  linkLabel,
-  linkType,
-  linkUrl,
-  linkPage,
-  anchorId,
-  paddingWhere,
-  paddingSize,
-} = Astro.props as FeatureListBlock
+const { heading, headingTag, items, linkLabel, linkType, linkUrl, linkPage, anchorId } =
+  Astro.props as FeatureListBlock
 
-const paddingClass = blockPaddingClass(paddingWhere, paddingSize)
 const HeadingTag = (headingTag ?? 'h2') as 'h1' | 'h2' | 'h3' | 'h4'
 const linkHref = linkLabel
   ? linkType === 'internal'
@@ -29,8 +17,8 @@ const linkHref = linkLabel
   : null
 ---
 
-<section id={anchorId ?? undefined} class={clsx('section-featurelist bg-ash', paddingClass)}>
-  <header class="container">
+<section id={anchorId ?? undefined} class="section-featurelist bg-ash">
+  <header class="container pt-xs">
     {
       heading && (
         <HeadingUnderline>

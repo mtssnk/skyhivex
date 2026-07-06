@@ -54,7 +54,7 @@ const {
     {
       category && (
         <p class="text-mono-4xs md:text-mono-3xs text-gravel">
-          <span class="text-mortar">{number} • </span>
+          <span class="text-mortar">{String(number).padStart(3, '0')} •</span>
           {category}
         </p>
       )
