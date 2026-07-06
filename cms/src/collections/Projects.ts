@@ -75,37 +75,37 @@ export const Projects: CollectionConfig = {
       },
     },
     {
-      name: 'clientTypes',
+      name: 'clientType',
       type: 'relationship',
       relationTo: 'client-types',
-      hasMany: true,
+      hasMany: false,
       admin: {
         position: 'sidebar',
       },
     },
     {
-      name: 'regions',
+      name: 'region',
       type: 'relationship',
       relationTo: 'regions',
-      hasMany: true,
+      hasMany: false,
       admin: {
         position: 'sidebar',
       },
     },
     {
-      name: 'states',
+      name: 'state',
       type: 'relationship',
       relationTo: 'states',
-      hasMany: true,
+      hasMany: false,
       admin: {
         position: 'sidebar',
       },
     },
     {
-      name: 'cities',
+      name: 'city',
       type: 'relationship',
       relationTo: 'cities',
-      hasMany: true,
+      hasMany: false,
       admin: {
         position: 'sidebar',
       },
@@ -226,7 +226,8 @@ export const Projects: CollectionConfig = {
       relationTo: 'media',
       admin: {
         position: 'sidebar',
-        description: 'Social share image (OG). Recommended: 1200×630px. Falls back to listing image.',
+        description:
+          'Social share image (OG). Recommended: 1200×630px. Falls back to listing image.',
       },
     },
   ],

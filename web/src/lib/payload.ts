@@ -94,7 +94,7 @@ export type Project = {
   heading: string
   projectName?: string | null
   slug: string
-  clientTypes?: ClientType[] | null
+  clientType?: ClientType | null
   regions?: Region[] | null
   states?: State[] | null
   cities?: City[] | null

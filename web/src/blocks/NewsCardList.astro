@@ -56,12 +56,11 @@ if (selectionMode !== 'manual') {
         resolvedArticles.map((article, i) => (
           <li class="border-congo border-2 md:border-r-0 last:border-r-2 last:border-b-2 md:border-b-2">
             <a href={`/news/${article.slug}`} class="block bg-night group">
-              <div class="aspect-[4/3] overflow-hidden">
+              <div class="aspect-video md:aspect-4/3 overflow-hidden">
                 <MediaItem
                   media={article.listingImage}
-                  aspectRatio="4/3"
                   sizes="(max-width: 768px) 100vw, 33vw"
-                  class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  class="w-full h-full object-cover"
                 />
               </div>
               <div class="flex justify-end bg-grid-congo border-congo border-b-1">

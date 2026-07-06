@@ -846,10 +846,10 @@ export interface Project {
    * Auto-generated from the title. Do not change after publishing.
    */
   slug: string;
-  clientTypes?: (string | ClientType)[] | null;
-  regions?: (string | Region)[] | null;
-  states?: (string | State)[] | null;
-  cities?: (string | City)[] | null;
+  clientType?: (string | null) | ClientType;
+  region?: (string | null) | Region;
+  state?: (string | null) | State;
+  city?: (string | null) | City;
   /**
    * Image shown on the projects index card. Used as hero background if no hero media is set.
    */
@@ -2437,10 +2437,10 @@ export interface PagesSelect<T extends boolean = true> {
 export interface ProjectsSelect<T extends boolean = true> {
   heading?: T;
   slug?: T;
-  clientTypes?: T;
-  regions?: T;
-  states?: T;
-  cities?: T;
+  clientType?: T;
+  region?: T;
+  state?: T;
+  city?: T;
   listingImage?: T;
   heroMedia?:
     | T

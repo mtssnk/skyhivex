@@ -1,0 +1,63 @@
+---
+import type { Media } from '@/lib/payload'
+import clsx from 'clsx'
+import MediaItem from '@/components/MediaItem.astro'
+
+interface Props {
+  href: string
+  media: Media
+  label: string
+  sizes?: string
+  isEven?: boolean
+  category?: string
+  number: number
+}
+
+const {
+  href,
+  media,
+  label,
+  category,
+  number,
+  sizes = '(max-width: 768px) 100vw, 33vw',
+  isEven = false,
+} = Astro.props
+---
+
+<a href={href} class="grid rows-1 gap-0 cols-11 bg-night border-2 border-congo items-stretch">
+  <div
+    class={clsx(
+      'col-span-12 md:row-start-1 aspect-video md:aspect-auto overflow-hidden relative',
+      isEven ? 'md:col-start-1 md:col-span-7' : 'md:col-start-6 md:col-span-7',
+      'md:h-[390px]',
+    )}
+  >
+    <div
+      role="presentation"
+      class={clsx(
+        'absolute top-0 w-1/2 h-full from-night/80 to-night/0 z-10',
+        isEven ? 'right-0 bg-gradient-to-l' : 'left-0 bg-gradient-to-r',
+      )}
+    >
+    </div>
+    <MediaItem {media} {sizes} class="w-full h-full object-cover z-0" />
+  </div>
+  <div
+    class={clsx(
+      'col-span-12 md:row-start-1 text-white p-4xs md:px-0 md:py-3xs flex flex-col gap-2 md:gap-4xs justify-center relative z-10 md:text-shadow-lg',
+      isEven
+        ? 'md:col-start-4 md:col-span-6 md:text-right md:items-end'
+        : 'md:col-start-4 md:col-span-6',
+    )}
+  >
+    <p class="text-serif-sm md:text-serif-2xl text-balance max-w-[7em]">{label}</p>
+    {
+      category && (
+        <p class="text-mono-4xs md:text-mono-3xs text-gravel">
+          <span class="text-mortar">{number} • </span>
+          {category}
+        </p>
+      )
+    }
+  </div>
+</a>
