@@ -83,5 +83,5 @@ export const ProjectList: Block = {
         description: 'Label for the link to the projects index. Leave empty to hide.',
       },
     },
-  ]),
+  ], { padding: false }),
 }

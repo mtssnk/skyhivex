@@ -690,14 +690,6 @@ export interface Page {
              * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
              */
             anchorId?: string | null;
-            /**
-             * Which side(s) the vertical padding is applied to.
-             */
-            paddingWhere?: ('both' | 'top' | 'bottom') | null;
-            /**
-             * Size of the vertical padding.
-             */
-            paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'projectList';
@@ -1244,14 +1236,6 @@ export interface Project {
              * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
              */
             anchorId?: string | null;
-            /**
-             * Which side(s) the vertical padding is applied to.
-             */
-            paddingWhere?: ('both' | 'top' | 'bottom') | null;
-            /**
-             * Size of the vertical padding.
-             */
-            paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'projectList';
@@ -1802,14 +1786,6 @@ export interface Post {
          * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
          */
         anchorId?: string | null;
-        /**
-         * Which side(s) the vertical padding is applied to.
-         */
-        paddingWhere?: ('both' | 'top' | 'bottom') | null;
-        /**
-         * Size of the vertical padding.
-         */
-        paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
         id?: string | null;
         blockName?: string | null;
         blockType: 'projectList';
@@ -2391,8 +2367,6 @@ export interface PagesSelect<T extends boolean = true> {
               heading?: T;
               viewAllLabel?: T;
               anchorId?: T;
-              paddingWhere?: T;
-              paddingSize?: T;
               id?: T;
               blockName?: T;
             };
@@ -2638,8 +2612,6 @@ export interface ProjectsSelect<T extends boolean = true> {
               heading?: T;
               viewAllLabel?: T;
               anchorId?: T;
-              paddingWhere?: T;
-              paddingSize?: T;
               id?: T;
               blockName?: T;
             };
@@ -2853,8 +2825,6 @@ export interface PostsSelect<T extends boolean = true> {
               heading?: T;
               viewAllLabel?: T;
               anchorId?: T;
-              paddingWhere?: T;
-              paddingSize?: T;
               id?: T;
               blockName?: T;
             };
@@ -3413,14 +3383,6 @@ export interface ProjectsPage {
              * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
              */
             anchorId?: string | null;
-            /**
-             * Which side(s) the vertical padding is applied to.
-             */
-            paddingWhere?: ('both' | 'top' | 'bottom') | null;
-            /**
-             * Size of the vertical padding.
-             */
-            paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'projectList';
@@ -3813,8 +3775,6 @@ export interface ProjectsPageSelect<T extends boolean = true> {
               heading?: T;
               viewAllLabel?: T;
               anchorId?: T;
-              paddingWhere?: T;
-              paddingSize?: T;
               id?: T;
               blockName?: T;
             };
