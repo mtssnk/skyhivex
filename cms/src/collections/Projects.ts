@@ -1,18 +1,6 @@
 import type { CollectionConfig } from 'payload'
-import { Hero } from '../blocks/Hero'
-import { MediaText } from '../blocks/MediaText'
 import { overlayAlphaField } from '../fields/overlayAlpha'
-import { Media } from '../blocks/Media'
-import { Quote } from '../blocks/Quote'
-import { BodyCopy } from '../blocks/BodyCopy'
-import { CTA } from '../blocks/CTA'
-import { PersonList } from '../blocks/PersonList'
-import { AccordionList } from '../blocks/AccordionList'
-import { CardList } from '../blocks/CardList'
-import { ProjectList } from '../blocks/ProjectList'
-import { NewsCardList } from '../blocks/NewsCardList'
-import { LogoList } from '../blocks/LogoList'
-import { LinkedContent } from '../blocks/LinkedContent'
+import { projectBlocks } from '../blocks'
 
 export const Projects: CollectionConfig = {
   slug: 'projects',
@@ -199,20 +187,7 @@ export const Projects: CollectionConfig = {
       admin: {
         description: 'Appended after the summary section.',
       },
-      blocks: [
-        MediaText,
-        Media,
-        Quote,
-        BodyCopy,
-        CTA,
-        PersonList,
-        AccordionList,
-        CardList,
-        ProjectList,
-        NewsCardList,
-        LogoList,
-        LinkedContent,
-      ],
+      blocks: projectBlocks,
     },
     {
       name: 'metaDescription',

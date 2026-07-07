@@ -1,0 +1,57 @@
+---
+import type { NavigationBlock, NavBlockLink } from '@/lib/payload'
+import { clsx } from 'clsx'
+
+const { name, links, anchorId } = Astro.props as NavigationBlock
+
+const currentPath = Astro.url.pathname
+
+function resolveNavHref(page: NavBlockLink['page']): string {
+  if (!page || typeof page.value === 'string') return '#'
+  const { relationTo, value } = page
+  if (relationTo === 'pages') return value.slug === 'home' ? '/' : `/${value.slug}`
+  if (relationTo === 'projects') return `/projects/${value.slug}`
+  if (relationTo === 'posts') return `/news/${value.slug}`
+  return '#'
+}
+---
+
+<section id={anchorId ?? undefined} class="section-navblock">
+  <div class="container pt-xs mb-[400px]">
+    <nav
+      class="border-b-2 border-congo text-gravel flex flex-wrap gap-4xs lg:gap-3xs"
+      aria-label={name ?? undefined}
+    >
+      {name && <p class="inline-flex text-mono-3xs pb-4xs -mb-1xs">{name}</p>}
+      {
+        links && links.length > 0 && (
+          <ul class="flex gap-4xs lg:gap-3xs flex-wrap" role="list">
+            {links.map((link) => {
+              const href = link.page ? resolveNavHref(link.page) : (link.url ?? '#')
+              const isActive = currentPath === href
+              console.log(isActive, currentPath, href)
+              return (
+                <li
+                  class={clsx(
+                    'border-b-6 inline-flex text-mono-3xs pb-4xs -mb-1xs transition-colors duration-200 cursor-pointer',
+                    isActive
+                      ? 'text-smoke border-smoke '
+                      : 'text-gravel border-congo hover:border-smoke',
+                  )}
+                >
+                  <a href={href} aria-current={isActive ? 'page' : undefined}>
+                    {link.label}
+                  </a>
+                </li>
+              )
+            })}
+          </ul>
+        )
+      }
+      <!-- <div
+        class="inline-flex border-b-6 border-congo text-mono-3xs -mb-0.5 items-center gap-8 pb-4xs -mb-1xs"
+      >
+      </div> -->
+    </nav>
+  </div>
+</section>

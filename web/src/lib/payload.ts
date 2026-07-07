@@ -322,6 +322,23 @@ export type LinkedContentBlock = BlockPadding & {
   body?: LexicalContent | null
 }
 
+export type NavBlockLink = {
+  id?: string | null
+  label: string
+  page?: {
+    relationTo: 'pages' | 'projects' | 'posts'
+    value: { id: string; slug: string } | string
+  } | null
+  url?: string | null
+}
+
+export type NavigationBlock = BlockPadding & {
+  blockType: 'navBlock'
+  id?: string | null
+  name?: string | null
+  links?: NavBlockLink[] | null
+}
+
 export type SharedBlock =
   | MediaTextBlock
   | MediaBlock
@@ -336,6 +353,7 @@ export type SharedBlock =
   | LogoListBlock
   | FeatureListBlock
   | LinkedContentBlock
+  | NavigationBlock
 
 export type PageBlock = HeroBlock | SharedBlock
 export type ProjectBlock = SharedBlock

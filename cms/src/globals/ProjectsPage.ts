@@ -1,17 +1,5 @@
 import type { GlobalConfig } from 'payload'
-import { heroFields } from '../blocks/Hero'
-import { MediaText } from '../blocks/MediaText'
-import { Media } from '../blocks/Media'
-import { Quote } from '../blocks/Quote'
-import { BodyCopy } from '../blocks/BodyCopy'
-import { CTA } from '../blocks/CTA'
-import { PersonList } from '../blocks/PersonList'
-import { AccordionList } from '../blocks/AccordionList'
-import { CardList } from '../blocks/CardList'
-import { ProjectList } from '../blocks/ProjectList'
-import { NewsCardList } from '../blocks/NewsCardList'
-import { LogoList } from '../blocks/LogoList'
-import { FeatureList } from '../blocks/FeatureList'
+import { heroFields, projectsPageBlocks } from '../blocks'
 
 export const ProjectsPage: GlobalConfig = {
   slug: 'projects-page',
@@ -33,20 +21,7 @@ export const ProjectsPage: GlobalConfig = {
       name: 'blocks',
       type: 'blocks',
       label: 'Additional content (after project list)',
-      blocks: [
-        MediaText,
-        Media,
-        Quote,
-        BodyCopy,
-        CTA,
-        PersonList,
-        AccordionList,
-        CardList,
-        ProjectList,
-        NewsCardList,
-        LogoList,
-        FeatureList,
-      ],
+      blocks: projectsPageBlocks,
     },
     {
       name: 'metaDescription',

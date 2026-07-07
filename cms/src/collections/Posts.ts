@@ -1,18 +1,6 @@
 import type { CollectionConfig } from 'payload'
-import { Hero } from '../blocks/Hero'
-import { MediaText } from '../blocks/MediaText'
 import { overlayAlphaField } from '../fields/overlayAlpha'
-import { Media } from '../blocks/Media'
-import { Quote } from '../blocks/Quote'
-import { BodyCopy } from '../blocks/BodyCopy'
-import { CTA } from '../blocks/CTA'
-import { PersonList } from '../blocks/PersonList'
-import { AccordionList } from '../blocks/AccordionList'
-import { CardList } from '../blocks/CardList'
-import { ProjectList } from '../blocks/ProjectList'
-import { NewsCardList } from '../blocks/NewsCardList'
-import { LogoList } from '../blocks/LogoList'
-import { LinkedContent } from '../blocks/LinkedContent'
+import { postBlocks } from '../blocks'
 
 export const Posts: CollectionConfig = {
   slug: 'posts',
@@ -97,20 +85,7 @@ export const Posts: CollectionConfig = {
       name: 'blocks',
       type: 'blocks',
       required: true,
-      blocks: [
-        MediaText,
-        Media,
-        Quote,
-        BodyCopy,
-        CTA,
-        PersonList,
-        AccordionList,
-        CardList,
-        ProjectList,
-        NewsCardList,
-        LogoList,
-        LinkedContent,
-      ],
+      blocks: postBlocks,
     },
     {
       name: 'metaDescription',

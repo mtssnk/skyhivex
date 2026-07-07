@@ -1,5 +1,5 @@
 ---
-import type { HeroBlock } from '@/lib/payload'
+import type { CTABlock } from '@/lib/payload'
 import MediaItem from '@/components/MediaItem.astro'
 import Button from '@/components/Button.astro'
 import ArrowDownRight from '@/assets/icons/arrowDownRight.astro'
@@ -7,7 +7,7 @@ import Play from '@/assets/icons/play.astro'
 import HexShader from '@/components/HexShader.astro'
 import { resolveButtonHref } from '@/lib/blocks'
 
-interface Props extends Omit<HeroBlock, 'blockType'> {}
+interface Props extends Omit<CTABlock, 'blockType'> {}
 
 const {
   headingPart1,

@@ -1,18 +1,5 @@
 import type { CollectionConfig } from 'payload'
-import { Hero } from '../blocks/Hero'
-import { LogoList } from '../blocks/LogoList'
-import { MediaText } from '../blocks/MediaText'
-import { Media } from '../blocks/Media'
-import { CardList } from '../blocks/CardList'
-import { Quote } from '../blocks/Quote'
-import { BodyCopy } from '../blocks/BodyCopy'
-import { CTA } from '../blocks/CTA'
-import { PersonList } from '../blocks/PersonList'
-import { AccordionList } from '../blocks/AccordionList'
-import { ProjectList } from '../blocks/ProjectList'
-import { NewsCardList } from '../blocks/NewsCardList'
-import { FeatureList } from '../blocks/FeatureList'
-import { LinkedContent } from '../blocks/LinkedContent'
+import { pageBlocks } from '../blocks'
 
 export const Pages: CollectionConfig = {
   slug: 'pages',
@@ -87,22 +74,7 @@ export const Pages: CollectionConfig = {
     {
       name: 'blocks',
       type: 'blocks',
-      blocks: [
-        Hero,
-        LogoList,
-        MediaText,
-        Media,
-        CardList,
-        Quote,
-        BodyCopy,
-        CTA,
-        PersonList,
-        AccordionList,
-        ProjectList,
-        NewsCardList,
-        FeatureList,
-        LinkedContent,
-      ],
+      blocks: pageBlocks,
     },
     {
       name: 'metaDescription',

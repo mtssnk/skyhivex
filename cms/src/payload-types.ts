@@ -332,25 +332,6 @@ export interface Page {
             blockType: 'hero';
           }
         | {
-            heading: string;
-            logos: (string | Svg)[];
-            /**
-             * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
-             */
-            anchorId?: string | null;
-            /**
-             * Which side(s) the vertical padding is applied to.
-             */
-            paddingWhere?: ('both' | 'top' | 'bottom') | null;
-            /**
-             * Size of the vertical padding.
-             */
-            paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'logoList';
-          }
-        | {
             variant: 'contained' | 'split';
             headingTag?: ('h1' | 'h2' | 'h3' | 'h4') | null;
             /**
@@ -448,60 +429,6 @@ export interface Page {
             id?: string | null;
             blockName?: string | null;
             blockType: 'media';
-          }
-        | {
-            heading?: string | null;
-            cards: {
-              /**
-               * Predefined illustration — update options once illustrations are finalised.
-               */
-              illustration:
-                | 'illustration-1'
-                | 'illustration-2'
-                | 'illustration-3'
-                | 'illustration-4'
-                | 'illustration-5'
-                | 'illustration-6';
-              heading: string;
-              body?: {
-                root: {
-                  type: string;
-                  children: {
-                    type: any;
-                    version: number;
-                    [k: string]: unknown;
-                  }[];
-                  direction: ('ltr' | 'rtl') | null;
-                  format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-                  indent: number;
-                  version: number;
-                };
-                [k: string]: unknown;
-              } | null;
-              id?: string | null;
-            }[];
-            /**
-             * Optional button below the cards. Leave label empty to hide.
-             */
-            button?: {
-              label?: string | null;
-              url?: string | null;
-            };
-            /**
-             * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
-             */
-            anchorId?: string | null;
-            /**
-             * Which side(s) the vertical padding is applied to.
-             */
-            paddingWhere?: ('both' | 'top' | 'bottom') | null;
-            /**
-             * Size of the vertical padding.
-             */
-            paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'cardList';
           }
         | {
             quoteSize: 'small' | 'regular' | 'large';
@@ -698,6 +625,60 @@ export interface Page {
             blockType: 'accordionList';
           }
         | {
+            heading?: string | null;
+            cards: {
+              /**
+               * Predefined illustration — update options once illustrations are finalised.
+               */
+              illustration:
+                | 'illustration-1'
+                | 'illustration-2'
+                | 'illustration-3'
+                | 'illustration-4'
+                | 'illustration-5'
+                | 'illustration-6';
+              heading: string;
+              body?: {
+                root: {
+                  type: string;
+                  children: {
+                    type: any;
+                    version: number;
+                    [k: string]: unknown;
+                  }[];
+                  direction: ('ltr' | 'rtl') | null;
+                  format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                  indent: number;
+                  version: number;
+                };
+                [k: string]: unknown;
+              } | null;
+              id?: string | null;
+            }[];
+            /**
+             * Optional button below the cards. Leave label empty to hide.
+             */
+            button?: {
+              label?: string | null;
+              url?: string | null;
+            };
+            /**
+             * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
+             */
+            anchorId?: string | null;
+            /**
+             * Which side(s) the vertical padding is applied to.
+             */
+            paddingWhere?: ('both' | 'top' | 'bottom') | null;
+            /**
+             * Size of the vertical padding.
+             */
+            paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'cardList';
+          }
+        | {
             selectionMode: 'manual' | 'filtered' | 'latest';
             /**
              * Pick specific projects to display.
@@ -777,6 +758,58 @@ export interface Page {
             id?: string | null;
             blockName?: string | null;
             blockType: 'newsCardList';
+          }
+        | {
+            heading: string;
+            logos: (string | Svg)[];
+            /**
+             * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
+             */
+            anchorId?: string | null;
+            /**
+             * Which side(s) the vertical padding is applied to.
+             */
+            paddingWhere?: ('both' | 'top' | 'bottom') | null;
+            /**
+             * Size of the vertical padding.
+             */
+            paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'logoList';
+          }
+        | {
+            name?: string | null;
+            links?:
+              | {
+                  label: string;
+                  page?:
+                    | ({
+                        relationTo: 'pages';
+                        value: string | Page;
+                      } | null)
+                    | ({
+                        relationTo: 'projects';
+                        value: string | Project;
+                      } | null)
+                    | ({
+                        relationTo: 'posts';
+                        value: string | Post;
+                      } | null);
+                  /**
+                   * Used when no page is selected.
+                   */
+                  url?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            /**
+             * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
+             */
+            anchorId?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'navBlock';
           }
         | {
             heading?: string | null;
@@ -1388,6 +1421,39 @@ export interface Project {
             blockType: 'logoList';
           }
         | {
+            name?: string | null;
+            links?:
+              | {
+                  label: string;
+                  page?:
+                    | ({
+                        relationTo: 'pages';
+                        value: string | Page;
+                      } | null)
+                    | ({
+                        relationTo: 'projects';
+                        value: string | Project;
+                      } | null)
+                    | ({
+                        relationTo: 'posts';
+                        value: string | Post;
+                      } | null);
+                  /**
+                   * Used when no page is selected.
+                   */
+                  url?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            /**
+             * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
+             */
+            anchorId?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'navBlock';
+          }
+        | {
             /**
              * Select a navigation group to display as linked related content.
              */
@@ -1968,6 +2034,39 @@ export interface Post {
         blockType: 'logoList';
       }
     | {
+        name?: string | null;
+        links?:
+          | {
+              label: string;
+              page?:
+                | ({
+                    relationTo: 'pages';
+                    value: string | Page;
+                  } | null)
+                | ({
+                    relationTo: 'projects';
+                    value: string | Project;
+                  } | null)
+                | ({
+                    relationTo: 'posts';
+                    value: string | Post;
+                  } | null);
+              /**
+               * Used when no page is selected.
+               */
+              url?: string | null;
+              id?: string | null;
+            }[]
+          | null;
+        /**
+         * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
+         */
+        anchorId?: string | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'navBlock';
+      }
+    | {
         /**
          * Select a navigation group to display as linked related content.
          */
@@ -2320,17 +2419,6 @@ export interface PagesSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
-        logoList?:
-          | T
-          | {
-              heading?: T;
-              logos?: T;
-              anchorId?: T;
-              paddingWhere?: T;
-              paddingSize?: T;
-              id?: T;
-              blockName?: T;
-            };
         mediaText?:
           | T
           | {
@@ -2364,30 +2452,6 @@ export interface PagesSelect<T extends boolean = true> {
               openVideo?: T;
               heading?: T;
               overlayAlpha?: T;
-              anchorId?: T;
-              paddingWhere?: T;
-              paddingSize?: T;
-              id?: T;
-              blockName?: T;
-            };
-        cardList?:
-          | T
-          | {
-              heading?: T;
-              cards?:
-                | T
-                | {
-                    illustration?: T;
-                    heading?: T;
-                    body?: T;
-                    id?: T;
-                  };
-              button?:
-                | T
-                | {
-                    label?: T;
-                    url?: T;
-                  };
               anchorId?: T;
               paddingWhere?: T;
               paddingSize?: T;
@@ -2480,6 +2544,30 @@ export interface PagesSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
+        cardList?:
+          | T
+          | {
+              heading?: T;
+              cards?:
+                | T
+                | {
+                    illustration?: T;
+                    heading?: T;
+                    body?: T;
+                    id?: T;
+                  };
+              button?:
+                | T
+                | {
+                    label?: T;
+                    url?: T;
+                  };
+              anchorId?: T;
+              paddingWhere?: T;
+              paddingSize?: T;
+              id?: T;
+              blockName?: T;
+            };
         projectList?:
           | T
           | {
@@ -2509,6 +2597,33 @@ export interface PagesSelect<T extends boolean = true> {
               anchorId?: T;
               paddingWhere?: T;
               paddingSize?: T;
+              id?: T;
+              blockName?: T;
+            };
+        logoList?:
+          | T
+          | {
+              heading?: T;
+              logos?: T;
+              anchorId?: T;
+              paddingWhere?: T;
+              paddingSize?: T;
+              id?: T;
+              blockName?: T;
+            };
+        navBlock?:
+          | T
+          | {
+              name?: T;
+              links?:
+                | T
+                | {
+                    label?: T;
+                    page?: T;
+                    url?: T;
+                    id?: T;
+                  };
+              anchorId?: T;
               id?: T;
               blockName?: T;
             };
@@ -2778,6 +2893,22 @@ export interface ProjectsSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
+        navBlock?:
+          | T
+          | {
+              name?: T;
+              links?:
+                | T
+                | {
+                    label?: T;
+                    page?: T;
+                    url?: T;
+                    id?: T;
+                  };
+              anchorId?: T;
+              id?: T;
+              blockName?: T;
+            };
         linkedContent?:
           | T
           | {
@@ -2998,6 +3129,22 @@ export interface PostsSelect<T extends boolean = true> {
               anchorId?: T;
               paddingWhere?: T;
               paddingSize?: T;
+              id?: T;
+              blockName?: T;
+            };
+        navBlock?:
+          | T
+          | {
+              name?: T;
+              links?:
+                | T
+                | {
+                    label?: T;
+                    page?: T;
+                    url?: T;
+                    id?: T;
+                  };
+              anchorId?: T;
               id?: T;
               blockName?: T;
             };
@@ -3679,6 +3826,39 @@ export interface ProjectsPage {
             blockType: 'logoList';
           }
         | {
+            name?: string | null;
+            links?:
+              | {
+                  label: string;
+                  page?:
+                    | ({
+                        relationTo: 'pages';
+                        value: string | Page;
+                      } | null)
+                    | ({
+                        relationTo: 'projects';
+                        value: string | Project;
+                      } | null)
+                    | ({
+                        relationTo: 'posts';
+                        value: string | Post;
+                      } | null);
+                  /**
+                   * Used when no page is selected.
+                   */
+                  url?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            /**
+             * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
+             */
+            anchorId?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'navBlock';
+          }
+        | {
             heading?: string | null;
             headingTag?: ('h1' | 'h2' | 'h3' | 'h4') | null;
             items?:
@@ -4057,6 +4237,22 @@ export interface ProjectsPageSelect<T extends boolean = true> {
               anchorId?: T;
               paddingWhere?: T;
               paddingSize?: T;
+              id?: T;
+              blockName?: T;
+            };
+        navBlock?:
+          | T
+          | {
+              name?: T;
+              links?:
+                | T
+                | {
+                    label?: T;
+                    page?: T;
+                    url?: T;
+                    id?: T;
+                  };
+              anchorId?: T;
               id?: T;
               blockName?: T;
             };
