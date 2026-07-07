@@ -25,7 +25,7 @@ const ogImage =
   project.listingImage.url ??
   undefined
 
-const heroMediaType = project.heroMedia?.type ?? 'image'
+const heroMediaType = project.heroMedia?.backgroundMedia ?? 'image'
 const heroBackgroundImage = project.heroMedia?.image ?? project.listingMedia ?? project.listingImage
 const heroBackgroundVideo = project.heroMedia?.video ?? undefined
 const overlayAlpha = project.heroMedia?.overlayAlpha ?? 0.4

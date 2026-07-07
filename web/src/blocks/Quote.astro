@@ -3,15 +3,33 @@ import type { QuoteBlock } from '@/lib/payload'
 import clsx from 'clsx'
 import { blockPaddingClass } from '@/lib/blocks'
 
-const { quote, attribution, anchorId, paddingWhere, paddingSize } = Astro.props as QuoteBlock
+const { quote, attribution, anchorId, paddingWhere, paddingSize, quoteSize } =
+  Astro.props as QuoteBlock
 const paddingClass = blockPaddingClass(paddingWhere, paddingSize)
+const quoteClass =
+  quoteSize === 'regular'
+    ? 'text-extended-lg font-light max-w-[22em]'
+    : quoteSize === 'small'
+      ? 'text-extended-sm font-light max-w-[30em]'
+      : 'text-extended-xl font-light max-w-[22em]'
 ---
 
 <section id={anchorId ?? undefined} class="section-quote bg-ash">
   <div class={clsx('container flex flex-col text-center items-center', paddingClass)}>
-    <blockquote class="m-0 max-w-[800px] space-y-xs">
-      <p class="text-body-lg text-mist font-light">{quote}</p>
-      {attribution && <cite class="text-condensed-xs text-mist not-italic">{attribution}</cite>}
+    <blockquote class={clsx(quoteSize === 'small' ? 'space-y-4xs' : 'space-y-3xs', 'm-0')}>
+      <p class={clsx(quoteClass, 'text-mist mx-auto')}>{quote}</p>
+      {
+        attribution && (
+          <cite
+            class={clsx(
+              quoteSize === 'small' ? 'text-mono-4xs' : 'text-mono-3xs',
+              'text-mist not-italic',
+            )}
+          >
+            {attribution}
+          </cite>
+        )
+      }
     </blockquote>
   </div>
 </section>

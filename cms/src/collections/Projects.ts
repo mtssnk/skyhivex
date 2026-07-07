@@ -128,7 +128,7 @@ export const Projects: CollectionConfig = {
       },
       fields: [
         {
-          name: 'type',
+          name: 'backgroundMedia',
           type: 'select',
           options: [
             { label: 'Image', value: 'image' },
@@ -140,7 +140,7 @@ export const Projects: CollectionConfig = {
           type: 'upload',
           relationTo: 'media',
           admin: {
-            condition: (_, sibling) => sibling?.type === 'image',
+            condition: (_, sibling) => sibling?.backgroundMedia === 'image',
           },
         },
         {
@@ -149,10 +149,14 @@ export const Projects: CollectionConfig = {
           relationTo: 'media',
           admin: {
             description: 'Muted, looped, autoplayed as background.',
-            condition: (_, sibling) => sibling?.type === 'video',
+            condition: (_, sibling) => sibling?.backgroundMedia === 'video',
           },
         },
-        overlayAlphaField({ defaultValue: 0.4 }),
+        overlayAlphaField({
+          defaultValue: 0.4,
+          condition: (_, sibling) =>
+            sibling?.backgroundMedia === 'image' || sibling?.backgroundMedia === 'video',
+        }),
       ],
     },
     {

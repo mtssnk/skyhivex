@@ -492,10 +492,7 @@ export interface Page {
             blockType: 'cardList';
           }
         | {
-            /**
-             * Visual style for the quote. Confirm final options from Figma.
-             */
-            quoteStyle: 'default' | 'large';
+            quoteSize: 'small' | 'regular' | 'large';
             quote: string;
             attribution?: string | null;
             /**
@@ -846,7 +843,7 @@ export interface Project {
    * Overrides the listing image as the hero background.
    */
   heroMedia?: {
-    type?: ('image' | 'video') | null;
+    backgroundMedia?: ('image' | 'video') | null;
     image?: (string | null) | Media;
     /**
      * Muted, looped, autoplayed as background.
@@ -994,10 +991,7 @@ export interface Project {
             blockType: 'media';
           }
         | {
-            /**
-             * Visual style for the quote. Confirm final options from Figma.
-             */
-            quoteStyle: 'default' | 'large';
+            quoteSize: 'small' | 'regular' | 'large';
             quote: string;
             attribution?: string | null;
             /**
@@ -1540,10 +1534,7 @@ export interface Post {
         blockType: 'media';
       }
     | {
-        /**
-         * Visual style for the quote. Confirm final options from Figma.
-         */
-        quoteStyle: 'default' | 'large';
+        quoteSize: 'small' | 'regular' | 'large';
         quote: string;
         attribution?: string | null;
         /**
@@ -2283,7 +2274,7 @@ export interface PagesSelect<T extends boolean = true> {
         quote?:
           | T
           | {
-              quoteStyle?: T;
+              quoteSize?: T;
               quote?: T;
               attribution?: T;
               anchorId?: T;
@@ -2444,7 +2435,7 @@ export interface ProjectsSelect<T extends boolean = true> {
   heroMedia?:
     | T
     | {
-        type?: T;
+        backgroundMedia?: T;
         image?: T;
         video?: T;
         overlayAlpha?: T;
@@ -2503,7 +2494,7 @@ export interface ProjectsSelect<T extends boolean = true> {
         quote?:
           | T
           | {
-              quoteStyle?: T;
+              quoteSize?: T;
               quote?: T;
               attribution?: T;
               anchorId?: T;
@@ -2715,7 +2706,7 @@ export interface PostsSelect<T extends boolean = true> {
         quote?:
           | T
           | {
-              quoteStyle?: T;
+              quoteSize?: T;
               quote?: T;
               attribution?: T;
               anchorId?: T;
@@ -3172,10 +3163,7 @@ export interface ProjectsPage {
             blockType: 'media';
           }
         | {
-            /**
-             * Visual style for the quote. Confirm final options from Figma.
-             */
-            quoteStyle: 'default' | 'large';
+            quoteSize: 'small' | 'regular' | 'large';
             quote: string;
             attribution?: string | null;
             /**
@@ -3717,7 +3705,7 @@ export interface ProjectsPageSelect<T extends boolean = true> {
         quote?:
           | T
           | {
-              quoteStyle?: T;
+              quoteSize?: T;
               quote?: T;
               attribution?: T;
               anchorId?: T;

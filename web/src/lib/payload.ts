@@ -101,7 +101,7 @@ export type Project = {
   listingImage: Media
   listingMedia?: Media | null
   heroMedia?: {
-    type?: 'image' | 'video' | null
+    backgroundMedia?: 'image' | 'video' | null
     image?: Media | null
     video?: Media | null
     overlayAlpha?: number | null
@@ -197,7 +197,7 @@ export type MediaBlock = BlockPadding & {
 export type QuoteBlock = BlockPadding & {
   blockType: 'quote'
   id?: string | null
-  quoteStyle: 'default' | 'large'
+  quoteSize: 'small' | 'regular' | 'large'
   quote: string
   attribution?: string | null
 }

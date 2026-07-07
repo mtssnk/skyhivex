@@ -6,15 +6,13 @@ export const Quote: Block = {
   labels: { singular: 'Quote', plural: 'Quotes' },
   fields: withBlockTabs([
     {
-      name: 'quoteStyle',
+      name: 'quoteSize',
       type: 'select',
       required: true,
-      defaultValue: 'default',
-      admin: {
-        description: 'Visual style for the quote. Confirm final options from Figma.',
-      },
+      defaultValue: 'regular',
       options: [
-        { label: 'Default', value: 'default' },
+        { label: 'Small', value: 'small' },
+        { label: 'Regular', value: 'regular' },
         { label: 'Large', value: 'large' },
       ],
     },
