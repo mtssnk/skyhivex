@@ -151,7 +151,10 @@ export type HeroBlock = BlockPadding & {
     | {
         label: string
         type: 'link' | 'anchor' | 'video'
-        linkUrl?: string | null
+        linkUrl?: {
+          relationTo: 'pages' | 'projects' | 'posts'
+          value: { id: string; slug: string } | string
+        } | null
         anchorTarget?: string | null
         videoFile?: Media | null
         variant: 'solid' | 'outline'
@@ -261,14 +264,15 @@ export type BodyCopyBlock = BlockPadding & {
 export type CTABlock = BlockPadding & {
   blockType: 'cta'
   id?: string | null
-  backgroundImage: Media
+  headingPart1?: string | null
+  headingPart2?: string | null
+  intro?: string | null
+  body?: string | null
+  backgroundMedia?: 'image' | 'video' | 'shader' | null
+  backgroundImage?: Media | null
+  backgroundVideo?: Media | null
   overlayAlpha?: number | null
-  text: string
-  textStyle: string
-  button: {
-    label: string
-    url: string
-  }
+  buttons?: HeroBlock['buttons']
 }
 
 export type PersonListBlock = BlockPadding & {

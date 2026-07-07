@@ -289,7 +289,19 @@ export interface Page {
               | {
                   label: string;
                   type: 'link' | 'anchor' | 'video';
-                  linkUrl?: string | null;
+                  linkUrl?:
+                    | ({
+                        relationTo: 'pages';
+                        value: string | Page;
+                      } | null)
+                    | ({
+                        relationTo: 'projects';
+                        value: string | Project;
+                      } | null)
+                    | ({
+                        relationTo: 'posts';
+                        value: string | Post;
+                      } | null);
                   /**
                    * CSS ID of the target element, without the # symbol.
                    */
@@ -544,16 +556,53 @@ export interface Page {
             blockType: 'bodyCopy';
           }
         | {
-            backgroundImage: string | Media;
+            headingPart1: string;
+            headingPart2?: string | null;
+            intro?: string | null;
+            /**
+             * Body text in body font — for content-heavy heroes (e.g. FAQs). Not used alongside intro.
+             */
+            body?: string | null;
+            backgroundMedia: 'image' | 'video' | 'shader';
+            backgroundImage?: (string | null) | Media;
+            /**
+             * Muted, looped, autoplayed as background.
+             */
+            backgroundVideo?: (string | null) | Media;
             /**
              * Dark overlay opacity (0–1) to improve text contrast.
              */
             overlayAlpha?: number | null;
-            text: string;
-            button: {
-              label: string;
-              url: string;
-            };
+            buttons?:
+              | {
+                  label: string;
+                  type: 'link' | 'anchor' | 'video';
+                  linkUrl?:
+                    | ({
+                        relationTo: 'pages';
+                        value: string | Page;
+                      } | null)
+                    | ({
+                        relationTo: 'projects';
+                        value: string | Project;
+                      } | null)
+                    | ({
+                        relationTo: 'posts';
+                        value: string | Post;
+                      } | null);
+                  /**
+                   * CSS ID of the target element, without the # symbol.
+                   */
+                  anchorTarget?: string | null;
+                  /**
+                   * Opens unmuted in a dialog.
+                   */
+                  videoFile?: (string | null) | Media;
+                  variant: 'solid' | 'outline';
+                  colour: 'white' | 'green';
+                  id?: string | null;
+                }[]
+              | null;
             /**
              * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
              */
@@ -1043,16 +1092,53 @@ export interface Project {
             blockType: 'bodyCopy';
           }
         | {
-            backgroundImage: string | Media;
+            headingPart1: string;
+            headingPart2?: string | null;
+            intro?: string | null;
+            /**
+             * Body text in body font — for content-heavy heroes (e.g. FAQs). Not used alongside intro.
+             */
+            body?: string | null;
+            backgroundMedia: 'image' | 'video' | 'shader';
+            backgroundImage?: (string | null) | Media;
+            /**
+             * Muted, looped, autoplayed as background.
+             */
+            backgroundVideo?: (string | null) | Media;
             /**
              * Dark overlay opacity (0–1) to improve text contrast.
              */
             overlayAlpha?: number | null;
-            text: string;
-            button: {
-              label: string;
-              url: string;
-            };
+            buttons?:
+              | {
+                  label: string;
+                  type: 'link' | 'anchor' | 'video';
+                  linkUrl?:
+                    | ({
+                        relationTo: 'pages';
+                        value: string | Page;
+                      } | null)
+                    | ({
+                        relationTo: 'projects';
+                        value: string | Project;
+                      } | null)
+                    | ({
+                        relationTo: 'posts';
+                        value: string | Post;
+                      } | null);
+                  /**
+                   * CSS ID of the target element, without the # symbol.
+                   */
+                  anchorTarget?: string | null;
+                  /**
+                   * Opens unmuted in a dialog.
+                   */
+                  videoFile?: (string | null) | Media;
+                  variant: 'solid' | 'outline';
+                  colour: 'white' | 'green';
+                  id?: string | null;
+                }[]
+              | null;
             /**
              * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
              */
@@ -1586,16 +1672,53 @@ export interface Post {
         blockType: 'bodyCopy';
       }
     | {
-        backgroundImage: string | Media;
+        headingPart1: string;
+        headingPart2?: string | null;
+        intro?: string | null;
+        /**
+         * Body text in body font — for content-heavy heroes (e.g. FAQs). Not used alongside intro.
+         */
+        body?: string | null;
+        backgroundMedia: 'image' | 'video' | 'shader';
+        backgroundImage?: (string | null) | Media;
+        /**
+         * Muted, looped, autoplayed as background.
+         */
+        backgroundVideo?: (string | null) | Media;
         /**
          * Dark overlay opacity (0–1) to improve text contrast.
          */
         overlayAlpha?: number | null;
-        text: string;
-        button: {
-          label: string;
-          url: string;
-        };
+        buttons?:
+          | {
+              label: string;
+              type: 'link' | 'anchor' | 'video';
+              linkUrl?:
+                | ({
+                    relationTo: 'pages';
+                    value: string | Page;
+                  } | null)
+                | ({
+                    relationTo: 'projects';
+                    value: string | Project;
+                  } | null)
+                | ({
+                    relationTo: 'posts';
+                    value: string | Post;
+                  } | null);
+              /**
+               * CSS ID of the target element, without the # symbol.
+               */
+              anchorTarget?: string | null;
+              /**
+               * Opens unmuted in a dialog.
+               */
+              videoFile?: (string | null) | Media;
+              variant: 'solid' | 'outline';
+              colour: 'white' | 'green';
+              id?: string | null;
+            }[]
+          | null;
         /**
          * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
          */
@@ -2296,14 +2419,25 @@ export interface PagesSelect<T extends boolean = true> {
         cta?:
           | T
           | {
+              headingPart1?: T;
+              headingPart2?: T;
+              intro?: T;
+              body?: T;
+              backgroundMedia?: T;
               backgroundImage?: T;
+              backgroundVideo?: T;
               overlayAlpha?: T;
-              text?: T;
-              button?:
+              buttons?:
                 | T
                 | {
                     label?: T;
-                    url?: T;
+                    type?: T;
+                    linkUrl?: T;
+                    anchorTarget?: T;
+                    videoFile?: T;
+                    variant?: T;
+                    colour?: T;
+                    id?: T;
                   };
               anchorId?: T;
               paddingWhere?: T;
@@ -2516,14 +2650,25 @@ export interface ProjectsSelect<T extends boolean = true> {
         cta?:
           | T
           | {
+              headingPart1?: T;
+              headingPart2?: T;
+              intro?: T;
+              body?: T;
+              backgroundMedia?: T;
               backgroundImage?: T;
+              backgroundVideo?: T;
               overlayAlpha?: T;
-              text?: T;
-              button?:
+              buttons?:
                 | T
                 | {
                     label?: T;
-                    url?: T;
+                    type?: T;
+                    linkUrl?: T;
+                    anchorTarget?: T;
+                    videoFile?: T;
+                    variant?: T;
+                    colour?: T;
+                    id?: T;
                   };
               anchorId?: T;
               paddingWhere?: T;
@@ -2728,14 +2873,25 @@ export interface PostsSelect<T extends boolean = true> {
         cta?:
           | T
           | {
+              headingPart1?: T;
+              headingPart2?: T;
+              intro?: T;
+              body?: T;
+              backgroundMedia?: T;
               backgroundImage?: T;
+              backgroundVideo?: T;
               overlayAlpha?: T;
-              text?: T;
-              button?:
+              buttons?:
                 | T
                 | {
                     label?: T;
-                    url?: T;
+                    type?: T;
+                    linkUrl?: T;
+                    anchorTarget?: T;
+                    videoFile?: T;
+                    variant?: T;
+                    colour?: T;
+                    id?: T;
                   };
               anchorId?: T;
               paddingWhere?: T;
@@ -3046,7 +3202,19 @@ export interface ProjectsPage {
       | {
           label: string;
           type: 'link' | 'anchor' | 'video';
-          linkUrl?: string | null;
+          linkUrl?:
+            | ({
+                relationTo: 'pages';
+                value: string | Page;
+              } | null)
+            | ({
+                relationTo: 'projects';
+                value: string | Project;
+              } | null)
+            | ({
+                relationTo: 'posts';
+                value: string | Post;
+              } | null);
           /**
            * CSS ID of the target element, without the # symbol.
            */
@@ -3215,16 +3383,53 @@ export interface ProjectsPage {
             blockType: 'bodyCopy';
           }
         | {
-            backgroundImage: string | Media;
+            headingPart1: string;
+            headingPart2?: string | null;
+            intro?: string | null;
+            /**
+             * Body text in body font — for content-heavy heroes (e.g. FAQs). Not used alongside intro.
+             */
+            body?: string | null;
+            backgroundMedia: 'image' | 'video' | 'shader';
+            backgroundImage?: (string | null) | Media;
+            /**
+             * Muted, looped, autoplayed as background.
+             */
+            backgroundVideo?: (string | null) | Media;
             /**
              * Dark overlay opacity (0–1) to improve text contrast.
              */
             overlayAlpha?: number | null;
-            text: string;
-            button: {
-              label: string;
-              url: string;
-            };
+            buttons?:
+              | {
+                  label: string;
+                  type: 'link' | 'anchor' | 'video';
+                  linkUrl?:
+                    | ({
+                        relationTo: 'pages';
+                        value: string | Page;
+                      } | null)
+                    | ({
+                        relationTo: 'projects';
+                        value: string | Project;
+                      } | null)
+                    | ({
+                        relationTo: 'posts';
+                        value: string | Post;
+                      } | null);
+                  /**
+                   * CSS ID of the target element, without the # symbol.
+                   */
+                  anchorTarget?: string | null;
+                  /**
+                   * Opens unmuted in a dialog.
+                   */
+                  videoFile?: (string | null) | Media;
+                  variant: 'solid' | 'outline';
+                  colour: 'white' | 'green';
+                  id?: string | null;
+                }[]
+              | null;
             /**
              * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
              */
@@ -3727,14 +3932,25 @@ export interface ProjectsPageSelect<T extends boolean = true> {
         cta?:
           | T
           | {
+              headingPart1?: T;
+              headingPart2?: T;
+              intro?: T;
+              body?: T;
+              backgroundMedia?: T;
               backgroundImage?: T;
+              backgroundVideo?: T;
               overlayAlpha?: T;
-              text?: T;
-              button?:
+              buttons?:
                 | T
                 | {
                     label?: T;
-                    url?: T;
+                    type?: T;
+                    linkUrl?: T;
+                    anchorTarget?: T;
+                    videoFile?: T;
+                    variant?: T;
+                    colour?: T;
+                    id?: T;
                   };
               anchorId?: T;
               paddingWhere?: T;

@@ -179,11 +179,7 @@ Optional button label/text links to the projects index page. If empty, the butto
 
 ### CTA
 
-- Full-width block
-- Required background image
-- Optional contrast overlay alpha
-- Text with selectable typographic style
-- Button link
+- A copy of the hero
 
 ### Person list
 

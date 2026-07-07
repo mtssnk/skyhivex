@@ -2,6 +2,7 @@
 import type { PageBlock, ProjectBlock } from '@/lib/payload'
 import BodyCopy from '@/blocks/BodyCopy.astro'
 import Hero from '@/blocks/Hero.astro'
+import CTA from '@/blocks/CTA.astro'
 import LogoList from '@/blocks/LogoList.astro'
 import ProjectList from '@/blocks/ProjectList.astro'
 import CardList from '@/blocks/CardList.astro'
@@ -23,6 +24,7 @@ const { blocks } = Astro.props
   (blocks ?? []).map((block) => (
     <>
       {block.blockType === 'hero' && <Hero {...block} />}
+      {block.blockType === 'cta' && <CTA {...block} />}
       {block.blockType === 'bodyCopy' && <BodyCopy {...block} />}
       {block.blockType === 'logoList' && <LogoList {...block} />}
       {block.blockType === 'projectList' && <ProjectList {...block} />}

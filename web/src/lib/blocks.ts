@@ -1,3 +1,18 @@
+type ButtonLinkUrl = {
+  relationTo: 'pages' | 'projects' | 'posts'
+  value: { id: string; slug: string } | string
+} | null | undefined
+
+export function resolveButtonHref(linkUrl: ButtonLinkUrl): string {
+  if (!linkUrl) return '#'
+  const { relationTo, value } = linkUrl
+  if (typeof value === 'string') return '#'
+  if (relationTo === 'pages') return value.slug === 'home' ? '/' : `/${value.slug}`
+  if (relationTo === 'projects') return `/projects/${value.slug}`
+  if (relationTo === 'posts') return `/news/${value.slug}`
+  return '#'
+}
+
 export function injectSpans(text: string, spanClass = 'font-semibold'): string {
   return text.replace(/\{\{(.+?)\}\}/g, `<span class="${spanClass}">$1</span>`)
 }

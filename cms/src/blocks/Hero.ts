@@ -79,7 +79,8 @@ export const heroFields: Field[] = [
       },
       {
         name: 'linkUrl',
-        type: 'text',
+        type: 'relationship',
+        relationTo: ['pages', 'projects', 'posts'],
         admin: {
           condition: (_, sibling) => sibling?.type === 'link',
         },
