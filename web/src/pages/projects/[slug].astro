@@ -3,6 +3,7 @@ import Layout from '@/layouts/Layout.astro'
 import BlockRenderer from '@/blocks/BlockRenderer.astro'
 import HeadingUnderline from '@/components/HeadingUnderline.astro'
 import { getProjects, getProjectBySlug } from '@/lib/payload'
+import { getSiteSettings } from '@/lib/payload'
 import Hero from '@/blocks/Hero.astro'
 import { lexicalToHtml } from '@/lib/lexical'
 
@@ -11,11 +12,12 @@ export async function getStaticPaths() {
   return projects.map((p) => ({ params: { slug: p.slug } }))
 }
 
+const [settings] = await Promise.all([getSiteSettings()])
 const { slug } = Astro.params
 const project = await getProjectBySlug(slug!)
 if (!project) return new Response(null, { status: 404 })
 
-const metaDescription = project.metaDescription ?? project.heading
+const metaDescription = project.metaDescription ?? project.intro ?? project.heading
 const ogImage =
   project.ogImage?.url ??
   project.heroMedia?.image?.url ??
@@ -28,14 +30,23 @@ const heroBackgroundImage = project.heroMedia?.image ?? project.listingMedia ?? 
 const heroBackgroundVideo = project.heroMedia?.video ?? undefined
 const overlayAlpha = project.heroMedia?.overlayAlpha ?? 0.4
 
+const areaServed = project.city
+  ? { '@type': 'City', name: project.city.name }
+  : project.state
+    ? { '@type': 'State', name: project.state.name }
+    : project.region
+      ? { '@type': 'AdministrativeArea', name: project.region.name }
+      : undefined
+
 const jsonLd: Record<string, unknown> = {
   '@context': 'https://schema.org',
   '@type': 'CreativeWork',
   name: project.projectName ?? project.heading,
   description: metaDescription,
   url: Astro.url.href,
-  creator: { '@type': 'Organization', name: 'Snook Studio', url: Astro.url.origin },
+  creator: { '@type': 'Organization', name: settings?.companyName, url: Astro.url.origin },
 }
+if (areaServed) jsonLd.areaServed = areaServed
 if (ogImage) jsonLd.image = ogImage
 
 const heroButtons: NonNullable<Parameters<typeof Hero>[0]['buttons']> = [

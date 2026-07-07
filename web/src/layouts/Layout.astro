@@ -15,13 +15,13 @@ interface Props {
   isPreview?: boolean
   jsonLd?: Record<string, unknown>
 }
+const settings = await getSiteSettings()
 
 const { title, description, ogImage, isPreview = false, jsonLd } = Astro.props
-const siteName = 'Snook Studio'
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? Astro.url).href
+const siteName = settings?.companyName
 const pageTitle = `${title} — ${siteName}`
 
-const settings = await getSiteSettings()
 const fontCss = settings?.adobeFontsId ? await getAdobeFontsCss(settings.adobeFontsId) : ''
 
 const orgSchema: Record<string, unknown> = {
