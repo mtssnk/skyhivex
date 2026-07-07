@@ -1,10 +1,12 @@
-type ButtonLinkUrl = {
-  relationTo: 'pages' | 'projects' | 'posts'
-  value: { id: string; slug: string } | string
-} | null | undefined
+type ButtonLinkUrl =
+  | { relationTo: 'pages' | 'projects' | 'posts'; value: { id: string; slug: string } | string }
+  | string
+  | null
+  | undefined
 
 export function resolveButtonHref(linkUrl: ButtonLinkUrl): string {
   if (!linkUrl) return '#'
+  if (typeof linkUrl === 'string') return linkUrl
   const { relationTo, value } = linkUrl
   if (typeof value === 'string') return '#'
   if (relationTo === 'pages') return value.slug === 'home' ? '/' : `/${value.slug}`

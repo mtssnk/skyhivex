@@ -151,10 +151,10 @@ export type HeroBlock = BlockPadding & {
     | {
         label: string
         type: 'link' | 'anchor' | 'video'
-        linkUrl?: {
-          relationTo: 'pages' | 'projects' | 'posts'
-          value: { id: string; slug: string } | string
-        } | null
+        linkUrl?:
+          | { relationTo: 'pages' | 'projects' | 'posts'; value: { id: string; slug: string } | string }
+          | string
+          | null
         anchorTarget?: string | null
         videoFile?: Media | null
         variant: 'solid' | 'outline'
