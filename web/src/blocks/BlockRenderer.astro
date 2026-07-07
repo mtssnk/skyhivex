@@ -13,6 +13,7 @@ import FeatureList from '@/blocks/FeatureList.astro'
 import NewsCardList from '@/blocks/NewsCardList.astro'
 import LinkedContent from '@/blocks/LinkedContent.astro'
 import NavBlock from '@/blocks/NavBlock.astro'
+import PersonList from '@/blocks/PersonList.astro'
 
 interface Props {
   blocks: (PageBlock | ProjectBlock)[] | null | undefined
@@ -37,6 +38,7 @@ const { blocks } = Astro.props
       {block.blockType === 'newsCardList' && <NewsCardList {...block} />}
       {block.blockType === 'linkedContent' && <LinkedContent {...block} />}
       {block.blockType === 'navBlock' && <NavBlock {...block} />}
+      {block.blockType === 'personList' && <PersonList {...block} />}
     </>
   ))
 }

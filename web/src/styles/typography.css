@@ -21,6 +21,26 @@
   text-transform: uppercase;
 }
 
+@utility text-serif-xl {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(2.25rem, 1.8rem + 1.5vw, 3rem); /* 36px → 48px */
+  line-height: 1.13;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+}
+
+@utility text-serif-lg {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1.875rem, 1.5rem + 1.25vw, 2.5rem); /* 30px → 40px */
+  line-height: 1.13;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+}
+
 @utility text-serif-md {
   font-family: var(--font-serif);
   font-style: italic;

@@ -31,6 +31,16 @@
     height: 13px;
   }
 
+  .btn-sm {
+    @apply text-mono-4xs;
+    gap: 0.6em;
+    padding: 0.93em 1.42em;
+  }
+  .btn-sm svg {
+    width: 11px;
+    height: 11px;
+  }
+
   .btn-green-solid,
   .btn-green-icon {
     background:

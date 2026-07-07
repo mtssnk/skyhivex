@@ -565,22 +565,16 @@ export interface Page {
             } | null;
             people: {
               image: string | Media;
+              cutoutImage?: boolean | null;
               name: string;
               role?: string | null;
+              description?: string | null;
               id?: string | null;
             }[];
             /**
              * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
              */
             anchorId?: string | null;
-            /**
-             * Which side(s) the vertical padding is applied to.
-             */
-            paddingWhere?: ('both' | 'top' | 'bottom') | null;
-            /**
-             * Size of the vertical padding.
-             */
-            paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'personList';
@@ -1207,22 +1201,16 @@ export interface Project {
             } | null;
             people: {
               image: string | Media;
+              cutoutImage?: boolean | null;
               name: string;
               role?: string | null;
+              description?: string | null;
               id?: string | null;
             }[];
             /**
              * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
              */
             anchorId?: string | null;
-            /**
-             * Which side(s) the vertical padding is applied to.
-             */
-            paddingWhere?: ('both' | 'top' | 'bottom') | null;
-            /**
-             * Size of the vertical padding.
-             */
-            paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'personList';
@@ -1820,22 +1808,16 @@ export interface Post {
         } | null;
         people: {
           image: string | Media;
+          cutoutImage?: boolean | null;
           name: string;
           role?: string | null;
+          description?: string | null;
           id?: string | null;
         }[];
         /**
          * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
          */
         anchorId?: string | null;
-        /**
-         * Which side(s) the vertical padding is applied to.
-         */
-        paddingWhere?: ('both' | 'top' | 'bottom') | null;
-        /**
-         * Size of the vertical padding.
-         */
-        paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
         id?: string | null;
         blockName?: string | null;
         blockType: 'personList';
@@ -2518,13 +2500,13 @@ export interface PagesSelect<T extends boolean = true> {
                 | T
                 | {
                     image?: T;
+                    cutoutImage?: T;
                     name?: T;
                     role?: T;
+                    description?: T;
                     id?: T;
                   };
               anchorId?: T;
-              paddingWhere?: T;
-              paddingSize?: T;
               id?: T;
               blockName?: T;
             };
@@ -2800,13 +2782,13 @@ export interface ProjectsSelect<T extends boolean = true> {
                 | T
                 | {
                     image?: T;
+                    cutoutImage?: T;
                     name?: T;
                     role?: T;
+                    description?: T;
                     id?: T;
                   };
               anchorId?: T;
-              paddingWhere?: T;
-              paddingSize?: T;
               id?: T;
               blockName?: T;
             };
@@ -3039,13 +3021,13 @@ export interface PostsSelect<T extends boolean = true> {
                 | T
                 | {
                     image?: T;
+                    cutoutImage?: T;
                     name?: T;
                     role?: T;
+                    description?: T;
                     id?: T;
                   };
               anchorId?: T;
-              paddingWhere?: T;
-              paddingSize?: T;
               id?: T;
               blockName?: T;
             };
@@ -3612,22 +3594,16 @@ export interface ProjectsPage {
             } | null;
             people: {
               image: string | Media;
+              cutoutImage?: boolean | null;
               name: string;
               role?: string | null;
+              description?: string | null;
               id?: string | null;
             }[];
             /**
              * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
              */
             anchorId?: string | null;
-            /**
-             * Which side(s) the vertical padding is applied to.
-             */
-            paddingWhere?: ('both' | 'top' | 'bottom') | null;
-            /**
-             * Size of the vertical padding.
-             */
-            paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'personList';
@@ -4147,13 +4123,13 @@ export interface ProjectsPageSelect<T extends boolean = true> {
                 | T
                 | {
                     image?: T;
+                    cutoutImage?: T;
                     name?: T;
                     role?: T;
+                    description?: T;
                     id?: T;
                   };
               anchorId?: T;
-              paddingWhere?: T;
-              paddingSize?: T;
               id?: T;
               blockName?: T;
             };

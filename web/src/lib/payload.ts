@@ -282,8 +282,10 @@ export type PersonListBlock = BlockPadding & {
   body?: LexicalContent | null
   people: {
     image: Media
+    cutoutImage?: boolean | null
     name: string
     role?: string | null
+    description?: string | null
     id?: string | null
   }[]
 }

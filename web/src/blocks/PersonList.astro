@@ -1,0 +1,174 @@
+---
+import type { PersonListBlock } from '@/lib/payload'
+import { clsx } from 'clsx'
+import { blockPaddingClass } from '@/lib/blocks'
+import { lexicalToHtml } from '@/lib/lexical'
+import Button from '@/components/Button.astro'
+import Numbered from '@/components/Numbered.astro'
+import MediaItem from '@/components/MediaItem.astro'
+import Plus from '@/assets/icons/plus.astro'
+import Close from '@/assets/icons/cross.astro'
+
+const { heading, body, people, anchorId, paddingWhere, paddingSize } =
+  Astro.props as PersonListBlock
+
+const paddingClass = blockPaddingClass(paddingWhere, paddingSize)
+const bodyHtml = body ? lexicalToHtml(body) : null
+
+const nl2br = (str: string) => str.replace(/\n/g, '<br>')
+---
+
+<section id={anchorId ?? undefined} class="section-personlist bg-tamarind bg-hexagon-night">
+  <div class={clsx('container space-y-xs', paddingClass)}>
+    {
+      heading || bodyHtml ? (
+        <header class="max-w-[480px] space-y-2xs">
+          {heading && <h2 class="text-serif-2xl text-white">{heading}</h2>}
+          {bodyHtml && <div class="wysiwyg text-balance" set:html={bodyHtml} />}
+        </header>
+      ) : null
+    }
+
+    <ul class="people-list grid grid-cols-12 lg:gap-y-sm items-end" role="list">
+      {
+        people.map((person, i) => {
+          const row = Math.floor(i / 2)
+          const col = i % 2
+          const isOddRow = row % 2 === 0
+          const isOddCol = col === 0
+          const gridClass =
+            isOddRow && isOddCol
+              ? ''
+              : isOddRow && !isOddCol
+                ? 'md:col-start-6'
+                : !isOddRow && isOddCol
+                  ? 'md:col-start-4'
+                  : 'md:col-start-9'
+          return (
+            <li
+              class={clsx(
+                'person-card col-span-12 sm:col-span-6 md:col-span-4',
+                gridClass,
+                person.description && 'cursor-pointer',
+              )}
+              data-person-modal={person.description ? `person-modal-${i}` : undefined}
+              role={person.description ? 'button' : undefined}
+              tabindex={person.description ? 0 : undefined}
+            >
+              <div class="person-card-inner">
+                <figure class="relative w-full">
+                  <div
+                    class={clsx(
+                      'bg-night bg-grid-congo absolute w-full z-0 bottom-0 left-0 border-2 border-congo border-b-0',
+                      person.cutoutImage ? 'h-[87%]' : 'h-full',
+                    )}
+                  >
+                    <Numbered
+                      bgColour="bg-congo"
+                      textColour="text-black"
+                      class="absolute top-0 right-0"
+                    >
+                      {String(i + 1).padStart(3, '0')}
+                    </Numbered>
+                  </div>
+                  <MediaItem
+                    media={person.image}
+                    class={clsx(
+                      'h-auto relative z-10',
+                      person.cutoutImage ? 'w-[84%] ml-[8%]' : 'w-full',
+                    )}
+                    sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw"
+                    data-cutout={person.cutoutImage ? 'true' : undefined}
+                  />
+                </figure>
+                <div class="bg-night p-4xs border-2 border-congo space-y-5xs">
+                  <div class="space-y-2">
+                    <p class="person-name text-serif-sm text-white">{person.name}</p>
+                    {person.role && (
+                      <p class="person-role text-mono-4xs text-smoke">{person.role}</p>
+                    )}
+                  </div>
+                  {person.description && (
+                    <Button as="span" style="text" size="sm" colour="white">
+                      Find out more
+                      <Plus />
+                    </Button>
+                  )}
+                </div>
+              </div>
+            </li>
+          )
+        })
+      }
+    </ul>
+  </div>
+</section>
+
+{
+  people.map((person, i) =>
+    person.description ? (
+      <template id={`person-modal-${i}`}>
+        <div class="person-modal-content max-h-screen mx-auto space-y-4xs">
+          <div class="space-y-2">
+            <p class="text-serif-lg text-white">{person.name}</p>
+            {person.role && <p class="text-mono-3xs text-smoke">{person.role}</p>}
+          </div>
+          <p class="text-body-2xs text-balance" set:html={nl2br(person.description)} />
+        </div>
+      </template>
+    ) : null,
+  )
+}
+
+<dialog
+  id="person-modal"
+  class="w-full m-auto max-h-screen bg-transparent border-0 p-0 outline-none"
+  aria-modal="true"
+  aria-label="Person details"
+>
+  <div class="text-mist max-w-[520px] m-auto p-10 relative bg-night border-congo border-2">
+    <button
+      id="person-modal-close"
+      class="text-white absolute top-1 right-1 flex items-center justify-center cursor-pointer w-8 h-8 focus:outline-none"
+      aria-label="Close video"
+    >
+      <Close class="w-6 h-6" />
+    </button>
+    <div id="person-modal-content"></div>
+  </div>
+</dialog>
+
+<script>
+  const modal = document.getElementById('person-modal') as HTMLDialogElement
+  const closeBtn = document.getElementById('person-modal-close')
+  const modalContent = document.getElementById('person-modal-content')
+
+  document.querySelectorAll<HTMLElement>('[data-person-modal]').forEach((card) => {
+    const open = () => {
+      const template = document.getElementById(
+        card.dataset.personModal!,
+      ) as HTMLTemplateElement | null
+      if (!template || !modalContent) return
+      modalContent.replaceChildren(template.content.cloneNode(true))
+      document.body.style.overflow = 'hidden'
+      modal.showModal()
+    }
+    card.addEventListener('click', open)
+    card.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault()
+        open()
+      }
+    })
+  })
+
+  closeBtn?.addEventListener('click', () => modal.close())
+
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) modal.close()
+  })
+
+  modal.addEventListener('close', () => {
+    document.body.style.overflow = ''
+  })
+</script>

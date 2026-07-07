@@ -4,6 +4,7 @@ interface Props {
   colour?: 'green' | 'white'
   size?: 'lg' | 'md' | 'sm'
   style?: 'solid' | 'outline' | 'text' | 'icon'
+  as?: 'span'
   href?: string
   target?: string
   rel?: string
@@ -15,6 +16,7 @@ const {
   colour = 'green',
   size = 'md',
   style = 'solid',
+  as: tag,
   href,
   target,
   rel,
@@ -26,6 +28,7 @@ const {
 const sizeClasses: Record<string, string> = {
   lg: 'btn-lg',
   md: 'btn-md',
+  sm: 'btn-sm',
 }
 
 const solidClasses: Record<string, string> = {
@@ -60,7 +63,11 @@ const classes = clsx('btn', colourClass, className, sizeClasses[size])
 ---
 
 {
-  href ? (
+  tag === 'span' ? (
+    <span class={classes} {...rest}>
+      <slot />
+    </span>
+  ) : href ? (
     <a href={href} class={classes} target={target} rel={rel} {...rest}>
       <slot />
     </a>

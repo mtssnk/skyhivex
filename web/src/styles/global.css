@@ -14,6 +14,7 @@
 
 @theme {
   /* Colors */
+  --color-black: #000000;
   --color-night: #130e14;
   --color-space: #18131b;
   --color-tamarind: #1e1922;
@@ -165,6 +166,12 @@ main {
 }
 .bg-hexagon-obsidian {
   background-image: url('../assets/img/bg/hexagon-obsidian.svg');
+  background-repeat: repeat;
+  background-position: center left;
+  background-size: 43px 50px;
+}
+.bg-hexagon-night {
+  background-image: url('../assets/img/bg/hexagon-night.svg');
   background-repeat: repeat;
   background-position: center left;
   background-size: 43px 50px;
