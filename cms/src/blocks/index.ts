@@ -11,6 +11,7 @@ import { ProjectList } from './ProjectList'
 import { NewsCardList } from './NewsCardList'
 import { LogoList } from './LogoList'
 import { FeatureList } from './FeatureList'
+import { FeatureAccordionList } from './FeatureAccordionList'
 import { LinkedContent } from './LinkedContent'
 import { NavBlock } from './NavBlock'
 
@@ -31,7 +32,7 @@ const baseBlocks = [
   NavBlock,
 ]
 
-export const pageBlocks = [Hero, ...baseBlocks, FeatureList, LinkedContent]
+export const pageBlocks = [Hero, ...baseBlocks, FeatureList, FeatureAccordionList, LinkedContent]
 export const postBlocks = [...baseBlocks, LinkedContent]
 export const projectBlocks = [...baseBlocks, LinkedContent]
-export const projectsPageBlocks = [...baseBlocks, FeatureList]
+export const projectsPageBlocks = [...baseBlocks, FeatureList, FeatureAccordionList]

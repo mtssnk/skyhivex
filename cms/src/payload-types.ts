@@ -841,6 +841,36 @@ export interface Page {
             blockType: 'featureList';
           }
         | {
+            features: {
+              icon: string | Svg;
+              heading: string;
+              intro: string;
+              body?: {
+                root: {
+                  type: string;
+                  children: {
+                    type: any;
+                    version: number;
+                    [k: string]: unknown;
+                  }[];
+                  direction: ('ltr' | 'rtl') | null;
+                  format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                  indent: number;
+                  version: number;
+                };
+                [k: string]: unknown;
+              } | null;
+              id?: string | null;
+            }[];
+            /**
+             * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
+             */
+            anchorId?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'featureAccordionList';
+          }
+        | {
             /**
              * Select a navigation group to display as linked related content.
              */
@@ -2630,6 +2660,22 @@ export interface PagesSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
+        featureAccordionList?:
+          | T
+          | {
+              features?:
+                | T
+                | {
+                    icon?: T;
+                    heading?: T;
+                    intro?: T;
+                    body?: T;
+                    id?: T;
+                  };
+              anchorId?: T;
+              id?: T;
+              blockName?: T;
+            };
         linkedContent?:
           | T
           | {
@@ -3869,6 +3915,36 @@ export interface ProjectsPage {
             blockName?: string | null;
             blockType: 'featureList';
           }
+        | {
+            features: {
+              icon: string | Svg;
+              heading: string;
+              intro: string;
+              body?: {
+                root: {
+                  type: string;
+                  children: {
+                    type: any;
+                    version: number;
+                    [k: string]: unknown;
+                  }[];
+                  direction: ('ltr' | 'rtl') | null;
+                  format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                  indent: number;
+                  version: number;
+                };
+                [k: string]: unknown;
+              } | null;
+              id?: string | null;
+            }[];
+            /**
+             * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
+             */
+            anchorId?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'featureAccordionList';
+          }
       )[]
     | null;
   /**
@@ -4249,6 +4325,22 @@ export interface ProjectsPageSelect<T extends boolean = true> {
               linkType?: T;
               linkUrl?: T;
               linkPage?: T;
+              anchorId?: T;
+              id?: T;
+              blockName?: T;
+            };
+        featureAccordionList?:
+          | T
+          | {
+              features?:
+                | T
+                | {
+                    icon?: T;
+                    heading?: T;
+                    intro?: T;
+                    body?: T;
+                    id?: T;
+                  };
               anchorId?: T;
               id?: T;
               blockName?: T;

@@ -10,6 +10,7 @@ import MediaText from '@/blocks/MediaText.astro'
 import MediaBlock from '@/blocks/MediaBlock.astro'
 import Quote from '@/blocks/Quote.astro'
 import FeatureList from '@/blocks/FeatureList.astro'
+import FeatureAccordionList from '@/blocks/FeatureAccordionList.astro'
 import NewsCardList from '@/blocks/NewsCardList.astro'
 import LinkedContent from '@/blocks/LinkedContent.astro'
 import NavBlock from '@/blocks/NavBlock.astro'
@@ -35,6 +36,7 @@ const { blocks } = Astro.props
       {block.blockType === 'media' && <MediaBlock {...block} />}
       {block.blockType === 'quote' && <Quote {...block} />}
       {block.blockType === 'featureList' && <FeatureList {...block} />}
+      {block.blockType === 'featureAccordionList' && <FeatureAccordionList {...block} />}
       {block.blockType === 'newsCardList' && <NewsCardList {...block} />}
       {block.blockType === 'linkedContent' && <LinkedContent {...block} />}
       {block.blockType === 'navBlock' && <NavBlock {...block} />}

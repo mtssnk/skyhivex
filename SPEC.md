@@ -158,7 +158,7 @@ Every block includes these fields:
 
 ---
 
-### Illustration Card List
+### Feature List
 
 | Field     | Type  | Required | Notes                       |
 | --------- | ----- | -------- | --------------------------- |
@@ -173,6 +173,24 @@ Every block includes these fields:
 | `heading`      | Text     | Yes      |                                                 |
 | `body`         | RichText | No       |                                                 |
 | `illustration` | Select   | Yes      | Predefined illustration set — not user-uploaded |
+
+### Feature Accordion List
+
+| Field     | Type  | Required | Notes |
+| --------- | ----- | -------- | ----- |
+| `feature` | Array | Yes      | Min 1 |
+
+**Card fields (per item):**
+
+| Field                                       | Type     | Required | Notes                                           |
+| ------------------------------------------- | -------- | -------- | ----------------------------------------------- |
+| `heading`                                   | Text     | Yes      |                                                 |
+| `intro`                                     | Textarea | Yes      |                                                 |
+| `body`                                      | RichText | No       | If the body is populated, a read more link is   |
+| displays the body copy. If the button is    |
+| again, it is hidden. Body text is hidden by |
+| default.                                    |
+| `icon`                                      | Select   | Yes      | Predefined illustration set — not user-uploaded |
 
 **Button fields:**
 

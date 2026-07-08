@@ -1,0 +1,104 @@
+---
+import type { FeatureAccordionListBlock } from '@/lib/payload'
+import { clsx } from 'clsx'
+import { blockPaddingClass } from '@/lib/blocks'
+import { lexicalToHtml } from '@/lib/lexical'
+import Button from '@/components/Button.astro'
+import SvgIcon from '@/components/SvgIcon.astro'
+import ArrowDownRight from '@/assets/icons/arrowDownRight.astro'
+
+const { features, anchorId, paddingWhere, paddingSize } = Astro.props as FeatureAccordionListBlock
+
+const paddingClass = blockPaddingClass(paddingWhere, paddingSize)
+---
+
+<section id={anchorId ?? undefined} class="section-featureaccordionlist">
+  <div class={clsx(paddingClass)}>
+    <ul class="feature-accordion-list" role="list">
+      {
+        features.map((feature, i) => {
+          const bodyHtml = feature.body ? lexicalToHtml(feature.body) : null
+          const bodyId = `feature-body-${i}`
+          return (
+            <li class="w-full feature-accordion-item border-t-2 border-congo flex flex-col md:flex-row">
+              <div
+                class={clsx(
+                  'w-full bg-hexagon-obsidian bg-night md:w-1/3 flex md:justify-end',
+                  feature.icon && 'md:py-xs px-3xs',
+                )}
+              >
+                {feature.icon && <SvgIcon icon={feature.icon} />}
+              </div>
+              <div class="w-full md:w-2/3 py-xs px-3xs ">
+                <div class="space-y-4xs max-w-[600px]">
+                  <h3 class="text-extended-xl font-light text-smoke">{feature.heading}</h3>
+                  <p class="text-body-xs text-mist">{feature.intro}</p>
+
+                  {bodyHtml && (
+                    <div
+                      id={bodyId}
+                      class="accordion-body grid grid-cols-1 grid-rows-[0fr] transition-[grid-template-rows] duration-300"
+                      aria-hidden="true"
+                    >
+                      <div class="overflow-hidden min-h-0">
+                        <div
+                          class="wysiwyg text-body-2xs text-mist opacity-0 transition-opacity duration-200 delay-150"
+                          set:html={bodyHtml}
+                        />
+                      </div>
+                    </div>
+                  )}
+
+                  <div class="flex flex-wrap items-center gap-xs">
+                    {bodyHtml && (
+                      <Button
+                        style="text"
+                        colour="green"
+                        class="accordion-trigger"
+                        aria-expanded="false"
+                        aria-controls={bodyId}
+                      >
+                        <span class="read-label">Read more</span>
+                        <ArrowDownRight class="accordion-arrow transition-transform" />
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </li>
+          )
+        })
+      }
+    </ul>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('.accordion-trigger').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const expanded = btn.getAttribute('aria-expanded') === 'true'
+      const bodyId = btn.getAttribute('aria-controls')!
+      const body = document.getElementById(bodyId)
+
+      btn.setAttribute('aria-expanded', String(!expanded))
+
+      if (body) {
+        body.setAttribute('aria-hidden', String(expanded))
+        body.classList.toggle('grid-rows-[1fr]', !expanded)
+        body.classList.toggle('grid-rows-[0fr]', expanded)
+        const inner = body.querySelector<HTMLElement>(':scope > div > div')
+        if (inner) {
+          inner.classList.toggle('opacity-0', expanded)
+          inner.classList.toggle('delay-150', !expanded)
+          inner.classList.toggle('delay-0', expanded)
+        }
+      }
+
+      const label = btn.querySelector('.read-label')
+      if (label) label.textContent = expanded ? 'Read more' : 'Read less'
+
+      const arrow = btn.querySelector('.accordion-arrow')
+      arrow?.classList.toggle('rotate-180', !expanded)
+    })
+  })
+</script>

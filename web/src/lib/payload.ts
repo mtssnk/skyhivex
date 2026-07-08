@@ -317,6 +317,18 @@ export type FeatureListBlock = BlockPadding & {
   linkPage?: { slug: string } | null
 }
 
+export type FeatureAccordionListBlock = BlockPadding & {
+  blockType: 'featureAccordionList'
+  id?: string | null
+  features: {
+    icon?: Svg | null
+    heading: string
+    intro: string
+    body?: LexicalContent | null
+    id?: string | null
+  }[]
+}
+
 export type LinkedContentBlock = BlockPadding & {
   blockType: 'linkedContent'
   id?: string | null
@@ -356,6 +368,7 @@ export type SharedBlock =
   | FeatureListBlock
   | LinkedContentBlock
   | NavigationBlock
+  | FeatureAccordionListBlock
 
 export type PageBlock = HeroBlock | SharedBlock
 export type ProjectBlock = SharedBlock
