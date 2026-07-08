@@ -1,6 +1,6 @@
 import type { Field, GlobalConfig } from 'payload'
 
-function linkFields(): Field[] {
+function linkFields(withDropdown = false): Field[] {
   return [
     {
       name: 'type',
@@ -10,6 +10,7 @@ function linkFields(): Field[] {
         { label: 'Projects listing', value: 'projects' },
         { label: 'News listing', value: 'news' },
         { label: 'Custom URL', value: 'url' },
+        ...(withDropdown ? [{ label: 'Dropdown', value: 'dropdown' }] : []),
       ],
       defaultValue: 'page',
       required: true,
@@ -32,7 +33,7 @@ function linkFields(): Field[] {
   ]
 }
 
-function navArrayField(name: string, label: string): Field {
+function navArrayField(name: string, label: string, withChildren = false): Field {
   return {
     name,
     type: 'array',
@@ -44,7 +45,29 @@ function navArrayField(name: string, label: string): Field {
         type: 'text',
         required: true,
       },
-      ...linkFields(),
+      ...linkFields(withChildren),
+      ...(withChildren
+        ? [
+            {
+              name: 'children',
+              type: 'array',
+              label: 'Dropdown children',
+              labels: { singular: 'Child link', plural: 'Child links' },
+              admin: {
+                condition: (_data: Record<string, unknown>, siblingData: Record<string, unknown>) =>
+                  siblingData?.type === 'dropdown',
+              },
+              fields: [
+                {
+                  name: 'label',
+                  type: 'text',
+                  required: true,
+                },
+                ...linkFields(),
+              ],
+            } as Field,
+          ]
+        : []),
     ],
   }
 }
@@ -63,7 +86,7 @@ export const Navigation: GlobalConfig = {
           name: 'header',
           label: 'Header',
           fields: [
-            navArrayField('links', 'Navigation'),
+            navArrayField('links', 'Navigation', true),
             {
               type: 'collapsible',
               label: 'CTA Button',

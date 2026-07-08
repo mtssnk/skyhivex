@@ -2,6 +2,7 @@
 import Button from '@/components/Button.astro'
 import { getNavigation } from '@/lib/payload'
 import ArrowUpRight from '@/assets/icons/arrowUpRight.astro'
+import ChevronDown from '@/assets/icons/chevronDown.astro'
 
 interface Props {
   companyName?: string
@@ -43,11 +44,35 @@ function linkHref(item: {
 
     <nav class="hidden lg:flex items-center gap-6" aria-label="Main navigation">
       {
-        links.map((link) => (
-          <a href={linkHref(link)} class="text-mono-3xs">
-            {link.label}
-          </a>
-        ))
+        links.map((link) =>
+          link.type === 'dropdown' ? (
+            <div class="relative" data-dropdown>
+              <button
+                class="text-mono-3xs flex items-center gap-2 nav-item"
+                aria-haspopup="true"
+                aria-expanded="false"
+                data-dropdown-trigger
+              >
+                {link.label}
+                <ChevronDown class="dropdown-chevron transition-transform size-3" />
+              </button>
+              <div
+                class="nav-item-dropdown absolute top-full left-0 bg-gravel"
+                data-dropdown-panel
+              >
+                {link?.children?.map((child) => (
+                  <a href={linkHref(child)} class="text-mono-3xs block">
+                    {child.label}
+                  </a>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <a href={linkHref(link)} class="text-mono-3xs nav-item">
+              {link.label}
+            </a>
+          ),
+        )
       }
     </nav>
 
@@ -81,11 +106,36 @@ function linkHref(item: {
   aria-label="Mobile navigation"
 >
   {
-    links.map((link) => (
-      <a href={linkHref(link)} class="text-mono-3xs">
-        {link.label}
-      </a>
-    ))
+    links.map((link) =>
+      link.type === 'dropdown' ? (
+        <div data-mobile-dropdown>
+          <button
+            class="text-mono-3xs flex gap-2xs"
+            aria-expanded="false"
+            data-mobile-dropdown-trigger
+          >
+            {link.label}
+            <ChevronDown class="mobile-dropdown-chevron transition-transform size-3" />
+          </button>
+          <div
+            class="grid grid-rows-[0fr] transition-[grid-template-rows] duration-300"
+            data-mobile-dropdown-panel
+          >
+            <div class="overflow-hidden min-h-0 flex flex-col">
+              {link?.children?.map((child) => (
+                <a href={linkHref(child)} class="text-mono-3xs">
+                  {child.label}
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+      ) : (
+        <a href={linkHref(link)} class="text-mono-3xs">
+          {link.label}
+        </a>
+      ),
+    )
   }
   {
     btn?.label && (
@@ -98,6 +148,7 @@ function linkHref(item: {
 </nav>
 
 <script>
+  // --- Mobile nav ---
   const toggle = document.getElementById('nav-toggle')!
   const nav = document.getElementById('mobile-nav')!
   const bars = toggle.querySelectorAll<HTMLElement>('span')
@@ -121,19 +172,93 @@ function linkHref(item: {
     bars[0].style.transform = ''
     bars[1].style.opacity = ''
     bars[2].style.transform = ''
+    // collapse all mobile dropdowns
+    nav.querySelectorAll('[data-mobile-dropdown-panel]').forEach((panel) => {
+      panel.classList.remove('grid-rows-[1fr]')
+      panel.classList.add('grid-rows-[0fr]')
+    })
+    nav.querySelectorAll('[data-mobile-dropdown-trigger]').forEach((t) => {
+      t.setAttribute('aria-expanded', 'false')
+      t.querySelector('.mobile-dropdown-chevron')?.classList.remove('rotate-x-180')
+    })
   }
 
   toggle.addEventListener('click', () => {
     nav.hasAttribute('data-open') ? closeNav() : openNav()
   })
 
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && nav.hasAttribute('data-open')) closeNav()
-  })
-
   nav.querySelectorAll('a').forEach((a) => a.addEventListener('click', closeNav))
 
   window.matchMedia('(min-width: 1024px)').addEventListener('change', ({ matches }) => {
     if (matches) closeNav()
+  })
+
+  // --- Mobile dropdowns ---
+  nav.querySelectorAll<HTMLButtonElement>('[data-mobile-dropdown-trigger]').forEach((trigger) => {
+    trigger.addEventListener('click', () => {
+      const expanded = trigger.getAttribute('aria-expanded') === 'true'
+      const panel = trigger.nextElementSibling as HTMLElement | null
+      trigger.setAttribute('aria-expanded', String(!expanded))
+      panel?.classList.toggle('grid-rows-[1fr]', !expanded)
+      panel?.classList.toggle('grid-rows-[0fr]', expanded)
+      trigger.querySelector('.mobile-dropdown-chevron')?.classList.toggle('rotate-x-180', !expanded)
+    })
+  })
+
+  // --- Desktop dropdowns ---
+  const HOVER_DELAY = 150
+
+  document.querySelectorAll<HTMLElement>('[data-dropdown]').forEach((dropdown) => {
+    const trigger = dropdown.querySelector<HTMLButtonElement>('[data-dropdown-trigger]')!
+    const panel = dropdown.querySelector<HTMLElement>('[data-dropdown-panel]')!
+    let timer: ReturnType<typeof setTimeout>
+
+    const open = () => {
+      clearTimeout(timer)
+      trigger.setAttribute('aria-expanded', 'true')
+      trigger.querySelector('.dropdown-chevron')?.classList.add('rotate-x-180')
+    }
+
+    const close = () => {
+      clearTimeout(timer)
+      timer = setTimeout(() => {
+        trigger.setAttribute('aria-expanded', 'false')
+        trigger.querySelector('.dropdown-chevron')?.classList.remove('rotate-x-180')
+      }, HOVER_DELAY)
+    }
+
+    dropdown.addEventListener('mouseenter', open)
+    dropdown.addEventListener('mouseleave', close)
+    trigger.addEventListener('click', () => {
+      trigger.getAttribute('aria-expanded') === 'true' ? close() : open()
+    })
+  })
+
+  // Close desktop dropdowns on outside click or Escape
+  document.addEventListener('click', (e) => {
+    document.querySelectorAll<HTMLElement>('[data-dropdown]').forEach((dropdown) => {
+      if (!dropdown.contains(e.target as Node)) {
+        const trigger = dropdown.querySelector<HTMLButtonElement>('[data-dropdown-trigger]')!
+        trigger.setAttribute('aria-expanded', 'false')
+        trigger.querySelector('.dropdown-chevron')?.classList.remove('rotate-x-180')
+      }
+    })
+  })
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      if (nav.hasAttribute('data-open')) {
+        closeNav()
+      } else {
+        document.querySelectorAll<HTMLElement>('[data-dropdown]').forEach((dropdown) => {
+          const trigger = dropdown.querySelector<HTMLButtonElement>('[data-dropdown-trigger]')!
+          if (trigger.getAttribute('aria-expanded') === 'true') {
+            trigger.setAttribute('aria-expanded', 'false')
+            trigger.querySelector('.dropdown-chevron')?.classList.remove('rotate-x-180')
+            trigger.focus()
+          }
+        })
+      }
+    }
   })
 </script>

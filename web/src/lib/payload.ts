@@ -415,7 +415,7 @@ export type ContactPage = {
 
 export type SocialPlatform = 'instagram' | 'linkedin' | 'x' | 'facebook' | 'youtube'
 
-type NavLinkType = 'page' | 'projects' | 'news' | 'url'
+type NavLinkType = 'page' | 'projects' | 'news' | 'url' | 'dropdown'
 
 type NavLink = {
   label: string
@@ -423,6 +423,15 @@ type NavLink = {
   page?: { slug: string } | null
   url?: string | null
   id?: string | null
+  children?:
+    | {
+        label: string
+        type: NavLinkType
+        page?: { slug: string } | null
+        url?: string | null
+        id?: string | null
+      }[]
+    | null
 }
 
 export type Navigation = {

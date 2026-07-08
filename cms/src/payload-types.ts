@@ -4025,9 +4025,18 @@ export interface Navigation1 {
     links?:
       | {
           label: string;
-          type: 'page' | 'projects' | 'news' | 'url';
+          type: 'page' | 'projects' | 'news' | 'url' | 'dropdown';
           page?: (string | null) | Page;
           url?: string | null;
+          children?:
+            | {
+                label: string;
+                type: 'page' | 'projects' | 'news' | 'url';
+                page?: (string | null) | Page;
+                url?: string | null;
+                id?: string | null;
+              }[]
+            | null;
           id?: string | null;
         }[]
       | null;
@@ -4400,6 +4409,15 @@ export interface NavigationSelect<T extends boolean = true> {
               type?: T;
               page?: T;
               url?: T;
+              children?:
+                | T
+                | {
+                    label?: T;
+                    type?: T;
+                    page?: T;
+                    url?: T;
+                    id?: T;
+                  };
               id?: T;
             };
         button?:
