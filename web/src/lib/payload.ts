@@ -132,7 +132,7 @@ export type Post = {
 
 type BlockPadding = {
   anchorId?: string | null
-  paddingWhere?: 'both' | 'top' | 'bottom' | null
+  paddingWhere?: 'both' | 'top' | 'bottom' | 'none' | null
   paddingSize?: 'xl' | 'lg' | 'md' | 'sm' | null
 }
 

@@ -35,6 +35,6 @@ export const FeatureAccordionList: Block = {
         ],
       },
     ],
-    { padding: false },
+    { paddingDefaults: { where: 'none' } },
   ),
 }

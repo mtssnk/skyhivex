@@ -322,7 +322,7 @@ export interface Page {
             /**
              * Which side(s) the vertical padding is applied to.
              */
-            paddingWhere?: ('both' | 'top' | 'bottom') | null;
+            paddingWhere?: ('both' | 'top' | 'bottom' | 'none') | null;
             /**
              * Size of the vertical padding.
              */
@@ -387,7 +387,7 @@ export interface Page {
             /**
              * Which side(s) the vertical padding is applied to.
              */
-            paddingWhere?: ('both' | 'top' | 'bottom') | null;
+            paddingWhere?: ('both' | 'top' | 'bottom' | 'none') | null;
             /**
              * Size of the vertical padding.
              */
@@ -421,7 +421,7 @@ export interface Page {
             /**
              * Which side(s) the vertical padding is applied to.
              */
-            paddingWhere?: ('both' | 'top' | 'bottom') | null;
+            paddingWhere?: ('both' | 'top' | 'bottom' | 'none') | null;
             /**
              * Size of the vertical padding.
              */
@@ -441,7 +441,7 @@ export interface Page {
             /**
              * Which side(s) the vertical padding is applied to.
              */
-            paddingWhere?: ('both' | 'top' | 'bottom') | null;
+            paddingWhere?: ('both' | 'top' | 'bottom' | 'none') | null;
             /**
              * Size of the vertical padding.
              */
@@ -473,7 +473,7 @@ export interface Page {
             /**
              * Which side(s) the vertical padding is applied to.
              */
-            paddingWhere?: ('both' | 'top' | 'bottom') | null;
+            paddingWhere?: ('both' | 'top' | 'bottom' | 'none') | null;
             /**
              * Size of the vertical padding.
              */
@@ -537,7 +537,7 @@ export interface Page {
             /**
              * Which side(s) the vertical padding is applied to.
              */
-            paddingWhere?: ('both' | 'top' | 'bottom') | null;
+            paddingWhere?: ('both' | 'top' | 'bottom' | 'none') | null;
             /**
              * Size of the vertical padding.
              */
@@ -609,7 +609,7 @@ export interface Page {
             /**
              * Which side(s) the vertical padding is applied to.
              */
-            paddingWhere?: ('both' | 'top' | 'bottom') | null;
+            paddingWhere?: ('both' | 'top' | 'bottom' | 'none') | null;
             /**
              * Size of the vertical padding.
              */
@@ -663,7 +663,7 @@ export interface Page {
             /**
              * Which side(s) the vertical padding is applied to.
              */
-            paddingWhere?: ('both' | 'top' | 'bottom') | null;
+            paddingWhere?: ('both' | 'top' | 'bottom' | 'none') | null;
             /**
              * Size of the vertical padding.
              */
@@ -744,7 +744,7 @@ export interface Page {
             /**
              * Which side(s) the vertical padding is applied to.
              */
-            paddingWhere?: ('both' | 'top' | 'bottom') | null;
+            paddingWhere?: ('both' | 'top' | 'bottom' | 'none') | null;
             /**
              * Size of the vertical padding.
              */
@@ -763,7 +763,7 @@ export interface Page {
             /**
              * Which side(s) the vertical padding is applied to.
              */
-            paddingWhere?: ('both' | 'top' | 'bottom') | null;
+            paddingWhere?: ('both' | 'top' | 'bottom' | 'none') | null;
             /**
              * Size of the vertical padding.
              */
@@ -866,6 +866,14 @@ export interface Page {
              * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
              */
             anchorId?: string | null;
+            /**
+             * Which side(s) the vertical padding is applied to.
+             */
+            paddingWhere?: ('both' | 'top' | 'bottom' | 'none') | null;
+            /**
+             * Size of the vertical padding.
+             */
+            paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'featureAccordionList';
@@ -900,7 +908,7 @@ export interface Page {
             /**
              * Which side(s) the vertical padding is applied to.
              */
-            paddingWhere?: ('both' | 'top' | 'bottom') | null;
+            paddingWhere?: ('both' | 'top' | 'bottom' | 'none') | null;
             /**
              * Size of the vertical padding.
              */
@@ -1053,7 +1061,7 @@ export interface Project {
             /**
              * Which side(s) the vertical padding is applied to.
              */
-            paddingWhere?: ('both' | 'top' | 'bottom') | null;
+            paddingWhere?: ('both' | 'top' | 'bottom' | 'none') | null;
             /**
              * Size of the vertical padding.
              */
@@ -1087,7 +1095,7 @@ export interface Project {
             /**
              * Which side(s) the vertical padding is applied to.
              */
-            paddingWhere?: ('both' | 'top' | 'bottom') | null;
+            paddingWhere?: ('both' | 'top' | 'bottom' | 'none') | null;
             /**
              * Size of the vertical padding.
              */
@@ -1107,7 +1115,7 @@ export interface Project {
             /**
              * Which side(s) the vertical padding is applied to.
              */
-            paddingWhere?: ('both' | 'top' | 'bottom') | null;
+            paddingWhere?: ('both' | 'top' | 'bottom' | 'none') | null;
             /**
              * Size of the vertical padding.
              */
@@ -1139,7 +1147,7 @@ export interface Project {
             /**
              * Which side(s) the vertical padding is applied to.
              */
-            paddingWhere?: ('both' | 'top' | 'bottom') | null;
+            paddingWhere?: ('both' | 'top' | 'bottom' | 'none') | null;
             /**
              * Size of the vertical padding.
              */
@@ -1203,7 +1211,7 @@ export interface Project {
             /**
              * Which side(s) the vertical padding is applied to.
              */
-            paddingWhere?: ('both' | 'top' | 'bottom') | null;
+            paddingWhere?: ('both' | 'top' | 'bottom' | 'none') | null;
             /**
              * Size of the vertical padding.
              */
@@ -1275,7 +1283,7 @@ export interface Project {
             /**
              * Which side(s) the vertical padding is applied to.
              */
-            paddingWhere?: ('both' | 'top' | 'bottom') | null;
+            paddingWhere?: ('both' | 'top' | 'bottom' | 'none') | null;
             /**
              * Size of the vertical padding.
              */
@@ -1329,7 +1337,7 @@ export interface Project {
             /**
              * Which side(s) the vertical padding is applied to.
              */
-            paddingWhere?: ('both' | 'top' | 'bottom') | null;
+            paddingWhere?: ('both' | 'top' | 'bottom' | 'none') | null;
             /**
              * Size of the vertical padding.
              */
@@ -1410,7 +1418,7 @@ export interface Project {
             /**
              * Which side(s) the vertical padding is applied to.
              */
-            paddingWhere?: ('both' | 'top' | 'bottom') | null;
+            paddingWhere?: ('both' | 'top' | 'bottom' | 'none') | null;
             /**
              * Size of the vertical padding.
              */
@@ -1429,7 +1437,7 @@ export interface Project {
             /**
              * Which side(s) the vertical padding is applied to.
              */
-            paddingWhere?: ('both' | 'top' | 'bottom') | null;
+            paddingWhere?: ('both' | 'top' | 'bottom' | 'none') | null;
             /**
              * Size of the vertical padding.
              */
@@ -1501,7 +1509,7 @@ export interface Project {
             /**
              * Which side(s) the vertical padding is applied to.
              */
-            paddingWhere?: ('both' | 'top' | 'bottom') | null;
+            paddingWhere?: ('both' | 'top' | 'bottom' | 'none') | null;
             /**
              * Size of the vertical padding.
              */
@@ -1660,7 +1668,7 @@ export interface Post {
         /**
          * Which side(s) the vertical padding is applied to.
          */
-        paddingWhere?: ('both' | 'top' | 'bottom') | null;
+        paddingWhere?: ('both' | 'top' | 'bottom' | 'none') | null;
         /**
          * Size of the vertical padding.
          */
@@ -1694,7 +1702,7 @@ export interface Post {
         /**
          * Which side(s) the vertical padding is applied to.
          */
-        paddingWhere?: ('both' | 'top' | 'bottom') | null;
+        paddingWhere?: ('both' | 'top' | 'bottom' | 'none') | null;
         /**
          * Size of the vertical padding.
          */
@@ -1714,7 +1722,7 @@ export interface Post {
         /**
          * Which side(s) the vertical padding is applied to.
          */
-        paddingWhere?: ('both' | 'top' | 'bottom') | null;
+        paddingWhere?: ('both' | 'top' | 'bottom' | 'none') | null;
         /**
          * Size of the vertical padding.
          */
@@ -1746,7 +1754,7 @@ export interface Post {
         /**
          * Which side(s) the vertical padding is applied to.
          */
-        paddingWhere?: ('both' | 'top' | 'bottom') | null;
+        paddingWhere?: ('both' | 'top' | 'bottom' | 'none') | null;
         /**
          * Size of the vertical padding.
          */
@@ -1810,7 +1818,7 @@ export interface Post {
         /**
          * Which side(s) the vertical padding is applied to.
          */
-        paddingWhere?: ('both' | 'top' | 'bottom') | null;
+        paddingWhere?: ('both' | 'top' | 'bottom' | 'none') | null;
         /**
          * Size of the vertical padding.
          */
@@ -1882,7 +1890,7 @@ export interface Post {
         /**
          * Which side(s) the vertical padding is applied to.
          */
-        paddingWhere?: ('both' | 'top' | 'bottom') | null;
+        paddingWhere?: ('both' | 'top' | 'bottom' | 'none') | null;
         /**
          * Size of the vertical padding.
          */
@@ -1936,7 +1944,7 @@ export interface Post {
         /**
          * Which side(s) the vertical padding is applied to.
          */
-        paddingWhere?: ('both' | 'top' | 'bottom') | null;
+        paddingWhere?: ('both' | 'top' | 'bottom' | 'none') | null;
         /**
          * Size of the vertical padding.
          */
@@ -2017,7 +2025,7 @@ export interface Post {
         /**
          * Which side(s) the vertical padding is applied to.
          */
-        paddingWhere?: ('both' | 'top' | 'bottom') | null;
+        paddingWhere?: ('both' | 'top' | 'bottom' | 'none') | null;
         /**
          * Size of the vertical padding.
          */
@@ -2036,7 +2044,7 @@ export interface Post {
         /**
          * Which side(s) the vertical padding is applied to.
          */
-        paddingWhere?: ('both' | 'top' | 'bottom') | null;
+        paddingWhere?: ('both' | 'top' | 'bottom' | 'none') | null;
         /**
          * Size of the vertical padding.
          */
@@ -2108,7 +2116,7 @@ export interface Post {
         /**
          * Which side(s) the vertical padding is applied to.
          */
-        paddingWhere?: ('both' | 'top' | 'bottom') | null;
+        paddingWhere?: ('both' | 'top' | 'bottom' | 'none') | null;
         /**
          * Size of the vertical padding.
          */
@@ -2673,6 +2681,8 @@ export interface PagesSelect<T extends boolean = true> {
                     id?: T;
                   };
               anchorId?: T;
+              paddingWhere?: T;
+              paddingSize?: T;
               id?: T;
               blockName?: T;
             };
@@ -3462,7 +3472,7 @@ export interface ProjectsPage {
             /**
              * Which side(s) the vertical padding is applied to.
              */
-            paddingWhere?: ('both' | 'top' | 'bottom') | null;
+            paddingWhere?: ('both' | 'top' | 'bottom' | 'none') | null;
             /**
              * Size of the vertical padding.
              */
@@ -3496,7 +3506,7 @@ export interface ProjectsPage {
             /**
              * Which side(s) the vertical padding is applied to.
              */
-            paddingWhere?: ('both' | 'top' | 'bottom') | null;
+            paddingWhere?: ('both' | 'top' | 'bottom' | 'none') | null;
             /**
              * Size of the vertical padding.
              */
@@ -3516,7 +3526,7 @@ export interface ProjectsPage {
             /**
              * Which side(s) the vertical padding is applied to.
              */
-            paddingWhere?: ('both' | 'top' | 'bottom') | null;
+            paddingWhere?: ('both' | 'top' | 'bottom' | 'none') | null;
             /**
              * Size of the vertical padding.
              */
@@ -3548,7 +3558,7 @@ export interface ProjectsPage {
             /**
              * Which side(s) the vertical padding is applied to.
              */
-            paddingWhere?: ('both' | 'top' | 'bottom') | null;
+            paddingWhere?: ('both' | 'top' | 'bottom' | 'none') | null;
             /**
              * Size of the vertical padding.
              */
@@ -3612,7 +3622,7 @@ export interface ProjectsPage {
             /**
              * Which side(s) the vertical padding is applied to.
              */
-            paddingWhere?: ('both' | 'top' | 'bottom') | null;
+            paddingWhere?: ('both' | 'top' | 'bottom' | 'none') | null;
             /**
              * Size of the vertical padding.
              */
@@ -3684,7 +3694,7 @@ export interface ProjectsPage {
             /**
              * Which side(s) the vertical padding is applied to.
              */
-            paddingWhere?: ('both' | 'top' | 'bottom') | null;
+            paddingWhere?: ('both' | 'top' | 'bottom' | 'none') | null;
             /**
              * Size of the vertical padding.
              */
@@ -3738,7 +3748,7 @@ export interface ProjectsPage {
             /**
              * Which side(s) the vertical padding is applied to.
              */
-            paddingWhere?: ('both' | 'top' | 'bottom') | null;
+            paddingWhere?: ('both' | 'top' | 'bottom' | 'none') | null;
             /**
              * Size of the vertical padding.
              */
@@ -3819,7 +3829,7 @@ export interface ProjectsPage {
             /**
              * Which side(s) the vertical padding is applied to.
              */
-            paddingWhere?: ('both' | 'top' | 'bottom') | null;
+            paddingWhere?: ('both' | 'top' | 'bottom' | 'none') | null;
             /**
              * Size of the vertical padding.
              */
@@ -3838,7 +3848,7 @@ export interface ProjectsPage {
             /**
              * Which side(s) the vertical padding is applied to.
              */
-            paddingWhere?: ('both' | 'top' | 'bottom') | null;
+            paddingWhere?: ('both' | 'top' | 'bottom' | 'none') | null;
             /**
              * Size of the vertical padding.
              */
@@ -3941,6 +3951,14 @@ export interface ProjectsPage {
              * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
              */
             anchorId?: string | null;
+            /**
+             * Which side(s) the vertical padding is applied to.
+             */
+            paddingWhere?: ('both' | 'top' | 'bottom' | 'none') | null;
+            /**
+             * Size of the vertical padding.
+             */
+            paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'featureAccordionList';
@@ -4342,6 +4360,8 @@ export interface ProjectsPageSelect<T extends boolean = true> {
                     id?: T;
                   };
               anchorId?: T;
+              paddingWhere?: T;
+              paddingSize?: T;
               id?: T;
               blockName?: T;
             };

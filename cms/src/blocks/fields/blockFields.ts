@@ -14,44 +14,55 @@ const anchorField: Field = {
   },
 }
 
-const paddingFields: Field[] = [
-  {
-    name: 'paddingWhere',
-    type: 'select',
-    defaultValue: 'both',
-    admin: {
-      description: 'Which side(s) the vertical padding is applied to.',
+type PaddingWhere = 'both' | 'top' | 'bottom' | 'none'
+type PaddingSize = 'xl' | 'lg' | 'md' | 'sm'
+
+function makePaddingFields(where: PaddingWhere = 'both', size: PaddingSize = 'md'): Field[] {
+  return [
+    {
+      name: 'paddingWhere',
+      type: 'select',
+      defaultValue: where,
+      admin: {
+        description: 'Which side(s) the vertical padding is applied to.',
+      },
+      options: [
+        { label: 'Top & bottom', value: 'both' },
+        { label: 'Top only', value: 'top' },
+        { label: 'Bottom only', value: 'bottom' },
+        { label: 'None', value: 'none' },
+      ],
     },
-    options: [
-      { label: 'Top & bottom', value: 'both' },
-      { label: 'Top only', value: 'top' },
-      { label: 'Bottom only', value: 'bottom' },
-    ],
-  },
-  {
-    name: 'paddingSize',
-    type: 'select',
-    defaultValue: 'md',
-    admin: {
-      description: 'Size of the vertical padding.',
+    {
+      name: 'paddingSize',
+      type: 'select',
+      defaultValue: size,
+      admin: {
+        description: 'Size of the vertical padding.',
+        condition: (_, sibling) => sibling?.paddingWhere !== 'none',
+      },
+      options: [
+        { label: 'XL', value: 'xl' },
+        { label: 'Large', value: 'lg' },
+        { label: 'Medium', value: 'md' },
+        { label: 'Small', value: 'sm' },
+      ],
     },
-    options: [
-      { label: 'XL', value: 'xl' },
-      { label: 'Large', value: 'lg' },
-      { label: 'Medium', value: 'md' },
-      { label: 'Small', value: 'sm' },
-    ],
-  },
-]
+  ]
+}
 
 type BlockTabsOptions = {
   padding?: boolean
+  paddingDefaults?: {
+    where?: PaddingWhere
+    size?: PaddingSize
+  }
   extra?: Field[]
 }
 
 export const withBlockTabs = (
   contentFields: Field[],
-  { padding = true, extra = [] }: BlockTabsOptions = {},
+  { padding = true, paddingDefaults, extra = [] }: BlockTabsOptions = {},
 ): Field[] => [
   {
     type: 'tabs',
@@ -62,7 +73,11 @@ export const withBlockTabs = (
       },
       {
         label: 'Options',
-        fields: [anchorField, ...(padding ? paddingFields : []), ...extra],
+        fields: [
+          anchorField,
+          ...(padding ? makePaddingFields(paddingDefaults?.where, paddingDefaults?.size) : []),
+          ...extra,
+        ],
       },
     ],
   },
