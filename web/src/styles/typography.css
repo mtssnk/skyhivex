@@ -124,6 +124,14 @@
 /*
 ----------- Mono
 */
+@utility text-mono-2xs {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: 1rem; /* 16px */
+  line-height: 1.14;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
 @utility text-mono-3xs {
   font-family: var(--font-mono);
   font-weight: 500;

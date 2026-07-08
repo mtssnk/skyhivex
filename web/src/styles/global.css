@@ -52,6 +52,9 @@
 
   /* Animations */
   --animate-fade-in: fade-in 1s ease-out both;
+
+  /* Breakpoints */
+  --breakpoint-xs: 30rem;
 }
 
 :root {

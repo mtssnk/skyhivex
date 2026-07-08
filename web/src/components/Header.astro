@@ -56,10 +56,7 @@ function linkHref(item: {
                 {link.label}
                 <ChevronDown class="dropdown-chevron transition-transform size-3" />
               </button>
-              <div
-                class="nav-item-dropdown absolute top-full left-0 bg-gravel"
-                data-dropdown-panel
-              >
+              <div class="nav-item-dropdown absolute top-full left-0 bg-gravel" data-dropdown-panel>
                 {link?.children?.map((child) => (
                   <a href={linkHref(child)} class="text-mono-3xs block">
                     {child.label}
@@ -79,7 +76,13 @@ function linkHref(item: {
     <div class="flex items-center gap-4">
       {
         btn?.label && (
-          <Button href={linkHref(btn)} size="md" colour="white" style="outline">
+          <Button
+            href={linkHref(btn)}
+            size="sm"
+            colour="white"
+            style="outline"
+            class="hidden xs:inline-flex"
+          >
             {btn.label}
             <ArrowUpRight />
           </Button>
@@ -110,7 +113,7 @@ function linkHref(item: {
       link.type === 'dropdown' ? (
         <div data-mobile-dropdown>
           <button
-            class="text-mono-3xs flex gap-2xs"
+            class="text-mono-2xs flex gap-2 w-full items-center justify-center"
             aria-expanded="false"
             data-mobile-dropdown-trigger
           >
@@ -118,12 +121,12 @@ function linkHref(item: {
             <ChevronDown class="mobile-dropdown-chevron transition-transform size-3" />
           </button>
           <div
-            class="grid grid-rows-[0fr] transition-[grid-template-rows] duration-300"
+            class="grid grid-cols-1 grid-rows-[0fr] transition-[grid-template-rows] duration-300"
             data-mobile-dropdown-panel
           >
-            <div class="overflow-hidden min-h-0 flex flex-col">
+            <div class="overflow-hidden min-h-0 flex flex-col justify-center text-center first:mt-2 last:bb-2">
               {link?.children?.map((child) => (
-                <a href={linkHref(child)} class="text-mono-3xs">
+                <a href={linkHref(child)} class="text-mono-3xs py-3">
                   {child.label}
                 </a>
               ))}
@@ -131,7 +134,7 @@ function linkHref(item: {
           </div>
         </div>
       ) : (
-        <a href={linkHref(link)} class="text-mono-3xs">
+        <a href={linkHref(link)} class="text-mono-2xs">
           {link.label}
         </a>
       ),
