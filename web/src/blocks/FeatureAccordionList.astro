@@ -24,13 +24,13 @@ const paddingClass = blockPaddingClass(paddingWhere, paddingSize)
               <div
                 class={clsx(
                   'w-full bg-hexagon-obsidian bg-night md:w-1/3 flex md:justify-end',
-                  feature.icon && 'md:py-xs px-3xs',
+                  feature.icon && 'pb-4xs pt-xs md:py-xs px-3xs',
                 )}
               >
                 {feature.icon && <SvgIcon icon={feature.icon} />}
               </div>
-              <div class="w-full md:w-2/3 py-xs px-3xs ">
-                <div class="space-y-4xs max-w-[600px]">
+              <div class="w-full md:w-2/3 pt-4xs pb-xs md:py-xs px-3xs ">
+                <div class="space-y-4xs max-w-[580px]">
                   <h3 class="text-extended-xl font-light text-smoke">{feature.heading}</h3>
                   <p class="text-body-xs text-mist">{feature.intro}</p>
 
