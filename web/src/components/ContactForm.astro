@@ -1,5 +1,7 @@
 ---
 import Button from '@/components/Button.astro'
+import Close from '@/assets/icons/cross.astro'
+import Tick from '@/assets/icons/tick.astro'
 
 const inputClasses =
   'w-full bg-night border-2 border-mist px-4 py-4 text-white text-body-xs outline-none focus:border-white transition-colors'
@@ -7,11 +9,11 @@ const labelClasses = 'text-mono-3xs text-gravel'
 ---
 
 <form id="contact-form" class="flex flex-col gap-6" novalidate>
-  <div class="flex flex-col gap-4">
+  <div class="flex flex-col gap-2.5">
     <label for="cf-name" class={labelClasses}>Name *</label>
     <input type="text" id="cf-name" name="name" required autocomplete="name" class={inputClasses} />
   </div>
-  <div class="flex flex-col gap-4">
+  <div class="flex flex-col gap-2.5">
     <label for="cf-email" class={labelClasses}>Email *</label>
     <input
       type="email"
@@ -22,11 +24,11 @@ const labelClasses = 'text-mono-3xs text-gravel'
       class={inputClasses}
     />
   </div>
-  <div class="flex flex-col gap-4">
+  <div class="flex flex-col gap-2.5">
     <label for="cf-phone" class={labelClasses}>Phone</label>
     <input type="tel" id="cf-phone" name="phone" autocomplete="tel" class={inputClasses} />
   </div>
-  <div class="flex flex-col gap-4">
+  <div class="flex flex-col gap-2.5">
     <label for="cf-location" class={labelClasses}>Location</label>
     <input
       type="text"
@@ -36,32 +38,55 @@ const labelClasses = 'text-mono-3xs text-gravel'
       class={inputClasses}
     />
   </div>
-  <div class="flex flex-col gap-4">
+  <div class="flex flex-col gap-2.5">
     <label for="cf-message" class={labelClasses}>Message *</label>
-    <textarea
-      id="cf-message"
-      name="message"
-      rows="6"
-      required
-      class={`${inputClasses} resize-y`}
+    <textarea id="cf-message" name="message" rows="6" required class={`${inputClasses} resize-y`}
     ></textarea>
   </div>
-  <div class="flex flex-col gap-3xs pt-3xs">
-    <div>
-      <Button type="submit" id="cf-submit" colour="green" style="solid" size="lg">Send</Button>
-    </div>
-    <p id="cf-success" class="text-body-xs text-mist hidden" role="status">
-      Thanks — we'll be in touch soon.
-    </p>
-    <p id="cf-error" class="text-body-xs text-red-500 hidden" role="alert">
-      Something went wrong. Please try again or email us directly.
-    </p>
+  <div class="absolute left-[-9999px] w-px h-px overflow-hidden" aria-hidden="true">
+    <label for="cf-website">Website</label>
+    <input type="text" id="cf-website" name="website" tabindex="-1" autocomplete="off" />
+  </div>
+  <div class="pt-3xs">
+    <Button type="submit" id="cf-submit" colour="green" style="solid" size="lg">Send</Button>
   </div>
 </form>
 
+<dialog
+  id="contact-modal"
+  class="w-full m-auto max-h-screen bg-transparent border-0 p-0 outline-none"
+  aria-modal="true"
+  aria-label="Contact form status"
+>
+  <div class="text-mist max-w-[520px] m-auto p-10 relative bg-night border-congo border-2">
+    <button
+      id="contact-modal-close"
+      class="text-white absolute top-1 right-1 flex items-center justify-center cursor-pointer w-8 h-8 focus:outline-none"
+      aria-label="Close"
+    >
+      <Close class="w-6 h-6" />
+    </button>
+    <div id="contact-modal-content">
+      <p id="cf-success" class="text-body-xs text-white flex gap-3 justify-center" role="status">
+        <span class="text-malachite w-6 h-6 inline-block relative top-[0.1em]"
+          ><Tick class="w-6 h-6" /></span
+        >Thanks, we'll be in touch soon.
+      </p>
+      <p id="cf-error" class="text-body-xs text-white flex gap-3 justify-center" role="alert">
+        <span class="text-red-600 w-6 h-6 inline-block relative top-[0.1em]"
+          ><Close class="w-6 h-6" /></span
+        >Something went wrong. Please try again or email us directly.
+      </p>
+    </div>
+  </div>
+</dialog>
+
 <script>
+  const pageLoadedAt = Date.now()
   const form = document.getElementById('contact-form') as HTMLFormElement | null
   const submit = document.getElementById('cf-submit') as HTMLButtonElement | null
+  const modal = document.getElementById('contact-modal') as HTMLDialogElement | null
+  const closeBtn = document.getElementById('contact-modal-close')
   const success = document.getElementById('cf-success')
   const error = document.getElementById('cf-error')
 
@@ -73,26 +98,44 @@ const labelClasses = 'text-mono-3xs text-gravel'
     }
 
     submit!.disabled = true
-    error?.classList.add('hidden')
 
     try {
+      const payload = {
+        ...Object.fromEntries(new FormData(form)),
+        elapsedMs: Date.now() - pageLoadedAt,
+      }
+
       const res = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(Object.fromEntries(new FormData(form))),
+        body: JSON.stringify(payload),
       })
 
-      if (res.ok) {
-        form.reset()
-        success?.classList.remove('hidden')
-        success?.focus()
-      } else {
-        error?.classList.remove('hidden')
-        submit!.disabled = false
-      }
+      success?.classList.toggle('hidden', !res.ok)
+      error?.classList.toggle('hidden', res.ok)
+
+      if (res.ok) form.reset()
+      submit!.disabled = false
+
+      document.body.style.overflow = 'hidden'
+      modal?.showModal()
     } catch {
+      success?.classList.add('hidden')
       error?.classList.remove('hidden')
       submit!.disabled = false
+
+      document.body.style.overflow = 'hidden'
+      modal?.showModal()
     }
+  })
+
+  closeBtn?.addEventListener('click', () => modal?.close())
+
+  modal?.addEventListener('click', (e) => {
+    if (e.target === modal) modal.close()
+  })
+
+  modal?.addEventListener('close', () => {
+    document.body.style.overflow = ''
   })
 </script>

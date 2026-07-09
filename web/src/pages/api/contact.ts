@@ -5,9 +5,10 @@ export const prerender = false
 
 const resend = new Resend(import.meta.env.RESEND_API_KEY)
 const toEmail = import.meta.env.CONTACT_EMAIL as string
+const MIN_SUBMIT_MS = 4000
 
 export const POST: APIRoute = async ({ request }) => {
-  let body: Record<string, string>
+  let body: Record<string, unknown>
 
   try {
     body = await request.json()
@@ -15,7 +16,16 @@ export const POST: APIRoute = async ({ request }) => {
     return new Response(null, { status: 400 })
   }
 
-  const { name, email, phone, location, message } = body
+  const { name, email, phone, location, message, website, elapsedMs } = body as Record<
+    string,
+    string
+  > & { elapsedMs?: number }
+
+  // Honeypot + minimum-fill-time check: bots either fill the hidden field or
+  // submit faster than a human can. Fake a 200 so they don't adapt and retry.
+  if (website?.trim() || typeof elapsedMs !== 'number' || elapsedMs < MIN_SUBMIT_MS) {
+    return new Response(null, { status: 200 })
+  }
 
   if (!name?.trim() || !email?.trim() || !message?.trim()) {
     return new Response(null, { status: 422 })

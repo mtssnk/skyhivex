@@ -227,7 +227,12 @@ When the heading is clicked, the body is revealed.
 ## Assumptions / unknowns
 
 - Figma may still refine spacing, breakpoints, and media ratios
-- Contact form backend/provider is not finalised
+- Contact form backend: Resend (implemented). Honeypot field + minimum-fill-time check are in place as a
+  first line of spam defence. **TODO before launch**: add Cloudflare Turnstile to the contact form —
+  on hold until the client sets up their Cloudflare account (with us given access) so it can be
+  configured against the live domain. Needs a `PUBLIC_TURNSTILE_SITE_KEY` (client-side widget) and
+  `TURNSTILE_SECRET_KEY` (server-side token verification in `web/src/pages/api/contact.ts`), plus a
+  decision on widget mode (Managed/Invisible/Non-interactive).
 - News/Contact template boundaries vs block flexibility need confirmation
 - SEO metadata requirements per page type need confirmation
 
