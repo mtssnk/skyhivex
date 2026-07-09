@@ -7,7 +7,7 @@ input[type='tel'],
 input[type='url'],
 textarea,
 select {
-  @apply text-mono-3xs px-4 py-2.5;
+  @apply text-mono-3xs px-4 py-2.5 bg-night;
   border-radius: 3px;
   border: 2px solid var(--color-smoke);
   box-shadow:

@@ -41,6 +41,7 @@ export const heroFields: Field[] = [
     },
     fields: [
       {
+        label: 'Background',
         name: 'backgroundMedia',
         type: 'select',
         required: true,
@@ -49,6 +50,7 @@ export const heroFields: Field[] = [
           { label: 'Image', value: 'image' },
           { label: 'Video', value: 'video' },
           { label: 'Shader', value: 'shader' },
+          { label: 'Hexagon pattern', value: 'hexagon' },
         ],
       },
       {
@@ -158,5 +160,20 @@ export const heroFields: Field[] = [
 export const Hero: Block = {
   slug: 'hero',
   labels: { singular: 'Hero', plural: 'Hero Blocks' },
-  fields: withBlockTabs(heroFields),
+  fields: withBlockTabs(heroFields, {
+    padding: false,
+    extra: [
+      {
+        name: 'size',
+        type: 'select',
+        required: true,
+        defaultValue: 'large',
+        options: [
+          { label: 'Large', value: 'large' },
+          { label: 'Medium', value: 'medium' },
+          { label: 'Small', value: 'small' },
+        ],
+      },
+    ],
+  }),
 }

@@ -22,7 +22,7 @@ const categories = Array.from(categoryMap.values())
 ---
 
 <Layout title="News">
-  <section class="section-news-index">
+  <section class="section-news-index bg-hexagon-obsidian">
     {
       categories.length > 0 && (
         <div class="container pt-xs">
@@ -40,58 +40,60 @@ const categories = Array.from(categoryMap.values())
         </div>
       )
     }
-    <ul class="container grid grid-cols-12 py-xs" role="list">
-      {
-        posts.map((post, i) => (
-          <li
-            class="border-congo border-2 col-span-12 sm:col-span-6 flex flex-col"
-            data-post-item
-            data-category-ids={post.categories?.map((c) => c.id).join(' ') ?? ''}
-            hidden={i >= perPage || undefined}
-          >
-            <a href={`/news/${post.slug}`} class="flex flex-col grow bg-night group">
-              <div class="aspect-video md:aspect-4/3 overflow-hidden">
-                <MediaItem
-                  media={post.listingImage}
-                  sizes="(max-width: 768px) 100vw, 33vw"
-                  class="w-full h-full object-cover"
-                />
-              </div>
-              <div class="flex justify-end bg-grid-congo border-congo border-b">
-                <Numbered class="-mb-0.5">{String(i + 1).padStart(3, '0')}</Numbered>
-              </div>
-              <div class="p-4xs lg:p-3xs flex flex-col grow">
-                <div class="flex flex-col gap-5xs pb-3xs grow">
-                  {post.categories && post.categories.length > 0 && (
-                    <p class="text-mono-4xs text-mist">
-                      {post.categories.map((c) => c.name).join(', ')}
-                    </p>
-                  )}
-                  <h2 class="text-serif-md text-white">{post.title}</h2>
-                  {post.intro && (
-                    <p class="text-body-3xs text-mist text-balance max-w-[460px]">{post.intro}</p>
-                  )}
+    <div class="bg-space">
+      <ul class="container grid grid-cols-12 py-xs" role="list">
+        {
+          posts.map((post, i) => (
+            <li
+              class="border-congo border-2 col-span-12 sm:col-span-6 flex flex-col"
+              data-post-item
+              data-category-ids={post.categories?.map((c) => c.id).join(' ') ?? ''}
+              hidden={i >= perPage || undefined}
+            >
+              <a href={`/news/${post.slug}`} class="flex flex-col grow bg-night group">
+                <div class="aspect-video md:aspect-4/3 overflow-hidden">
+                  <MediaItem
+                    media={post.listingImage}
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                    class="w-full h-full object-cover"
+                  />
                 </div>
-                <Button as="span" style="text" colour="white" size="sm" class="inline-flex">
-                  Read more
-                  <ArrowDownRight />
-                </Button>
-              </div>
-            </a>
-          </li>
-        ))
+                <div class="flex justify-end bg-grid-congo border-congo border-b">
+                  <Numbered class="-mb-0.5">{String(i + 1).padStart(3, '0')}</Numbered>
+                </div>
+                <div class="p-4xs lg:p-3xs flex flex-col grow">
+                  <div class="flex flex-col gap-5xs pb-3xs grow">
+                    {post.categories && post.categories.length > 0 && (
+                      <p class="text-mono-4xs text-mist">
+                        {post.categories.map((c) => c.name).join(', ')}
+                      </p>
+                    )}
+                    <h2 class="text-serif-md text-white">{post.title}</h2>
+                    {post.intro && (
+                      <p class="text-body-3xs text-mist text-balance max-w-[460px]">{post.intro}</p>
+                    )}
+                  </div>
+                  <Button as="span" style="text" colour="white" size="sm" class="inline-flex">
+                    Read more
+                    <ArrowDownRight />
+                  </Button>
+                </div>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      {
+        posts.length > perPage && (
+          <div id="load-more-wrapper" class="container flex justify-center pb-xs">
+            <Button id="load-more" type="button" style="solid" colour="green" size="lg">
+              Load more
+              <Plus />
+            </Button>
+          </div>
+        )
       }
-    </ul>
-    {
-      posts.length > perPage && (
-        <div id="load-more-wrapper" class="container flex justify-center pb-xs">
-          <Button id="load-more" type="button" style="solid" colour="green" size="lg">
-            Load more
-            <Plus />
-          </Button>
-        </div>
-      )
-    }
+    </div>
   </section>
 </Layout>
 

@@ -275,7 +275,7 @@ export interface Page {
              * Body text in body font — for content-heavy heroes (e.g. FAQs). Not used alongside intro.
              */
             body?: string | null;
-            backgroundMedia: 'image' | 'video' | 'shader';
+            backgroundMedia: 'image' | 'video' | 'shader' | 'hexagon';
             backgroundImage?: (string | null) | Media;
             /**
              * Muted, looped, autoplayed as background.
@@ -319,14 +319,7 @@ export interface Page {
              * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
              */
             anchorId?: string | null;
-            /**
-             * Which side(s) the vertical padding is applied to.
-             */
-            paddingWhere?: ('both' | 'top' | 'bottom' | 'none') | null;
-            /**
-             * Size of the vertical padding.
-             */
-            paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
+            size: 'large' | 'medium' | 'small';
             id?: string | null;
             blockName?: string | null;
             blockType: 'hero';
@@ -490,7 +483,7 @@ export interface Page {
              * Body text in body font — for content-heavy heroes (e.g. FAQs). Not used alongside intro.
              */
             body?: string | null;
-            backgroundMedia: 'image' | 'video' | 'shader';
+            backgroundMedia: 'image' | 'video' | 'shader' | 'hexagon';
             backgroundImage?: (string | null) | Media;
             /**
              * Muted, looped, autoplayed as background.
@@ -1164,7 +1157,7 @@ export interface Project {
              * Body text in body font — for content-heavy heroes (e.g. FAQs). Not used alongside intro.
              */
             body?: string | null;
-            backgroundMedia: 'image' | 'video' | 'shader';
+            backgroundMedia: 'image' | 'video' | 'shader' | 'hexagon';
             backgroundImage?: (string | null) | Media;
             /**
              * Muted, looped, autoplayed as background.
@@ -1775,7 +1768,7 @@ export interface Post {
          * Body text in body font — for content-heavy heroes (e.g. FAQs). Not used alongside intro.
          */
         body?: string | null;
-        backgroundMedia: 'image' | 'video' | 'shader';
+        backgroundMedia: 'image' | 'video' | 'shader' | 'hexagon';
         backgroundImage?: (string | null) | Media;
         /**
          * Muted, looped, autoplayed as background.
@@ -2438,8 +2431,7 @@ export interface PagesSelect<T extends boolean = true> {
                     id?: T;
                   };
               anchorId?: T;
-              paddingWhere?: T;
-              paddingSize?: T;
+              size?: T;
               id?: T;
               blockName?: T;
             };
@@ -3378,7 +3370,7 @@ export interface ProjectsPage {
      * Body text in body font — for content-heavy heroes (e.g. FAQs). Not used alongside intro.
      */
     body?: string | null;
-    backgroundMedia: 'image' | 'video' | 'shader';
+    backgroundMedia: 'image' | 'video' | 'shader' | 'hexagon';
     backgroundImage?: (string | null) | Media;
     /**
      * Muted, looped, autoplayed as background.
@@ -3580,7 +3572,7 @@ export interface ProjectsPage {
              * Body text in body font — for content-heavy heroes (e.g. FAQs). Not used alongside intro.
              */
             body?: string | null;
-            backgroundMedia: 'image' | 'video' | 'shader';
+            backgroundMedia: 'image' | 'video' | 'shader' | 'hexagon';
             backgroundImage?: (string | null) | Media;
             /**
              * Muted, looped, autoplayed as background.

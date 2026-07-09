@@ -1,4 +1,5 @@
 ---
+import clsx from 'clsx'
 import type { HeroBlock } from '@/lib/payload'
 import MediaItem from '@/components/MediaItem.astro'
 import Button from '@/components/Button.astro'
@@ -20,6 +21,7 @@ const {
   overlayAlpha,
   buttons,
   anchorId,
+  size,
 } = Astro.props
 
 const bgMedia =
@@ -28,11 +30,21 @@ const bgMedia =
     : backgroundMedia === 'video'
       ? backgroundVideo
       : null
+
+const sizeClasses: Record<HeroBlock['size'], string> = {
+  large: 'min-h-[80vh]',
+  medium: 'min-h-[60vh]',
+  small: 'min-h-[40vh]',
+}
 ---
 
 <header
   id={anchorId ?? undefined}
-  class="section-hero relative min-h-[80vh] flex items-center bg-night text-white overflow-hidden"
+  class={clsx(
+    'section-hero relative flex items-center bg-night text-white overflow-hidden',
+    sizeClasses[size],
+    backgroundMedia === 'hexagon' && 'bg-hexagon-obsidian',
+  )}
 >
   {
     bgMedia ? (
@@ -98,7 +110,9 @@ const bgMedia =
                 )
               }
               const href =
-                btn.type === 'anchor' ? `#${btn.anchorTarget ?? ''}` : resolveButtonHref(btn.linkUrl)
+                btn.type === 'anchor'
+                  ? `#${btn.anchorTarget ?? ''}`
+                  : resolveButtonHref(btn.linkUrl)
               return (
                 <Button href={href} colour={btn.colour} style={btn.variant} size="lg">
                   {btn.label}

@@ -137,23 +137,28 @@ type BlockPadding = {
   paddingSize?: 'xl' | 'lg' | 'md' | 'sm' | null
 }
 
-export type HeroBlock = BlockPadding & {
+export type HeroBlock = {
   blockType: 'hero'
   id?: string | null
+  anchorId?: string | null
   headingPart1: string
   headingPart2?: string | null
   intro?: string | null
   body?: string | null
-  backgroundMedia?: 'image' | 'video' | 'shader' | null
+  backgroundMedia?: 'image' | 'video' | 'shader' | 'hexagon' | null
   backgroundImage?: Media | null
   backgroundVideo?: Media | null
   overlayAlpha?: number | null
+  size: 'large' | 'medium' | 'small'
   buttons?:
     | {
         label: string
         type: 'link' | 'anchor' | 'video'
         linkUrl?:
-          | { relationTo: 'pages' | 'projects' | 'posts'; value: { id: string; slug: string } | string }
+          | {
+              relationTo: 'pages' | 'projects' | 'posts'
+              value: { id: string; slug: string } | string
+            }
           | string
           | null
         anchorTarget?: string | null
@@ -269,7 +274,7 @@ export type CTABlock = BlockPadding & {
   headingPart2?: string | null
   intro?: string | null
   body?: string | null
-  backgroundMedia?: 'image' | 'video' | 'shader' | null
+  backgroundMedia?: 'image' | 'video' | 'shader' | 'hexagon' | null
   backgroundImage?: Media | null
   backgroundVideo?: Media | null
   overlayAlpha?: number | null
@@ -393,7 +398,7 @@ export type ProjectsPageHero = {
   headingPart2?: string | null
   intro?: string | null
   body?: string | null
-  backgroundMedia?: 'image' | 'video' | 'shader' | null
+  backgroundMedia?: 'image' | 'video' | 'shader' | 'hexagon' | null
   backgroundImage?: Media | null
   backgroundVideo?: Media | null
   overlayAlpha?: number | null
