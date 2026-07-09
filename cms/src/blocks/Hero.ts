@@ -25,11 +25,7 @@ export const heroFields: Field[] = [
       },
       {
         name: 'body',
-        type: 'textarea',
-        admin: {
-          description:
-            'Body text in body font — for content-heavy heroes (e.g. FAQs). Not used alongside intro.',
-        },
+        type: 'richText',
       },
     ],
   },

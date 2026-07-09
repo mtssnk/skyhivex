@@ -144,7 +144,7 @@ export type HeroBlock = {
   headingPart1: string
   headingPart2?: string | null
   intro?: string | null
-  body?: string | null
+  body?: LexicalContent | null
   backgroundMedia?: 'image' | 'video' | 'shader' | 'hexagon' | null
   backgroundImage?: Media | null
   backgroundVideo?: Media | null
@@ -273,7 +273,7 @@ export type CTABlock = BlockPadding & {
   headingPart1?: string | null
   headingPart2?: string | null
   intro?: string | null
-  body?: string | null
+  body?: LexicalContent | null
   backgroundMedia?: 'image' | 'video' | 'shader' | 'hexagon' | null
   backgroundImage?: Media | null
   backgroundVideo?: Media | null
@@ -398,7 +398,7 @@ export type ProjectsPageHero = {
   headingPart1?: string | null
   headingPart2?: string | null
   intro?: string | null
-  body?: string | null
+  body?: LexicalContent | null
   backgroundMedia?: 'image' | 'video' | 'shader' | 'hexagon' | null
   backgroundImage?: Media | null
   backgroundVideo?: Media | null

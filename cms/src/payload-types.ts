@@ -271,10 +271,21 @@ export interface Page {
             headingPart1: string;
             headingPart2?: string | null;
             intro?: string | null;
-            /**
-             * Body text in body font — for content-heavy heroes (e.g. FAQs). Not used alongside intro.
-             */
-            body?: string | null;
+            body?: {
+              root: {
+                type: string;
+                children: {
+                  type: any;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
             backgroundMedia: 'image' | 'video' | 'shader' | 'hexagon';
             backgroundImage?: (string | null) | Media;
             /**
@@ -479,10 +490,21 @@ export interface Page {
             headingPart1: string;
             headingPart2?: string | null;
             intro?: string | null;
-            /**
-             * Body text in body font — for content-heavy heroes (e.g. FAQs). Not used alongside intro.
-             */
-            body?: string | null;
+            body?: {
+              root: {
+                type: string;
+                children: {
+                  type: any;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
             backgroundMedia: 'image' | 'video' | 'shader' | 'hexagon';
             backgroundImage?: (string | null) | Media;
             /**
@@ -1145,10 +1167,21 @@ export interface Project {
             headingPart1: string;
             headingPart2?: string | null;
             intro?: string | null;
-            /**
-             * Body text in body font — for content-heavy heroes (e.g. FAQs). Not used alongside intro.
-             */
-            body?: string | null;
+            body?: {
+              root: {
+                type: string;
+                children: {
+                  type: any;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
             backgroundMedia: 'image' | 'video' | 'shader' | 'hexagon';
             backgroundImage?: (string | null) | Media;
             /**
@@ -1748,10 +1781,21 @@ export interface Post {
         headingPart1: string;
         headingPart2?: string | null;
         intro?: string | null;
-        /**
-         * Body text in body font — for content-heavy heroes (e.g. FAQs). Not used alongside intro.
-         */
-        body?: string | null;
+        body?: {
+          root: {
+            type: string;
+            children: {
+              type: any;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        } | null;
         backgroundMedia: 'image' | 'video' | 'shader' | 'hexagon';
         backgroundImage?: (string | null) | Media;
         /**
@@ -3336,10 +3380,21 @@ export interface ProjectsPage {
     headingPart1: string;
     headingPart2?: string | null;
     intro?: string | null;
-    /**
-     * Body text in body font — for content-heavy heroes (e.g. FAQs). Not used alongside intro.
-     */
-    body?: string | null;
+    body?: {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    } | null;
     backgroundMedia: 'image' | 'video' | 'shader' | 'hexagon';
     backgroundImage?: (string | null) | Media;
     /**
@@ -3538,10 +3593,21 @@ export interface ProjectsPage {
             headingPart1: string;
             headingPart2?: string | null;
             intro?: string | null;
-            /**
-             * Body text in body font — for content-heavy heroes (e.g. FAQs). Not used alongside intro.
-             */
-            body?: string | null;
+            body?: {
+              root: {
+                type: string;
+                children: {
+                  type: any;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
             backgroundMedia: 'image' | 'video' | 'shader' | 'hexagon';
             backgroundImage?: (string | null) | Media;
             /**

@@ -7,6 +7,7 @@ import ArrowDownRight from '@/assets/icons/arrowDownRight.astro'
 import Play from '@/assets/icons/play.astro'
 import HexShader from '@/components/HexShader.astro'
 import { resolveButtonHref } from '@/lib/blocks'
+import { lexicalToHtml } from '@/lib/lexical'
 
 interface Props extends Omit<HeroBlock, 'blockType'> {}
 
@@ -30,6 +31,8 @@ const bgMedia =
     : backgroundMedia === 'video'
       ? backgroundVideo
       : null
+
+const bodyHtml = body ? lexicalToHtml(body) : null
 
 const sizeClasses: Record<HeroBlock['size'], string> = {
   large: 'min-h-[80vh]',
@@ -90,7 +93,14 @@ const sizeClasses: Record<HeroBlock['size'], string> = {
           ) : null
         }
         {intro && <p class="text-extended-md mx-auto max-w-[24em]">{intro}</p>}
-        {body && <p class="text-body-sm mx-auto max-w-[36em] text-balance">{body}</p>}
+        {
+          bodyHtml && (
+            <div
+              class="wysiwyg text-body-sm mx-auto max-w-[36em] text-balance"
+              set:html={bodyHtml}
+            />
+          )
+        }
       </div>
       {
         buttons && buttons.length > 0 && (
