@@ -307,6 +307,13 @@ export type AccordionListBlock = {
   }[]
 }
 
+export type ContactFormBlock = BlockPadding & {
+  blockType: 'contactForm'
+  id?: string | null
+  heading: string
+  body?: LexicalContent | null
+}
+
 export type FeatureListBlock = BlockPadding & {
   blockType: 'featureList'
   id?: string | null
@@ -368,6 +375,7 @@ export type SharedBlock =
   | CTABlock
   | PersonListBlock
   | AccordionListBlock
+  | ContactFormBlock
   | CardListBlock
   | ProjectListBlock
   | NewsCardListBlock

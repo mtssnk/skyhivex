@@ -6,6 +6,7 @@ import { Quote } from './Quote'
 import { BodyCopy } from './BodyCopy'
 import { PersonList } from './PersonList'
 import { AccordionList } from './AccordionList'
+import { ContactForm } from './ContactForm'
 import { CardList } from './CardList'
 import { ProjectList } from './ProjectList'
 import { NewsCardList } from './NewsCardList'
@@ -25,6 +26,7 @@ const baseBlocks = [
   CTA,
   PersonList,
   AccordionList,
+  ContactForm,
   CardList,
   ProjectList,
   NewsCardList,

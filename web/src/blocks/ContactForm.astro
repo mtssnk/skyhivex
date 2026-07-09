@@ -1,133 +1,23 @@
 ---
-import type { ContactFormBlock } from '@/lib/payload'
 import clsx from 'clsx'
-import Button from '@/components/Button.astro'
+import type { ContactFormBlock } from '@/lib/payload'
 import { blockPaddingClass } from '@/lib/blocks'
-import MeshGradientBackground from '@/components/MeshGradientBackground.tsx'
+import { lexicalToHtml } from '@/lib/lexical'
+import ContactForm from '@/components/ContactForm.astro'
 
-const { heading, intro, anchorId, paddingWhere, paddingSize } = Astro.props as ContactFormBlock
+const { heading, body, anchorId, paddingWhere, paddingSize } = Astro.props as ContactFormBlock
 const paddingClass = blockPaddingClass(paddingWhere, paddingSize)
-
-const inputClasses =
-  'px-4 py-3 bg-white border border-mist outline-none focus:border-night transition-all text-night text-body-md'
+const bodyHtml = body ? lexicalToHtml(body) : null
 ---
 
-<section
-  id={anchorId ?? undefined}
-  class={clsx('section-contactform relative bg-ash', paddingClass)}
->
-  <MeshGradientBackground colors={['#FFFFFF', '#b5acbc']} client:only="preact" />
-  <div class="container relative z-20 grid pt-lg space-y-sm">
-    {
-      (heading || intro) && (
-        <div class="col-span-12 space-y-6 md:space-y-10 max-w-[36em] ">
-          {heading && <h1 class="text-wide-lg whitespace-pre-line">{heading}</h1>}
-          {intro && <p class="text-body-md text-dark text-balance">{intro}</p>}
-        </div>
-      )
-    }
-
-    <div class="col-span-12 lg:col-span-8">
-      <form id="contact-form" class="flex flex-col gap-6" novalidate>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div class="flex flex-col gap-2">
-            <label for="cf-name" class="text-condensed-sm text-mist"
-              >Name <span aria-hidden="true">*</span></label
-            >
-            <input
-              type="text"
-              id="cf-name"
-              name="name"
-              required
-              autocomplete="name"
-              class={clsx('w-full', inputClasses)}
-            />
-          </div>
-          <div class="flex flex-col gap-2">
-            <label for="cf-email" class="text-condensed-sm text-mist"
-              >Email <span aria-hidden="true">*</span></label
-            >
-            <input
-              type="email"
-              id="cf-email"
-              name="email"
-              required
-              autocomplete="email"
-              class={clsx('w-full', inputClasses)}
-            />
-          </div>
-        </div>
-        <div class="flex flex-col gap-2">
-          <label for="cf-phone" class="text-condensed-sm text-mist">Phone</label>
-          <input
-            type="tel"
-            id="cf-phone"
-            name="phone"
-            autocomplete="tel"
-            class={clsx('w-full', inputClasses)}
-          />
-        </div>
-        <div class="flex flex-col gap-2">
-          <label for="cf-message" class="text-condensed-sm text-mist"
-            >Message <span aria-hidden="true">*</span></label
-          >
-          <textarea
-            id="cf-message"
-            name="message"
-            rows="6"
-            required
-            class={clsx('w-full resize-y', inputClasses)}></textarea>
-        </div>
-        <div class="flex flex-col gap-4">
-          <div>
-            <Button type="submit" id="cf-submit">Send</Button>
-          </div>
-          <p id="cf-success" class="text-body-md hidden" role="status">
-            Thanks — we'll be in touch soon.
-          </p>
-          <p id="cf-error" class="text-body-md text-red-600 hidden" role="alert">
-            Something went wrong. Please try again or email us directly.
-          </p>
-        </div>
-      </form>
+<section id={anchorId ?? undefined} class={clsx('section-contactform', paddingClass)}>
+  <div class="container max-w-[640px]!">
+    <div class="space-y-3xs">
+      <h2 class="text-serif-2xl text-white">{heading}</h2>
+      {bodyHtml && <div class="wysiwyg text-body-xs text-mist" set:html={bodyHtml} />}
+    </div>
+    <div class="mt-3xs">
+      <ContactForm />
     </div>
   </div>
 </section>
-
-<script>
-  const form = document.getElementById('contact-form') as HTMLFormElement | null
-  const submit = document.getElementById('cf-submit') as HTMLButtonElement | null
-  const success = document.getElementById('cf-success')
-  const error = document.getElementById('cf-error')
-
-  form?.addEventListener('submit', async (e) => {
-    e.preventDefault()
-    if (!form.checkValidity()) {
-      form.reportValidity()
-      return
-    }
-
-    submit!.disabled = true
-    error?.classList.add('hidden')
-
-    try {
-      const res = await fetch('/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(Object.fromEntries(new FormData(form))),
-      })
-
-      if (res.ok) {
-        form.reset()
-        success?.classList.remove('hidden')
-        success?.focus()
-      } else {
-        error?.classList.remove('hidden')
-        submit!.disabled = false
-      }
-    } catch {
-      error?.classList.remove('hidden')
-      submit!.disabled = false
-    }
-  })
-</script>
