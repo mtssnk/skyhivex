@@ -1,0 +1,98 @@
+---
+import Button from '@/components/Button.astro'
+
+const inputClasses =
+  'w-full bg-night border-2 border-mist px-4 py-4 text-white text-body-xs outline-none focus:border-white transition-colors'
+const labelClasses = 'text-mono-3xs text-gravel'
+---
+
+<form id="contact-form" class="flex flex-col gap-6" novalidate>
+  <div class="flex flex-col gap-4">
+    <label for="cf-name" class={labelClasses}>Name *</label>
+    <input type="text" id="cf-name" name="name" required autocomplete="name" class={inputClasses} />
+  </div>
+  <div class="flex flex-col gap-4">
+    <label for="cf-email" class={labelClasses}>Email *</label>
+    <input
+      type="email"
+      id="cf-email"
+      name="email"
+      required
+      autocomplete="email"
+      class={inputClasses}
+    />
+  </div>
+  <div class="flex flex-col gap-4">
+    <label for="cf-phone" class={labelClasses}>Phone</label>
+    <input type="tel" id="cf-phone" name="phone" autocomplete="tel" class={inputClasses} />
+  </div>
+  <div class="flex flex-col gap-4">
+    <label for="cf-location" class={labelClasses}>Location</label>
+    <input
+      type="text"
+      id="cf-location"
+      name="location"
+      autocomplete="address-level2"
+      class={inputClasses}
+    />
+  </div>
+  <div class="flex flex-col gap-4">
+    <label for="cf-message" class={labelClasses}>Message *</label>
+    <textarea
+      id="cf-message"
+      name="message"
+      rows="6"
+      required
+      class={`${inputClasses} resize-y`}
+    ></textarea>
+  </div>
+  <div class="flex flex-col gap-3xs pt-3xs">
+    <div>
+      <Button type="submit" id="cf-submit" colour="green" style="solid" size="lg">Send</Button>
+    </div>
+    <p id="cf-success" class="text-body-xs text-mist hidden" role="status">
+      Thanks — we'll be in touch soon.
+    </p>
+    <p id="cf-error" class="text-body-xs text-red-500 hidden" role="alert">
+      Something went wrong. Please try again or email us directly.
+    </p>
+  </div>
+</form>
+
+<script>
+  const form = document.getElementById('contact-form') as HTMLFormElement | null
+  const submit = document.getElementById('cf-submit') as HTMLButtonElement | null
+  const success = document.getElementById('cf-success')
+  const error = document.getElementById('cf-error')
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault()
+    if (!form.checkValidity()) {
+      form.reportValidity()
+      return
+    }
+
+    submit!.disabled = true
+    error?.classList.add('hidden')
+
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(Object.fromEntries(new FormData(form))),
+      })
+
+      if (res.ok) {
+        form.reset()
+        success?.classList.remove('hidden')
+        success?.focus()
+      } else {
+        error?.classList.remove('hidden')
+        submit!.disabled = false
+      }
+    } catch {
+      error?.classList.remove('hidden')
+      submit!.disabled = false
+    }
+  })
+</script>

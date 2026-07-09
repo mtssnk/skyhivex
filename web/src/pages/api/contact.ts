@@ -1,6 +1,8 @@
 import type { APIRoute } from 'astro'
 import { Resend } from 'resend'
 
+export const prerender = false
+
 const resend = new Resend(import.meta.env.RESEND_API_KEY)
 const toEmail = import.meta.env.CONTACT_EMAIL as string
 
@@ -13,7 +15,7 @@ export const POST: APIRoute = async ({ request }) => {
     return new Response(null, { status: 400 })
   }
 
-  const { name, email, phone, message } = body
+  const { name, email, phone, location, message } = body
 
   if (!name?.trim() || !email?.trim() || !message?.trim()) {
     return new Response(null, { status: 422 })
@@ -24,7 +26,14 @@ export const POST: APIRoute = async ({ request }) => {
     to: toEmail,
     replyTo: email,
     subject: `New enquiry from ${name}`,
-    text: [`Name: ${name}`, `Email: ${email}`, phone ? `Phone: ${phone}` : null, ``, message]
+    text: [
+      `Name: ${name}`,
+      `Email: ${email}`,
+      phone ? `Phone: ${phone}` : null,
+      location ? `Location: ${location}` : null,
+      ``,
+      message,
+    ]
       .filter((l) => l !== null)
       .join('\n'),
   })

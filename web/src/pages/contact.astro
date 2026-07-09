@@ -1,0 +1,70 @@
+---
+import Layout from '@/layouts/Layout.astro'
+import Hero from '@/blocks/Hero.astro'
+import ContactForm from '@/components/ContactForm.astro'
+import { getContactPage, getSiteSettings } from '@/lib/payload'
+import { lexicalToHtml } from '@/lib/lexical'
+
+const [contactPage, settings] = await Promise.all([getContactPage(), getSiteSettings()])
+
+const bodyHtml = contactPage?.body ? lexicalToHtml(contactPage.body) : null
+---
+
+<Layout
+  title="Contact"
+  description={contactPage?.metaDescription ?? undefined}
+  ogImage={contactPage?.ogImage?.url ?? undefined}
+>
+  <Hero
+    headingPart1={contactPage?.heading ?? 'Get in contact'}
+    backgroundMedia="hexagon"
+    size="small"
+  />
+
+  <section class="section-contact bg-night">
+    <div class="container py-sm">
+      <div class="grid grid-cols-12">
+        <div class="col-span-12 md:col-span-5 space-y-2xs lg:col-span-4 lg:col-start-2">
+          <ul class="space-y-5xs max-w-[400px] text-balance" role="list">
+            {
+              settings?.contactPhone && (
+                <li>
+                  <a href={`tel:${settings.contactPhone}`} class="text-mono-3xs text-smoke">
+                    {settings.contactPhone}
+                  </a>
+                </li>
+              )
+            }
+            {
+              settings?.contactEmail && (
+                <li>
+                  <a href={`mailto:${settings.contactEmail}`} class="text-mono-3xs text-smoke">
+                    {settings.contactEmail}
+                  </a>
+                </li>
+              )
+            }
+            {
+              settings?.contactAddress && (
+                <li class="text-mono-3xs text-smoke whitespace-pre-line">
+                  {settings.contactAddress}
+                </li>
+              )
+            }
+          </ul>
+          {
+            bodyHtml && (
+              <div
+                class="wysiwyg text-body-xs text-mist max-w-[400px] text-balance"
+                set:html={bodyHtml}
+              />
+            )
+          }
+        </div>
+        <div class="col-span-12 md:col-span-7 lg:col-span-5 lg:col-start-7">
+          <ContactForm />
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
