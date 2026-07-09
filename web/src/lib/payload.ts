@@ -119,6 +119,7 @@ export type Post = {
   id: string
   title: string
   slug: string
+  intro?: string | null
   categories?: Category[] | null
   regions?: Region[] | null
   states?: State[] | null

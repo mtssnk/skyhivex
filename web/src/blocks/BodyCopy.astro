@@ -8,7 +8,7 @@ import { blockPaddingClass } from '@/lib/blocks'
 ---
 
 <section id={anchorId ?? undefined} class={clsx('section-bodycopy bg-ash ', paddingClass)}>
-  <div class="wysiwyg !max-w-[622px] container">
+  <div class="wysiwyg max-w-[622px]! container">
     <div set:html={html} />
   </div>
 </section>

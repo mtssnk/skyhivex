@@ -90,10 +90,12 @@ const heroButtons: NonNullable<Parameters<typeof Hero>[0]['buttons']> = [
 
   {
     (project.intro || project.body || project.summary?.length) && (
-      <div class="space-y-sm py-sm container !max-w-[640px] ">
+      <div class="space-y-sm py-sm container max-w-[640px]!">
         {(project.intro || project.summary?.length) && (
           <section class="section-project-intro space-y-2xs">
-            {project.intro && <p class="text-body-md">{project.intro}</p>}
+            {project.intro && (
+              <p class="text-extended-md font-light text-balance">{project.intro}</p>
+            )}
             {project.summary?.length && (
               <dl class="grid grid-cols-1 md:grid-cols-2 lg:gap-x-xs lg:gap-y-3xs">
                 {project.summary.map((item) => (

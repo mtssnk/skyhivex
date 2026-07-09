@@ -201,9 +201,13 @@
   h2,
   h3,
   h4 {
-    @apply text-smoke;
-    margin-top: 1em;
-    margin-bottom: 0.5em;
+    @apply text-smoke text-balance;
+    &:not(:first-child) {
+      margin-top: 1em;
+    }
+    &:not(:last-child) {
+      margin-bottom: 0.5em;
+    }
   }
   h2 {
     @apply text-extended-xl font-light;

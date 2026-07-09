@@ -15,7 +15,7 @@ const apiKey = preview ? import.meta.env.PAYLOAD_API_KEY : undefined
 const post = await getPostBySlug(slug!, { draft: preview, apiKey })
 if (!post) return new Response(null, { status: 404 })
 console.log({ post })
-const metaDescription = post.metaDescription ?? post.title
+const metaDescription = post.metaDescription ?? post.intro ?? post.title
 const ogImage = post.ogImage?.url ?? post.listingImage?.url ?? undefined
 
 const jsonLd: Record<string, unknown> = {

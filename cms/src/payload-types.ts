@@ -1604,6 +1604,10 @@ export interface Post {
   slug: string;
   categories?: (string | Category)[] | null;
   /**
+   * Short summary shown on listing cards. Falls back to meta description for SEO.
+   */
+  intro?: string | null;
+  /**
    * Image shown on the news index card and at the top of the post.
    */
   listingImage: string | Media;
@@ -2973,6 +2977,7 @@ export interface PostsSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
   categories?: T;
+  intro?: T;
   listingImage?: T;
   overlayAlpha?: T;
   blocks?:

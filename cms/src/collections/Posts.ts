@@ -72,6 +72,13 @@ export const Posts: CollectionConfig = {
       },
     },
     {
+      name: 'intro',
+      type: 'textarea',
+      admin: {
+        description: 'Short summary shown on listing cards. Falls back to meta description for SEO.',
+      },
+    },
+    {
       name: 'listingImage',
       type: 'upload',
       relationTo: 'media',

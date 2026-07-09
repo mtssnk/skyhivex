@@ -4,6 +4,7 @@ import HeadingUnderline from '@/components/HeadingUnderline.astro'
 import Numbered from '@/components/Numbered.astro'
 import MediaItem from '@/components/MediaItem.astro'
 import Button from '@/components/Button.astro'
+import ArrowDownRight from '@/assets/icons/arrowDownRight.astro'
 import ArrowUpRight from '@/assets/icons/arrowUpRight.astro'
 import clsx from 'clsx'
 import { blockPaddingClass } from '@/lib/blocks'
@@ -55,7 +56,7 @@ if (selectionMode !== 'manual') {
       {
         resolvedArticles.map((article, i) => (
           <li class="border-congo border-2 md:border-r-0 last:border-r-2 last:border-b-2 md:border-b-2">
-            <a href={`/news/${article.slug}`} class="block bg-night group">
+            <a href={`/news/${article.slug}`} class="flex flex-col bg-night group">
               <div class="aspect-video md:aspect-4/3 overflow-hidden">
                 <MediaItem
                   media={article.listingImage}
@@ -63,11 +64,23 @@ if (selectionMode !== 'manual') {
                   class="w-full h-full object-cover"
                 />
               </div>
-              <div class="flex justify-end bg-grid-congo border-congo border-b-1">
+              <div class="flex justify-end bg-grid-congo border-congo border-b">
                 <Numbered class="-mb-0.5">{String(i + 1).padStart(3, '0')}</Numbered>
               </div>
-              <div class="p-4xs">
-                <h3 class="text-serif-sm text-white">{article.title}</h3>
+              <div class="p-4xs flex flex-col gap-4xs grow">
+                {article.categories && article.categories.length > 0 && (
+                  <p class="text-mono-3xs text-mist">
+                    {article.categories.map((c) => c.name).join(', ')}
+                  </p>
+                )}
+                <h3 class="text-serif-sm italic text-smoke">{article.title}</h3>
+                {article.intro && <p class="text-body-3xs text-mist">{article.intro}</p>}
+                <div class="mt-auto pt-4xs">
+                  <Button as="span" style="text" colour="white" size="sm">
+                    Read more
+                    <ArrowDownRight />
+                  </Button>
+                </div>
               </div>
             </a>
           </li>

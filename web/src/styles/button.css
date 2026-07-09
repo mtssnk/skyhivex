@@ -1,6 +1,6 @@
 @layer components {
   .btn {
-    @apply inline-flex items-center justify-center rounded-full focus:outline-none cursor-pointer;
+    @apply inline-flex items-center rounded-full focus:outline-none cursor-pointer;
     /* text-box: trim-both cap alphabetic; */
     text-box: trim-both text;
     box-shadow:
