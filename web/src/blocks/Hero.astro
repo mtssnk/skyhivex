@@ -34,7 +34,7 @@ const bgMedia =
 
 const bodyHtml = body ? lexicalToHtml(body) : null
 
-const sizeClasses: Record<HeroBlock['size'], string> = {
+const sizeClasses: Record<NonNullable<HeroBlock['size']>, string> = {
   large: 'min-h-[80vh]',
   medium: 'min-h-[60vh]',
   small: 'min-h-[40vh]',
@@ -45,7 +45,7 @@ const sizeClasses: Record<HeroBlock['size'], string> = {
   id={anchorId ?? undefined}
   class={clsx(
     'section-hero relative flex items-center bg-night text-white overflow-hidden',
-    sizeClasses[size],
+    sizeClasses[size ?? 'large'],
     backgroundMedia === 'hexagon' && 'bg-hexagon-obsidian',
   )}
 >

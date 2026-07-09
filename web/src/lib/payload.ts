@@ -149,7 +149,7 @@ export type HeroBlock = {
   backgroundImage?: Media | null
   backgroundVideo?: Media | null
   overlayAlpha?: number | null
-  size: 'large' | 'medium' | 'small'
+  size?: 'large' | 'medium' | 'small' | null
   buttons?:
     | {
         label: string

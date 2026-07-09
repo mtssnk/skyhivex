@@ -3,6 +3,7 @@ import { defineConfig } from 'astro/config'
 import node from '@astrojs/node'
 import tailwindcss from '@tailwindcss/vite'
 import preact from '@astrojs/preact'
+import sitemap from '@astrojs/sitemap'
 import astroConsent from 'astro-consent'
 
 export default defineConfig({
@@ -23,6 +24,9 @@ export default defineConfig({
 
   integrations: [
     preact({ compat: true }),
+    sitemap({
+      filter: (page) => !page.includes('/api/') && !page.includes('/admin'),
+    }),
     astroConsent({
       siteName: 'SkyHive X',
       headline: 'Cookie preferences',

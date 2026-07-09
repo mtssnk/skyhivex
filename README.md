@@ -11,7 +11,6 @@ Monorepo — Payload CMS (`/cms`) + Astro frontend (`/web`)
 - **Cloudflare Turnstile** — add Cloudflare Turnstile to the contact form using the clients CLoudflare account
 - **Favicon** — `web/public/favicon.svg` is the default Astro placeholder; replace with the studio mark
 - **robots.txt** — add `web/public/robots.txt`
-- **Sitemap** — install `@astrojs/sitemap` and add to `astro.config.mjs`; configure it to exclude admin and API routes
 
 ### Nice to have
 
