@@ -1,0 +1,82 @@
+---
+import type { AccordionListBlock } from '@/lib/payload'
+import { lexicalToHtml } from '@/lib/lexical'
+import Numbered from '@/components/Numbered.astro'
+import Plus from '@/assets/icons/plus.astro'
+
+const { items, anchorId } = Astro.props as AccordionListBlock
+---
+
+<section id={anchorId ?? undefined} class="section-accordionlist bg-tamarind">
+  <div class="container py-sm">
+    <ul class="accordion-list border-b-2 border-congo" role="list">
+      {
+        items.map((item, i) => {
+          const bodyHtml = lexicalToHtml(item.body)
+          const bodyId = `accordion-body-${i}`
+          return (
+            <li class="bg-night relative border-t-2 border-congo">
+              <Numbered
+                bgColour="bg-tamarind"
+                textColour="text-mortar"
+                class="absolute top-0 right-0 hidden lg:block"
+              >
+                {String(i + 1).padStart(3, '0')}
+              </Numbered>
+              <div class="max-w-[720px]! mx-auto py-3xs container">
+                <button
+                  type="button"
+                  class="accordion-trigger flex justify-between gap-xs w-full text-left text-white cursor-pointer"
+                  aria-expanded="false"
+                  aria-controls={bodyId}
+                >
+                  <span class="text-serif-md text-balance">{item.heading}</span>
+                  <Plus class="accordion-icon w-6 h-6 shrink-0 transition-transform duration-300 [&>path:last-child]:transition-opacity [&>path:last-child]:duration-200 [&.is-open]:rotate-[270deg] [&.is-open>path:first-child]:opacity-0" />
+                </button>
+                <div
+                  id={bodyId}
+                  class="accordion-body grid grid-cols-1 grid-rows-[0fr] transition-[grid-template-rows] duration-300"
+                  aria-hidden="true"
+                >
+                  <div class="overflow-hidden min-h-0">
+                    <div
+                      class="wysiwyg text-body-xs text-mist opacity-0 transition-opacity duration-200 delay-150 pt-4xs"
+                      set:html={bodyHtml}
+                    />
+                  </div>
+                </div>
+              </div>
+            </li>
+          )
+        })
+      }
+    </ul>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('.accordion-trigger').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const expanded = btn.getAttribute('aria-expanded') === 'true'
+      const bodyId = btn.getAttribute('aria-controls')!
+      const body = document.getElementById(bodyId)
+
+      btn.setAttribute('aria-expanded', String(!expanded))
+
+      if (body) {
+        body.setAttribute('aria-hidden', String(expanded))
+        body.classList.toggle('grid-rows-[1fr]', !expanded)
+        body.classList.toggle('grid-rows-[0fr]', expanded)
+        const inner = body.querySelector<HTMLElement>(':scope > div > div')
+        if (inner) {
+          inner.classList.toggle('opacity-0', expanded)
+          inner.classList.toggle('delay-150', !expanded)
+          inner.classList.toggle('delay-0', expanded)
+        }
+      }
+
+      const icon = btn.querySelector('.accordion-icon')
+      icon?.classList.toggle('is-open', !expanded)
+    })
+  })
+</script>

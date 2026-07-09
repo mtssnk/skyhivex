@@ -296,9 +296,10 @@ export type PersonListBlock = BlockPadding & {
   }[]
 }
 
-export type AccordionListBlock = BlockPadding & {
+export type AccordionListBlock = {
   blockType: 'accordionList'
   id?: string | null
+  anchorId?: string | null
   items: {
     heading: string
     body: LexicalContent
