@@ -258,11 +258,11 @@ export interface Page {
   id: string;
   title: string;
   /**
-   * Full URL path for this page. Use "home" for the homepage (/). For nested pages include the full path, e.g. "services/northeast/texas". Do not change after publishing.
+   * URL segment for this page. Use "home" for the homepage (/). If a parent page is selected, this is automatically combined with the parent's full path (e.g. parent "services", typing "web-design" here → "services/web-design"). Do not change after publishing.
    */
   slug: string;
   /**
-   * Parent page for hierarchical navigation. The slug must include the parent path.
+   * Selecting a parent automatically prefixes this page's slug with the parent's full path.
    */
   parent?: (string | null) | Page;
   blocks?:

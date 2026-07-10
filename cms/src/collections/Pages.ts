@@ -32,17 +32,34 @@ export const Pages: CollectionConfig = {
       admin: {
         position: 'sidebar',
         description:
-          'Full URL path for this page. Use "home" for the homepage (/). For nested pages include the full path, e.g. "services/northeast/texas". Do not change after publishing.',
+          'URL segment for this page. Use "home" for the homepage (/). If a parent page is selected, this is automatically combined with the parent\'s full path (e.g. parent "services", typing "web-design" here → "services/web-design"). Do not change after publishing.',
       },
       hooks: {
         beforeValidate: [
-          ({ value, data }) => {
-            const source = value || data?.title || ''
-            return source
-              .toLowerCase()
-              .replace(/[^a-z0-9/]+/g, '-')
-              .replace(/(^[-/]|[-/]$)/g, '')
-              .replace(/\/+/g, '/')
+          async ({ value, data, originalDoc, req }) => {
+            const source = value || data?.title || originalDoc?.title || ''
+            const ownSegment =
+              source
+                .toLowerCase()
+                .replace(/[^a-z0-9/]+/g, '-')
+                .replace(/(^[-/]|[-/]$)/g, '')
+                .replace(/\/+/g, '/')
+                .split('/')
+                .pop() ?? ''
+
+            const rawParent = data?.parent !== undefined ? data.parent : originalDoc?.parent
+            const parentId =
+              rawParent && typeof rawParent === 'object' ? rawParent.id : rawParent
+
+            if (!parentId || parentId === originalDoc?.id) return ownSegment
+
+            const parent = await req.payload.findByID({
+              collection: 'pages',
+              id: parentId,
+              depth: 0,
+            })
+
+            return parent?.slug ? `${parent.slug}/${ownSegment}` : ownSegment
           },
         ],
       },
@@ -68,7 +85,7 @@ export const Pages: CollectionConfig = {
       admin: {
         position: 'sidebar',
         description:
-          'Parent page for hierarchical navigation. The slug must include the parent path.',
+          "Selecting a parent automatically prefixes this page's slug with the parent's full path.",
       },
     },
     {
