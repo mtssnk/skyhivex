@@ -1,6 +1,7 @@
 import type { Block, Field } from 'payload'
 import { withBlockTabs } from './fields/blockFields'
 import { overlayAlphaField } from '../fields/overlayAlpha'
+import { headingTagField } from '../fields/headingTag'
 
 export const heroFields: Field[] = [
   {
@@ -153,23 +154,23 @@ export const heroFields: Field[] = [
   },
 ]
 
+export const heroSizeField: Field = {
+  name: 'size',
+  type: 'select',
+  required: true,
+  defaultValue: 'large',
+  options: [
+    { label: 'Large', value: 'large' },
+    { label: 'Medium', value: 'medium' },
+    { label: 'Small', value: 'small' },
+  ],
+}
+
 export const Hero: Block = {
   slug: 'hero',
   labels: { singular: 'Hero', plural: 'Hero Blocks' },
   fields: withBlockTabs(heroFields, {
     padding: false,
-    extra: [
-      {
-        name: 'size',
-        type: 'select',
-        required: true,
-        defaultValue: 'large',
-        options: [
-          { label: 'Large', value: 'large' },
-          { label: 'Medium', value: 'medium' },
-          { label: 'Small', value: 'small' },
-        ],
-      },
-    ],
+    extra: [heroSizeField, headingTagField({ defaultValue: 'h1' })],
   }),
 }

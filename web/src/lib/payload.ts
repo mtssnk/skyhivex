@@ -143,6 +143,7 @@ export type HeroBlock = {
   anchorId?: string | null
   headingPart1: string
   headingPart2?: string | null
+  headingTag?: 'h1' | 'h2' | 'h3' | 'h4' | null
   intro?: string | null
   body?: LexicalContent | null
   backgroundMedia?: 'image' | 'video' | 'shader' | 'hexagon' | null
@@ -267,17 +268,20 @@ export type BodyCopyBlock = BlockPadding & {
   content: LexicalContent
 }
 
-export type CTABlock = BlockPadding & {
+export type CTABlock = {
   blockType: 'cta'
   id?: string | null
-  headingPart1?: string | null
+  anchorId?: string | null
+  headingPart1: string
   headingPart2?: string | null
+  headingTag?: 'h1' | 'h2' | 'h3' | 'h4' | null
   intro?: string | null
   body?: LexicalContent | null
   backgroundMedia?: 'image' | 'video' | 'shader' | 'hexagon' | null
   backgroundImage?: Media | null
   backgroundVideo?: Media | null
   overlayAlpha?: number | null
+  size?: 'large' | 'medium' | 'small' | null
   buttons?: HeroBlock['buttons']
 }
 
@@ -403,8 +407,9 @@ export type Page = {
 }
 
 export type ProjectsPageHero = {
-  headingPart1?: string | null
+  headingPart1: string
   headingPart2?: string | null
+  headingTag?: 'h1' | 'h2' | 'h3' | 'h4' | null
   intro?: string | null
   body?: LexicalContent | null
   backgroundMedia?: 'image' | 'video' | 'shader' | 'hexagon' | null

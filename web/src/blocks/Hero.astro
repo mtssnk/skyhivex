@@ -9,11 +9,14 @@ import HexShader from '@/components/HexShader.astro'
 import { resolveButtonHref } from '@/lib/blocks'
 import { lexicalToHtml } from '@/lib/lexical'
 
-interface Props extends Omit<HeroBlock, 'blockType'> {}
+interface Props extends Omit<HeroBlock, 'blockType'> {
+  as?: 'header' | 'section'
+}
 
 const {
   headingPart1,
   headingPart2,
+  headingTag,
   intro,
   body,
   backgroundMedia,
@@ -23,6 +26,7 @@ const {
   buttons,
   anchorId,
   size,
+  as = 'header',
 } = Astro.props
 
 const bgMedia =
@@ -39,12 +43,16 @@ const sizeClasses: Record<NonNullable<HeroBlock['size']>, string> = {
   medium: 'min-h-[60vh]',
   small: 'min-h-[40vh]',
 }
+
+const Tag = as === 'section' ? 'section' : 'header'
+const HeadingTag = (headingTag ?? (as === 'section' ? 'h2' : 'h1')) as 'h1' | 'h2' | 'h3' | 'h4'
 ---
 
-<header
+<Tag
   id={anchorId ?? undefined}
   class={clsx(
-    'section-hero relative flex items-center bg-night text-white overflow-hidden',
+    as === 'section' ? 'section-cta' : 'section-hero',
+    'relative flex items-center bg-night text-white overflow-hidden',
     sizeClasses[size ?? 'large'],
     backgroundMedia === 'hexagon' && 'bg-hexagon-obsidian',
   )}
@@ -80,7 +88,7 @@ const sizeClasses: Record<NonNullable<HeroBlock['size']>, string> = {
       <div class="space-y-5xs">
         {
           headingPart1 || headingPart2 ? (
-            <h1 class="text-white space-y-5xs">
+            <HeadingTag class="text-white space-y-5xs">
               {headingPart1 && (
                 <span class="text-extended-xl uppercase w-full inline-flex justify-center max-w-[28em] text-balance">
                   {headingPart1}
@@ -89,7 +97,7 @@ const sizeClasses: Record<NonNullable<HeroBlock['size']>, string> = {
               {headingPart2 && (
                 <p class="text-serif-5xl w-full inline-flex justify-center">{headingPart2}</p>
               )}
-            </h1>
+            </HeadingTag>
           ) : null
         }
         {intro && <p class="text-extended-md mx-auto max-w-[24em]">{intro}</p>}
@@ -135,4 +143,4 @@ const sizeClasses: Record<NonNullable<HeroBlock['size']>, string> = {
       }
     </div>
   </div>
-</header>
+</Tag>

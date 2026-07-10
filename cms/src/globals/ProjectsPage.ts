@@ -1,5 +1,6 @@
 import type { GlobalConfig } from 'payload'
 import { heroFields, projectsPageBlocks } from '../blocks'
+import { headingTagField } from '../fields/headingTag'
 
 export const ProjectsPage: GlobalConfig = {
   slug: 'projects-page',
@@ -11,7 +12,7 @@ export const ProjectsPage: GlobalConfig = {
     {
       name: 'hero',
       type: 'group',
-      fields: heroFields,
+      fields: [...heroFields, headingTagField({ defaultValue: 'h1' })],
       admin: {
         description:
           'The project list Anchor ID is project-list. Use this ID for the scroll to section Anchor ID.',
