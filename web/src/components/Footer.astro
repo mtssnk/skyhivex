@@ -7,6 +7,7 @@ import LinkedIn from '@/assets/icons/linkedin.astro'
 import X from '@/assets/icons/x.astro'
 import YouTube from '@/assets/icons/youtube.astro'
 import SnkLogomark from '@/assets/icons/snkLogomark.astro'
+import logo from '@/assets/img/skyhive-logo-colour.png'
 
 const year = new Date().getFullYear()
 const [settings, nav] = await Promise.all([getSiteSettings(), getNavigation()])
@@ -57,7 +58,7 @@ function linkHref(item: {
         class="block w-42 lg:w-50 xl:w-60"
       >
         <img
-          src="/src/assets/img/skyhive-logo-colour.png"
+          src={logo.src}
           alt={companyName || 'SkyHive X'}
           class="w-full h-auto"
           loading="lazy"

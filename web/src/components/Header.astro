@@ -3,6 +3,7 @@ import Button from '@/components/Button.astro'
 import { getNavigation } from '@/lib/payload'
 import ArrowUpRight from '@/assets/icons/arrowUpRight.astro'
 import ChevronDown from '@/assets/icons/chevronDown.astro'
+import logo from '@/assets/img/skyhive-logo-white.png'
 
 interface Props {
   companyName?: string
@@ -36,7 +37,7 @@ function linkHref(item: {
       aria-label={companyName ? `${companyName} Home` : 'Home'}
     >
       <img
-        src="/src/assets/img/skyhive-logo-white.png"
+        src={logo.src}
         alt={companyName ? `${companyName} logo` : 'Logo'}
         class="w-full h-auto"
       />

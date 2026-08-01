@@ -30,11 +30,8 @@
 }
 
 .cb-reject {
-  color: var(--color-white);
+  color: var(--color-night);
   border: 2px solid;
-  text-shadow:
-    var(--color-night) 0 0 10px,
-    var(--color-night) 0 0 4px;
 }
 .cb-actions {
   @apply flex gap-3 flex-wrap mt-4;
