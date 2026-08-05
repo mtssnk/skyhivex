@@ -1,6 +1,6 @@
 import type { CollectionAfterChangeHook, CollectionAfterDeleteHook, GlobalAfterChangeHook } from 'payload'
 
-const RAILWAY_API_URL = 'https://backboard.railway.app/graphql/v2'
+const RAILWAY_API_URL = 'https://backboard.railway.com/graphql/v2'
 
 async function triggerWebDeploy(reason: string): Promise<void> {
   const token = process.env.RAILWAY_API_TOKEN
