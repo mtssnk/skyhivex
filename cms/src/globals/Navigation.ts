@@ -1,4 +1,5 @@
 import type { Field, GlobalConfig } from 'payload'
+import { globalAfterChangeTriggerDeploy } from '../hooks/triggerWebDeploy'
 
 function linkFields(withDropdown = false): Field[] {
   return [
@@ -75,6 +76,9 @@ function navArrayField(name: string, label: string, withChildren = false): Field
 export const Navigation: GlobalConfig = {
   slug: 'navigation',
   label: 'Site Navigation',
+  hooks: {
+    afterChange: [globalAfterChangeTriggerDeploy],
+  },
   access: {
     read: () => true,
   },

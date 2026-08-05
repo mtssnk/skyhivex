@@ -214,3 +214,11 @@ cd .. && mv pnpm-workspace.yaml.bak pnpm-workspace.yaml
 - **Host binding**: `web/astro.config.mjs` has `server: { host: true }` — this makes `@astrojs/node` bind to `0.0.0.0` instead of `localhost`. Without it, Railway's proxy cannot reach the service.
 - **`CMS_URL`**: must be the live CMS domain in production, not `localhost`. Set it in the web service's Railway variables.
 - **MongoDB**: use Railway's MongoDB plugin within the same project. Set `DATABASE_URL=${{MongoDB.MONGO_URL}}` using Railway's variable reference syntax.
+
+### Rebuild on publish
+
+`web` uses `output: 'static'` (see above), so page content is fetched from the CMS at **build time** and baked into static HTML — publishing in the CMS does not update the live site until `web` rebuilds.
+
+`cms/src/hooks/triggerWebDeploy.ts` calls Railway's GraphQL API (`serviceInstanceRedeploy`) to redeploy the `web` service automatically. It's wired into `afterChange`/`afterDelete` on `Pages`, `Projects`, `Posts`, `Navigations`, and `afterChange` on the `SiteSettings`, `ProjectsPage`, `ContactPage`, and `Navigation` globals — for collections with drafts enabled, it only fires when `_status === 'published'`.
+
+Requires `RAILWAY_API_TOKEN`, `RAILWAY_WEB_SERVICE_ID`, and `RAILWAY_ENVIRONMENT_ID` in `cms/.env` (see `cms/.env.example`). If any are unset, the hook silently no-ops — safe to leave unset for local dev.

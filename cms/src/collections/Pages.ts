@@ -1,8 +1,13 @@
 import type { CollectionConfig } from 'payload'
 import { pageBlocks } from '../blocks'
+import { afterChangeTriggerDeploy, afterDeleteTriggerDeploy } from '../hooks/triggerWebDeploy'
 
 export const Pages: CollectionConfig = {
   slug: 'pages',
+  hooks: {
+    afterChange: [afterChangeTriggerDeploy],
+    afterDelete: [afterDeleteTriggerDeploy],
+  },
   admin: {
     useAsTitle: 'title',
     preview: (doc) => {

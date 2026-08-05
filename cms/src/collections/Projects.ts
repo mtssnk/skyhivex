@@ -1,10 +1,15 @@
 import type { CollectionConfig } from 'payload'
 import { overlayAlphaField } from '../fields/overlayAlpha'
 import { projectBlocks } from '../blocks'
+import { afterChangeTriggerDeploy, afterDeleteTriggerDeploy } from '../hooks/triggerWebDeploy'
 
 export const Projects: CollectionConfig = {
   slug: 'projects',
   labels: { singular: 'Project', plural: 'Projects' },
+  hooks: {
+    afterChange: [afterChangeTriggerDeploy],
+    afterDelete: [afterDeleteTriggerDeploy],
+  },
   admin: {
     useAsTitle: 'heading',
     defaultColumns: ['heading', 'clientTypes', 'updatedAt'],

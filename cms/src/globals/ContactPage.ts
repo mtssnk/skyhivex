@@ -1,8 +1,12 @@
 import type { GlobalConfig } from 'payload'
+import { globalAfterChangeTriggerDeploy } from '../hooks/triggerWebDeploy'
 
 export const ContactPage: GlobalConfig = {
   slug: 'contact-page',
   label: 'Contact page',
+  hooks: {
+    afterChange: [globalAfterChangeTriggerDeploy],
+  },
   access: {
     read: () => true,
   },

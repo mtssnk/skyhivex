@@ -1,4 +1,5 @@
 import type { CollectionConfig, Field } from 'payload'
+import { afterChangeTriggerDeploy, afterDeleteTriggerDeploy } from '../hooks/triggerWebDeploy'
 
 function linkFields(): Field[] {
   return [
@@ -25,6 +26,10 @@ function linkFields(): Field[] {
 export const Navigations: CollectionConfig = {
   slug: 'navigations',
   labels: { singular: 'Navigation', plural: 'Navigations' },
+  hooks: {
+    afterChange: [afterChangeTriggerDeploy],
+    afterDelete: [afterDeleteTriggerDeploy],
+  },
   admin: {
     useAsTitle: 'name',
     defaultColumns: ['name', 'updatedAt'],

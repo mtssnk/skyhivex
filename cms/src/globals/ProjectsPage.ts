@@ -1,10 +1,14 @@
 import type { GlobalConfig } from 'payload'
 import { heroFields, projectsPageBlocks } from '../blocks'
 import { headingTagField } from '../fields/headingTag'
+import { globalAfterChangeTriggerDeploy } from '../hooks/triggerWebDeploy'
 
 export const ProjectsPage: GlobalConfig = {
   slug: 'projects-page',
   label: 'Projects listing',
+  hooks: {
+    afterChange: [globalAfterChangeTriggerDeploy],
+  },
   access: {
     read: () => true,
   },

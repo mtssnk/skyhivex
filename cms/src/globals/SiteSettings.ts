@@ -1,8 +1,12 @@
 import type { GlobalConfig } from 'payload'
+import { globalAfterChangeTriggerDeploy } from '../hooks/triggerWebDeploy'
 
 export const SiteSettings: GlobalConfig = {
   slug: 'site-settings',
   label: 'Site Settings',
+  hooks: {
+    afterChange: [globalAfterChangeTriggerDeploy],
+  },
   access: {
     read: () => true,
   },
