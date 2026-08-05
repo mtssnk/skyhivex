@@ -17,8 +17,11 @@ async function triggerWebDeploy(reason: string): Promise<void> {
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
+        // serviceInstanceRedeploy reuses the existing built image and never re-fetches CMS
+        // content — serviceInstanceDeployV2 triggers a real rebuild from source, which is
+        // required since Astro fetches page content from the CMS at build time.
         query: `mutation ($serviceId: String!, $environmentId: String!) {
-          serviceInstanceRedeploy(serviceId: $serviceId, environmentId: $environmentId)
+          serviceInstanceDeployV2(serviceId: $serviceId, environmentId: $environmentId)
         }`,
         variables: { serviceId, environmentId },
       }),
