@@ -228,13 +228,6 @@ export type CardListBlock = BlockPadding & {
   } | null
 }
 
-export type LogoListBlock = BlockPadding & {
-  blockType: 'logoList'
-  id?: string | null
-  heading: string
-  logos: Svg[]
-}
-
 export type ProjectListBlock = BlockPadding & {
   blockType: 'projectList'
   id?: string | null
@@ -383,7 +376,6 @@ export type SharedBlock =
   | CardListBlock
   | ProjectListBlock
   | NewsCardListBlock
-  | LogoListBlock
   | FeatureListBlock
   | LinkedContentBlock
   | NavigationBlock

@@ -169,6 +169,7 @@ export const heroSizeField: Field = {
 export const Hero: Block = {
   slug: 'hero',
   labels: { singular: 'Hero', plural: 'Hero Blocks' },
+  imageURL: '/assets/block-thumbnails/hero-preview.jpg',
   fields: withBlockTabs(heroFields, {
     padding: false,
     extra: [heroSizeField, headingTagField({ defaultValue: 'h1' })],

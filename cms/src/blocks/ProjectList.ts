@@ -4,6 +4,7 @@ import { withBlockTabs } from './fields/blockFields'
 export const ProjectList: Block = {
   slug: 'projectList',
   labels: { singular: 'Project List', plural: 'Project Lists' },
+  imageURL: '/assets/block-thumbnails/project-list-preview.jpg',
   fields: withBlockTabs(
     [
       {

@@ -4,6 +4,7 @@ import { withBlockTabs } from './fields/blockFields'
 export const MediaText: Block = {
   slug: 'mediaText',
   labels: { singular: 'Text and Media', plural: 'Text and Media Blocks' },
+  imageURL: '/assets/block-thumbnails/media-text-preview.jpg',
   fields: withBlockTabs([
     {
       name: 'variant',

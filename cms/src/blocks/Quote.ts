@@ -4,6 +4,7 @@ import { withBlockTabs } from './fields/blockFields'
 export const Quote: Block = {
   slug: 'quote',
   labels: { singular: 'Quote', plural: 'Quotes' },
+  imageURL: '/assets/block-thumbnails/quote-preview.jpg',
   fields: withBlockTabs([
     {
       name: 'quoteSize',

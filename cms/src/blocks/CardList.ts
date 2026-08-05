@@ -4,6 +4,7 @@ import { withBlockTabs } from './fields/blockFields'
 export const CardList: Block = {
   slug: 'cardList',
   labels: { singular: 'Illustration Card List', plural: 'Illustration Card Lists' },
+  imageURL: '/assets/block-thumbnails/card-list-preview.jpg',
   fields: withBlockTabs([
     {
       name: 'heading',

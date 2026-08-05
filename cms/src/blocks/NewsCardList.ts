@@ -4,6 +4,7 @@ import { withBlockTabs } from './fields/blockFields'
 export const NewsCardList: Block = {
   slug: 'newsCardList',
   labels: { singular: 'News Card List', plural: 'News Card Lists' },
+  imageURL: '/assets/block-thumbnails/news-card-list-preview.jpg',
   fields: withBlockTabs([
     {
       name: 'selectionMode',

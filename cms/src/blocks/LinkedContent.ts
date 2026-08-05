@@ -4,6 +4,7 @@ import { withBlockTabs } from './fields/blockFields'
 export const LinkedContent: Block = {
   slug: 'linkedContent',
   labels: { singular: 'Linked Content', plural: 'Linked Content' },
+  imageURL: '/assets/block-thumbnails/linked-content-preview.jpg',
   fields: withBlockTabs([
     {
       name: 'navigation',

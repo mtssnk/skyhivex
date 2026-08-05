@@ -85,7 +85,6 @@ These map directly to Tailwind utility classes using the clamp spacing scale:
 | Figma name         | Astro file                | Notes                          |
 | ------------------ | ------------------------- | ------------------------------ |
 | `block/Hero`       | `blocks/Hero.astro`       |                                |
-| `block/LogoList`   | `blocks/LogoList.astro`   |                                |
 | `block/WorkList`   | `blocks/WorkList.astro`   |                                |
 | `block/CardList`   | `blocks/CardList.astro`   |                                |
 | `block/MediaText`  | `blocks/MediaText.astro`  | Left/right variant — see below |

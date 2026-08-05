@@ -4,6 +4,7 @@ import { withBlockTabs } from './fields/blockFields'
 export const FeatureList: Block = {
   slug: 'featureList',
   labels: { singular: 'Feature List', plural: 'Feature Lists' },
+  imageURL: '/assets/block-thumbnails/feature-list-preview.jpg',
   fields: withBlockTabs(
     [
       {

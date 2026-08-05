@@ -4,6 +4,7 @@ import { withBlockTabs } from './fields/blockFields'
 export const FeatureAccordionList: Block = {
   slug: 'featureAccordionList',
   labels: { singular: 'Feature Accordion List', plural: 'Feature Accordion Lists' },
+  imageURL: '/assets/block-thumbnails/feature-accordion-list-preview.jpg',
   fields: withBlockTabs(
     [
       {

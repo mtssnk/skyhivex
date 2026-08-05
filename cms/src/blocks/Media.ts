@@ -5,6 +5,7 @@ import { overlayAlphaField } from '../fields/overlayAlpha'
 export const Media: Block = {
   slug: 'media',
   labels: { singular: 'Media', plural: 'Media Blocks' },
+  imageURL: '/assets/block-thumbnails/media-preview.jpg',
   fields: withBlockTabs([
     {
       name: 'size',

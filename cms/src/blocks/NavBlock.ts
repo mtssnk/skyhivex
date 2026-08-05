@@ -4,6 +4,7 @@ import { withBlockTabs } from './fields/blockFields'
 export const NavBlock: Block = {
   slug: 'navBlock',
   labels: { singular: 'Navigation', plural: 'Navigations' },
+  imageURL: '/assets/block-thumbnails/nav-block-preview.jpg',
   fields: withBlockTabs(
     [
       {

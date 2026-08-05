@@ -10,7 +10,6 @@ import { ContactForm } from './ContactForm'
 import { CardList } from './CardList'
 import { ProjectList } from './ProjectList'
 import { NewsCardList } from './NewsCardList'
-import { LogoList } from './LogoList'
 import { FeatureList } from './FeatureList'
 import { FeatureAccordionList } from './FeatureAccordionList'
 import { LinkedContent } from './LinkedContent'
@@ -30,7 +29,6 @@ const baseBlocks = [
   CardList,
   ProjectList,
   NewsCardList,
-  LogoList,
   NavBlock,
 ]
 

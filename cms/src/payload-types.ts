@@ -789,25 +789,6 @@ export interface Page {
             blockType: 'newsCardList';
           }
         | {
-            heading: string;
-            logos: (string | Svg)[];
-            /**
-             * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
-             */
-            anchorId?: string | null;
-            /**
-             * Which side(s) the vertical padding is applied to.
-             */
-            paddingWhere?: ('both' | 'top' | 'bottom' | 'none') | null;
-            /**
-             * Size of the vertical padding.
-             */
-            paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'logoList';
-          }
-        | {
             name?: string | null;
             links?:
               | {
@@ -1493,25 +1474,6 @@ export interface Project {
             blockType: 'newsCardList';
           }
         | {
-            heading: string;
-            logos: (string | Svg)[];
-            /**
-             * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
-             */
-            anchorId?: string | null;
-            /**
-             * Which side(s) the vertical padding is applied to.
-             */
-            paddingWhere?: ('both' | 'top' | 'bottom' | 'none') | null;
-            /**
-             * Size of the vertical padding.
-             */
-            paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'logoList';
-          }
-        | {
             name?: string | null;
             links?:
               | {
@@ -2134,25 +2096,6 @@ export interface Post {
         blockType: 'newsCardList';
       }
     | {
-        heading: string;
-        logos: (string | Svg)[];
-        /**
-         * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
-         */
-        anchorId?: string | null;
-        /**
-         * Which side(s) the vertical padding is applied to.
-         */
-        paddingWhere?: ('both' | 'top' | 'bottom' | 'none') | null;
-        /**
-         * Size of the vertical padding.
-         */
-        paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
-        id?: string | null;
-        blockName?: string | null;
-        blockType: 'logoList';
-      }
-    | {
         name?: string | null;
         links?:
           | {
@@ -2728,17 +2671,6 @@ export interface PagesSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
-        logoList?:
-          | T
-          | {
-              heading?: T;
-              logos?: T;
-              anchorId?: T;
-              paddingWhere?: T;
-              paddingSize?: T;
-              id?: T;
-              blockName?: T;
-            };
         navBlock?:
           | T
           | {
@@ -3037,17 +2969,6 @@ export interface ProjectsSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
-        logoList?:
-          | T
-          | {
-              heading?: T;
-              logos?: T;
-              anchorId?: T;
-              paddingWhere?: T;
-              paddingSize?: T;
-              id?: T;
-              blockName?: T;
-            };
         navBlock?:
           | T
           | {
@@ -3280,17 +3201,6 @@ export interface PostsSelect<T extends boolean = true> {
               filterState?: T;
               filterCity?: T;
               buttonLabel?: T;
-              anchorId?: T;
-              paddingWhere?: T;
-              paddingSize?: T;
-              id?: T;
-              blockName?: T;
-            };
-        logoList?:
-          | T
-          | {
-              heading?: T;
-              logos?: T;
               anchorId?: T;
               paddingWhere?: T;
               paddingSize?: T;
@@ -4008,25 +3918,6 @@ export interface ProjectsPage {
             blockType: 'newsCardList';
           }
         | {
-            heading: string;
-            logos: (string | Svg)[];
-            /**
-             * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
-             */
-            anchorId?: string | null;
-            /**
-             * Which side(s) the vertical padding is applied to.
-             */
-            paddingWhere?: ('both' | 'top' | 'bottom' | 'none') | null;
-            /**
-             * Size of the vertical padding.
-             */
-            paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'logoList';
-          }
-        | {
             name?: string | null;
             links?:
               | {
@@ -4481,17 +4372,6 @@ export interface ProjectsPageSelect<T extends boolean = true> {
               filterState?: T;
               filterCity?: T;
               buttonLabel?: T;
-              anchorId?: T;
-              paddingWhere?: T;
-              paddingSize?: T;
-              id?: T;
-              blockName?: T;
-            };
-        logoList?:
-          | T
-          | {
-              heading?: T;
-              logos?: T;
               anchorId?: T;
               paddingWhere?: T;
               paddingSize?: T;
