@@ -4,7 +4,9 @@ import { clsx } from 'clsx'
 
 const { name, links, anchorId } = Astro.props as NavigationBlock
 
-const currentPath = Astro.url.pathname
+const normalizePath = (path: string) => (path !== '/' ? path.replace(/\/$/, '') : path)
+
+const currentPath = normalizePath(Astro.url.pathname)
 
 function resolveNavHref(page: NavBlockLink['page']): string {
   if (!page || typeof page.value === 'string') return '#'
@@ -28,7 +30,7 @@ function resolveNavHref(page: NavBlockLink['page']): string {
           <ul class="flex gap-4xs lg:gap-3xs flex-wrap" role="list">
             {links.map((link) => {
               const href = link.page ? resolveNavHref(link.page) : (link.url ?? '#')
-              const isActive = currentPath === href
+              const isActive = currentPath === normalizePath(href)
               return (
                 <li
                   class={clsx(
