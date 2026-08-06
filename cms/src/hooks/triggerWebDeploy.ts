@@ -1,40 +1,51 @@
 import type { CollectionAfterChangeHook, CollectionAfterDeleteHook, GlobalAfterChangeHook } from 'payload'
 
-const RAILWAY_API_URL = 'https://backboard.railway.com/graphql/v2'
+const GITHUB_API_URL = 'https://api.github.com'
+
+// Any path inside web/ works — committing to it is what busts Railway's build cache,
+// since a genuinely fresh commit (unlike calling Railway's deploy API on an unchanged
+// commit) is the only thing that reliably makes Railpack/BuildKit re-run `pnpm build`
+// and re-fetch CMS content. Calling Railway's API directly reuses the last build output
+// when no files changed, no matter which mutation or cache-control env var is used.
+const TRIGGER_FILE_PATH = 'web/.build-trigger'
 
 async function triggerWebDeploy(reason: string): Promise<void> {
-  const token = process.env.RAILWAY_API_TOKEN
-  const serviceId = process.env.RAILWAY_WEB_SERVICE_ID
-  const environmentId = process.env.RAILWAY_ENVIRONMENT_ID
+  const token = process.env.SKYHIVEX_DEPLOY_GITHUB_TOKEN
+  const repo = process.env.GITHUB_REPO
+  const branch = process.env.GITHUB_BRANCH || 'main'
 
-  if (!token || !serviceId || !environmentId) return
+  if (!token || !repo) return
+
+  const headers = {
+    Authorization: `Bearer ${token}`,
+    Accept: 'application/vnd.github+json',
+    'Content-Type': 'application/json',
+  }
+  const contentsUrl = `${GITHUB_API_URL}/repos/${repo}/contents/${TRIGGER_FILE_PATH}`
 
   try {
-    const res = await fetch(RAILWAY_API_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
+    const getRes = await fetch(`${contentsUrl}?ref=${branch}`, { headers })
+    const sha = getRes.ok ? (await getRes.json()).sha : undefined
+
+    const putRes = await fetch(contentsUrl, {
+      method: 'PUT',
+      headers,
       body: JSON.stringify({
-        // serviceInstanceRedeploy reuses the existing built image and never re-fetches CMS
-        // content — serviceInstanceDeployV2 triggers a real rebuild from source, which is
-        // required since Astro fetches page content from the CMS at build time.
-        query: `mutation ($serviceId: String!, $environmentId: String!) {
-          serviceInstanceDeployV2(serviceId: $serviceId, environmentId: $environmentId)
-        }`,
-        variables: { serviceId, environmentId },
+        message: `chore: trigger web rebuild (${reason})`,
+        content: Buffer.from(new Date().toISOString()).toString('base64'),
+        branch,
+        ...(sha ? { sha } : {}),
       }),
     })
 
-    const json = await res.json()
-    if (!res.ok || json.errors) {
-      console.error(`[triggerWebDeploy] Railway redeploy failed (${reason}):`, json.errors ?? res.statusText)
+    const json = await putRes.json()
+    if (!putRes.ok) {
+      console.error(`[triggerWebDeploy] GitHub commit failed (${reason}):`, json)
     } else {
-      console.log(`[triggerWebDeploy] Web redeploy triggered (${reason})`)
+      console.log(`[triggerWebDeploy] Web rebuild triggered via commit (${reason})`)
     }
   } catch (err) {
-    console.error(`[triggerWebDeploy] Railway redeploy request failed (${reason}):`, err)
+    console.error(`[triggerWebDeploy] GitHub request failed (${reason}):`, err)
   }
 }
 
