@@ -18,5 +18,7 @@ export const GET: APIRoute = ({ url, cookies, redirect }) => {
   })
 
   const destination = slug === 'home' ? '/preview' : `/preview/${slug}`
-  return redirect(destination)
+  const response = redirect(destination)
+  response.headers.set('Cache-Control', 'no-store')
+  return response
 }

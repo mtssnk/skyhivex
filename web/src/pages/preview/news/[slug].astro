@@ -6,6 +6,8 @@ import Hero from '@/blocks/Hero.astro'
 
 export const prerender = false
 
+Astro.response.headers.set('Cache-Control', 'no-store')
+
 const { slug } = Astro.params
 const isPreview = Astro.cookies.get('__preview')?.value === 'true'
 if (!isPreview) return Astro.redirect(`/news/${slug ?? ''}`)
