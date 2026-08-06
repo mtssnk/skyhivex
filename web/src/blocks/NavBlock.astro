@@ -29,7 +29,6 @@ function resolveNavHref(page: NavBlockLink['page']): string {
             {links.map((link) => {
               const href = link.page ? resolveNavHref(link.page) : (link.url ?? '#')
               const isActive = currentPath === href
-              console.log(isActive, currentPath, href)
               return (
                 <li
                   class={clsx(

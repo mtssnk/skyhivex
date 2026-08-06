@@ -3,7 +3,13 @@ import Layout from '@/layouts/Layout.astro'
 import BlockRenderer from '@/blocks/BlockRenderer.astro'
 import { getPageBySlug } from '@/lib/payload'
 
-const page = await getPageBySlug('home')
+export const prerender = false
+
+const isPreview = Astro.cookies.get('__preview')?.value === 'true'
+if (!isPreview) return Astro.redirect('/')
+
+const apiKey = import.meta.env.PAYLOAD_API_KEY as string
+const page = await getPageBySlug('home', { draft: true, apiKey })
 if (!page) return Astro.redirect('/404')
 ---
 
@@ -11,6 +17,7 @@ if (!page) return Astro.redirect('/404')
   title={page.title}
   description={page.metaDescription ?? undefined}
   ogImage={page.ogImage?.url ?? undefined}
+  isPreview={isPreview}
 >
   <BlockRenderer blocks={page.blocks} />
 </Layout>

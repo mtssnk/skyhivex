@@ -17,6 +17,6 @@ export const GET: APIRoute = ({ url, cookies, redirect }) => {
     maxAge: 60 * 60, // 1 hour
   })
 
-  const destination = slug === 'home' ? '/' : `/${slug}`
+  const destination = slug === 'home' ? '/preview' : `/preview/${slug}`
   return redirect(destination)
 }

@@ -1,0 +1,128 @@
+---
+import Layout from '@/layouts/Layout.astro'
+import BlockRenderer from '@/blocks/BlockRenderer.astro'
+import HeadingUnderline from '@/components/HeadingUnderline.astro'
+import { getProjectBySlug } from '@/lib/payload'
+import { getSiteSettings } from '@/lib/payload'
+import Hero from '@/blocks/Hero.astro'
+import { lexicalToHtml } from '@/lib/lexical'
+
+export const prerender = false
+
+const { slug } = Astro.params
+const isPreview = Astro.cookies.get('__preview')?.value === 'true'
+if (!isPreview) return Astro.redirect(`/projects/${slug ?? ''}`)
+
+const apiKey = import.meta.env.PAYLOAD_API_KEY as string
+const [settings, project] = await Promise.all([
+  getSiteSettings(),
+  getProjectBySlug(slug!, { draft: true, apiKey }),
+])
+if (!project) return new Response(null, { status: 404 })
+
+const metaDescription = project.metaDescription ?? project.intro ?? project.heading
+const ogImage =
+  project.ogImage?.url ??
+  project.heroMedia?.image?.url ??
+  project.listingMedia?.url ??
+  project.listingImage.url ??
+  undefined
+
+const heroMediaType = project.heroMedia?.backgroundMedia ?? 'image'
+const heroBackgroundImage = project.heroMedia?.image ?? project.listingMedia ?? project.listingImage
+const heroBackgroundVideo = project.heroMedia?.video ?? undefined
+const overlayAlpha = project.heroMedia?.overlayAlpha ?? 0.4
+
+const areaServed = project.city
+  ? { '@type': 'City', name: project.city.name }
+  : project.state
+    ? { '@type': 'State', name: project.state.name }
+    : project.region
+      ? { '@type': 'AdministrativeArea', name: project.region.name }
+      : undefined
+
+const jsonLd: Record<string, unknown> = {
+  '@context': 'https://schema.org',
+  '@type': 'CreativeWork',
+  name: project.projectName ?? project.heading,
+  description: metaDescription,
+  url: Astro.url.href,
+  creator: { '@type': 'Organization', name: settings?.companyName, url: Astro.url.origin },
+}
+if (areaServed) jsonLd.areaServed = areaServed
+if (ogImage) jsonLd.image = ogImage
+
+const heroButtons: NonNullable<Parameters<typeof Hero>[0]['buttons']> = [
+  {
+    label: 'Find out more',
+    type: 'anchor',
+    anchorTarget: 'project-content',
+    variant: 'solid',
+    colour: 'white',
+  },
+  ...(project.url
+    ? [
+        {
+          label: 'View project',
+          type: 'link' as const,
+          linkUrl: project.url,
+          variant: 'outline' as const,
+          colour: 'white' as const,
+        },
+      ]
+    : []),
+]
+---
+
+<Layout
+  title={project.projectName ?? project.heading}
+  description={metaDescription}
+  ogImage={ogImage ?? undefined}
+  jsonLd={jsonLd}
+  isPreview={isPreview}
+>
+  <Hero
+    headingPart1={project.heading}
+    backgroundMedia={heroMediaType}
+    backgroundImage={heroBackgroundImage}
+    backgroundVideo={heroBackgroundVideo}
+    overlayAlpha={overlayAlpha}
+    buttons={heroButtons}
+    size="large"
+  />
+
+  <div id="project-content"></div>
+
+  {
+    (project.intro || project.body || project.summary?.length) && (
+      <div class="space-y-sm py-sm container max-w-[640px]!">
+        {(project.intro || project.summary?.length) && (
+          <section class="section-project-intro space-y-2xs">
+            {project.intro && (
+              <p class="text-extended-md font-light text-balance">{project.intro}</p>
+            )}
+            {project.summary?.length && (
+              <dl class="grid grid-cols-1 md:grid-cols-2 lg:gap-x-xs lg:gap-y-3xs">
+                {project.summary.map((item) => (
+                  <div class="space-y-5xs">
+                    <HeadingUnderline spacing="sm">
+                      <dt>{item.label}</dt>
+                    </HeadingUnderline>
+                    <dd class="text-body-xs">{item.value}</dd>
+                  </div>
+                ))}
+              </dl>
+            )}
+          </section>
+        )}
+
+        {project.body && (
+          <div class="wysiwyg">
+            <div set:html={lexicalToHtml(project.body)} />
+          </div>
+        )}
+      </div>
+    )
+  }
+  <BlockRenderer blocks={project.blocks} />
+</Layout>
