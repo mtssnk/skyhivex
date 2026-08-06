@@ -37,5 +37,6 @@ pnpm-debug.log*
 backups/
 r2-migration-temp/
 
-# One-off migration script gets real R2 credentials pasted into it locally — never commit
+# One-off migration scripts get real credentials pasted into them locally — never commit
 scripts/migrate-r2.sh
+scripts/restore-content-to-production.sh
