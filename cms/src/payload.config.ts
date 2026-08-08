@@ -20,7 +20,6 @@ import { ClientTypes } from './collections/ClientTypes'
 import { Navigations } from './collections/Navigations'
 import { SiteSettings } from './globals/SiteSettings'
 import { ProjectsPage } from './globals/ProjectsPage'
-import { ContactPage } from './globals/ContactPage'
 import { Navigation } from './globals/Navigation'
 
 const filename = fileURLToPath(import.meta.url)
@@ -48,7 +47,7 @@ export default buildConfig({
     ClientTypes,
     Navigations,
   ],
-  globals: [SiteSettings, ProjectsPage, ContactPage, Navigation],
+  globals: [SiteSettings, ProjectsPage, Navigation],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {

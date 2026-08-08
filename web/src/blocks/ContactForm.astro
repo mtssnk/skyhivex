@@ -3,21 +3,56 @@ import clsx from 'clsx'
 import type { ContactFormBlock } from '@/lib/payload'
 import { blockPaddingClass } from '@/lib/blocks'
 import { lexicalToHtml } from '@/lib/lexical'
+import { getSiteSettings } from '@/lib/payload'
 import ContactForm from '@/components/ContactForm.astro'
+import ContactDetailsList from '@/components/ContactDetailsList.astro'
 
-const { heading, body, anchorId, paddingWhere, paddingSize } = Astro.props as ContactFormBlock
+const {
+  heading,
+  showContactDetails = true,
+  body,
+  anchorId,
+  paddingWhere,
+  paddingSize,
+} = Astro.props as ContactFormBlock
 const paddingClass = blockPaddingClass(paddingWhere, paddingSize)
 const bodyHtml = body ? lexicalToHtml(body) : null
+const twoColumn = !!bodyHtml
+const settings = showContactDetails !== false ? await getSiteSettings() : null
 ---
 
 <section id={anchorId ?? undefined} class={clsx('section-contactform', paddingClass)}>
-  <div class="container max-w-[640px]!">
-    <div class="space-y-3xs">
-      <h2 class="text-serif-2xl text-white">{heading}</h2>
-      {bodyHtml && <div class="wysiwyg text-body-xs text-mist" set:html={bodyHtml} />}
-    </div>
-    <div class="mt-3xs">
-      <ContactForm />
-    </div>
-  </div>
+  {
+    twoColumn ? (
+      <div class="container">
+        <div class="grid grid-cols-12">
+          {heading && (
+            <h2 class="text-serif-xl text-white col-span-12 lg:col-span-10 lg:col-start-2">
+              {heading}
+            </h2>
+          )}
+          <div class="col-span-12 md:col-span-5 space-y-2xs lg:col-span-4 lg:col-start-2">
+            {settings && <ContactDetailsList settings={settings} />}
+            <div
+              class="wysiwyg text-body-xs md:text-body-2xs text-mist max-w-[28em] text-balance"
+              set:html={bodyHtml}
+            />
+          </div>
+          <div class="col-span-12 md:col-span-7 lg:col-span-5 lg:col-start-7">
+            <ContactForm />
+          </div>
+        </div>
+      </div>
+    ) : (
+      <div class="container max-w-[640px]!">
+        <div class="space-y-3xs">
+          {heading && <h2 class="text-serif-xl text-white">{heading}</h2>}
+          {settings && <ContactDetailsList settings={settings} />}
+        </div>
+        <div class="mt-3xs">
+          <ContactForm />
+        </div>
+      </div>
+    )
+  }
 </section>

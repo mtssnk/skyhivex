@@ -1,0 +1,31 @@
+---
+import type { SiteSettings } from '@/lib/payload'
+
+const { settings } = Astro.props as { settings: SiteSettings }
+---
+
+<ul class="space-y-5xs max-w-[400px] text-balance" role="list">
+  {
+    settings.contactPhone && (
+      <li>
+        <a href={`tel:${settings.contactPhone}`} class="text-mono-3xs text-smoke">
+          {settings.contactPhone}
+        </a>
+      </li>
+    )
+  }
+  {
+    settings.contactEmail && (
+      <li>
+        <a href={`mailto:${settings.contactEmail}`} class="text-mono-3xs text-smoke">
+          {settings.contactEmail}
+        </a>
+      </li>
+    )
+  }
+  {
+    settings.contactAddress && (
+      <li class="text-mono-3xs text-smoke whitespace-pre-line">{settings.contactAddress}</li>
+    )
+  }
+</ul>

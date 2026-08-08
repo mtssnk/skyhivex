@@ -9,11 +9,23 @@ export const ContactForm: Block = {
     {
       name: 'heading',
       type: 'text',
-      required: true,
+    },
+    {
+      name: 'showContactDetails',
+      type: 'checkbox',
+      label: 'Show contact details',
+      defaultValue: true,
+      admin: {
+        description: 'Displays phone, email, and address from Site Settings.',
+      },
     },
     {
       name: 'body',
       type: 'richText',
+      admin: {
+        description:
+          'When set, switches to a two-column layout (details/body left, form right). When empty, uses a single-column layout.',
+      },
     },
   ]),
 }

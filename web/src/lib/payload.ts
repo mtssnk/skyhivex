@@ -307,7 +307,8 @@ export type AccordionListBlock = {
 export type ContactFormBlock = BlockPadding & {
   blockType: 'contactForm'
   id?: string | null
-  heading: string
+  heading?: string | null
+  showContactDetails?: boolean | null
   body?: LexicalContent | null
 }
 
@@ -414,13 +415,6 @@ export type ProjectsPageHero = {
 export type ProjectsPage = {
   hero?: ProjectsPageHero | null
   blocks?: SharedBlock[] | null
-  metaDescription?: string | null
-  ogImage?: Media | null
-}
-
-export type ContactPage = {
-  heading: string
-  body?: LexicalContent | null
   metaDescription?: string | null
   ogImage?: Media | null
 }
@@ -577,10 +571,6 @@ export async function getNavigation(): Promise<Navigation | null> {
 
 export async function getProjectsPage(): Promise<ProjectsPage | null> {
   return get<ProjectsPage>('/globals/projects-page')
-}
-
-export async function getContactPage(): Promise<ContactPage | null> {
-  return get<ContactPage>('/globals/contact-page')
 }
 
 export async function getRegions(): Promise<Region[]> {

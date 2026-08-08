@@ -110,13 +110,11 @@ export interface Config {
   globals: {
     'site-settings': SiteSetting;
     'projects-page': ProjectsPage;
-    'contact-page': ContactPage;
     navigation: Navigation1;
   };
   globalsSelect: {
     'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
     'projects-page': ProjectsPageSelect<false> | ProjectsPageSelect<true>;
-    'contact-page': ContactPageSelect<false> | ContactPageSelect<true>;
     navigation: NavigationSelect<false> | NavigationSelect<true>;
   };
   locale: null;
@@ -621,7 +619,14 @@ export interface Page {
             blockType: 'accordionList';
           }
         | {
-            heading: string;
+            heading?: string | null;
+            /**
+             * Displays phone, email, and address from Site Settings.
+             */
+            showContactDetails?: boolean | null;
+            /**
+             * When set, switches to a two-column layout (details/body left, form right). When empty, uses a single-column layout.
+             */
             body?: {
               root: {
                 type: string;
@@ -1306,7 +1311,14 @@ export interface Project {
             blockType: 'accordionList';
           }
         | {
-            heading: string;
+            heading?: string | null;
+            /**
+             * Displays phone, email, and address from Site Settings.
+             */
+            showContactDetails?: boolean | null;
+            /**
+             * When set, switches to a two-column layout (details/body left, form right). When empty, uses a single-column layout.
+             */
             body?: {
               root: {
                 type: string;
@@ -1928,7 +1940,14 @@ export interface Post {
         blockType: 'accordionList';
       }
     | {
-        heading: string;
+        heading?: string | null;
+        /**
+         * Displays phone, email, and address from Site Settings.
+         */
+        showContactDetails?: boolean | null;
+        /**
+         * When set, switches to a two-column layout (details/body left, form right). When empty, uses a single-column layout.
+         */
         body?: {
           root: {
             type: string;
@@ -2608,6 +2627,7 @@ export interface PagesSelect<T extends boolean = true> {
           | T
           | {
               heading?: T;
+              showContactDetails?: T;
               body?: T;
               anchorId?: T;
               paddingWhere?: T;
@@ -2906,6 +2926,7 @@ export interface ProjectsSelect<T extends boolean = true> {
           | T
           | {
               heading?: T;
+              showContactDetails?: T;
               body?: T;
               anchorId?: T;
               paddingWhere?: T;
@@ -3144,6 +3165,7 @@ export interface PostsSelect<T extends boolean = true> {
           | T
           | {
               heading?: T;
+              showContactDetails?: T;
               body?: T;
               anchorId?: T;
               paddingWhere?: T;
@@ -3750,7 +3772,14 @@ export interface ProjectsPage {
             blockType: 'accordionList';
           }
         | {
-            heading: string;
+            heading?: string | null;
+            /**
+             * Displays phone, email, and address from Site Settings.
+             */
+            showContactDetails?: boolean | null;
+            /**
+             * When set, switches to a two-column layout (details/body left, form right). When empty, uses a single-column layout.
+             */
             body?: {
               root: {
                 type: string;
@@ -4038,45 +4067,6 @@ export interface ProjectsPage {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "contact-page".
- */
-export interface ContactPage {
-  id: string;
-  /**
-   * Main heading displayed at the top of the contact page.
-   */
-  heading: string;
-  /**
-   * Text displayed below the contact details (phone, email, address from Site Settings).
-   */
-  body?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  /**
-   * SEO meta description (max 160 characters).
-   */
-  metaDescription?: string | null;
-  /**
-   * Social share image (OG). Recommended: 1200×630px.
-   */
-  ogImage?: (string | null) | Media;
-  updatedAt?: string | null;
-  createdAt?: string | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "navigation".
  */
 export interface Navigation1 {
@@ -4315,6 +4305,7 @@ export interface ProjectsPageSelect<T extends boolean = true> {
           | T
           | {
               heading?: T;
+              showContactDetails?: T;
               body?: T;
               anchorId?: T;
               paddingWhere?: T;
@@ -4434,19 +4425,6 @@ export interface ProjectsPageSelect<T extends boolean = true> {
               blockName?: T;
             };
       };
-  metaDescription?: T;
-  ogImage?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  globalType?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "contact-page_select".
- */
-export interface ContactPageSelect<T extends boolean = true> {
-  heading?: T;
-  body?: T;
   metaDescription?: T;
   ogImage?: T;
   updatedAt?: T;
