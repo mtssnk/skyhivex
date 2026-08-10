@@ -45,7 +45,7 @@ const categories = Array.from(categoryMap.values())
         {
           posts.map((post, i) => (
             <li
-              class="border-congo border-2 col-span-12 sm:col-span-6 flex flex-col"
+              class="border-congo chromatic-glow border-2 col-span-12 sm:col-span-6 flex flex-col"
               data-post-item
               data-category-ids={post.categories?.map((c) => c.id).join(' ') ?? ''}
               hidden={i >= perPage || undefined}
