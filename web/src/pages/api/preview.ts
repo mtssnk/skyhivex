@@ -13,7 +13,11 @@ export const GET: APIRoute = ({ url, cookies, redirect }) => {
   cookies.set('__preview', 'true', {
     path: '/',
     httpOnly: true,
-    sameSite: 'strict',
+    // 'strict' would exclude this cookie from the very redirect that sets it, since the
+    // navigation originates cross-site (Preview is clicked from the CMS's own origin).
+    // 'lax' still blocks cross-site POSTs/subresource requests but allows top-level GET
+    // navigations like this one.
+    sameSite: 'lax',
     maxAge: 60 * 60, // 1 hour
   })
 
