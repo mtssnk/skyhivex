@@ -1,0 +1,52 @@
+@property --gradient-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@layer components {
+  .chromatic-glow {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .chromatic-glow::before,
+  .chromatic-glow::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: conic-gradient(from var(--gradient-angle), #bb00ff, #00fbff, #44f988, #bb00ff);
+    opacity: 0;
+    transition: opacity 2s ease;
+    pointer-events: none;
+  }
+
+  /* Crisp ring — a full gradient fill masked down to just the border edge */
+  .chromatic-glow::before {
+    padding: 2px;
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+  }
+
+  /* Blurred glow behind the element */
+  .chromatic-glow::after {
+    z-index: -1;
+    filter: blur(16px);
+  }
+
+  .chromatic-glow:hover::before,
+  .chromatic-glow:hover::after {
+    opacity: 1;
+    animation: chromatic-glow-rotate 4s linear infinite;
+  }
+
+  @keyframes chromatic-glow-rotate {
+    to {
+      --gradient-angle: 360deg;
+    }
+  }
+}

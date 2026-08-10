@@ -54,7 +54,7 @@ if (selectionMode !== 'manual') {
     <ul class="grid grid-cols-1 md:grid-cols-3 md:gap-0" role="list">
       {
         resolvedArticles.map((article, i) => (
-          <li class="border-congo border-2 md:border-r-0 last:border-r-2 last:border-b-2 md:border-b-2">
+          <li class="chromatic-glow border-congo border-2 md:border-r-0 last:border-r-2 last:border-b-2 md:border-b-2 flex">
             <a href={`/news/${article.slug}`} class="flex flex-col bg-night group">
               <div class="aspect-video md:aspect-4/3 overflow-hidden">
                 <MediaItem
@@ -68,7 +68,7 @@ if (selectionMode !== 'manual') {
               </div>
               <div class="p-4xs flex flex-col gap-4xs grow">
                 {article.categories && article.categories.length > 0 && (
-                  <p class="text-mono-3xs text-mist">
+                  <p class="text-mono-4xs text-mist">
                     {article.categories.map((c) => c.name).join(', ')}
                   </p>
                 )}
