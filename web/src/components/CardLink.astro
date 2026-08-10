@@ -1,7 +1,7 @@
 ---
 import type { Media } from '@/lib/payload'
 import MediaItem from '@/components/MediaItem.astro'
-import ArrowUpRight from '@/assets/icons/arrowUpRight.astro'
+import SlideArrow from '@/components/SlideArrow.astro'
 
 interface Props {
   href: string
@@ -13,12 +13,12 @@ interface Props {
 const { href, media, label, sizes = '(max-width: 768px) 100vw, 33vw' } = Astro.props
 ---
 
-<a href={href} class="flex flex-col gap-5 no-underline">
+<a href={href} class="card-link flex flex-col gap-5 no-underline">
   <div class="aspect-video overflow-hidden">
     <MediaItem {media} {sizes} class="w-full h-full object-cover block" />
   </div>
   <div class="flex items-center gap-2 text-night">
     <span class="text-wide-sm">{label}</span>
-    <span class="inline-block size-6"><ArrowUpRight class="size-6 shrink-0" /></span>
+    <span class="inline-block size-6"><SlideArrow direction="up-right" class="size-6 shrink-0" /></span>
   </div>
 </a>

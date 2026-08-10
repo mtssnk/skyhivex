@@ -3,7 +3,7 @@ import clsx from 'clsx'
 import type { HeroBlock } from '@/lib/payload'
 import MediaItem from '@/components/MediaItem.astro'
 import Button from '@/components/Button.astro'
-import ArrowDownRight from '@/assets/icons/arrowDownRight.astro'
+import SlideArrow from '@/components/SlideArrow.astro'
 import Play from '@/assets/icons/play.astro'
 import HexShader from '@/components/HexShader.astro'
 import { resolveButtonHref } from '@/lib/blocks'
@@ -134,7 +134,7 @@ const HeadingTag = (headingTag ?? (as === 'section' ? 'h2' : 'h1')) as 'h1' | 'h
               return (
                 <Button href={href} colour={btn.colour} style={btn.variant} size="lg">
                   {btn.label}
-                  {btn.type === 'anchor' && <ArrowDownRight />}
+                  {btn.type === 'anchor' && <SlideArrow direction="down-right" />}
                 </Button>
               )
             })}

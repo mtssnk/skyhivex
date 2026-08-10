@@ -12,6 +12,30 @@
     stroke-width: 1;
   }
 
+  .icon-slide {
+    position: relative;
+    display: inline-block;
+    overflow: hidden;
+  }
+  .icon-slide-a {
+    transform: translate(0, 0);
+  }
+  .icon-slide-b {
+    position: absolute;
+    inset: 0;
+    transform: translate(calc(var(--icon-slide-exit-x) * -1), calc(var(--icon-slide-exit-y) * -1));
+  }
+  .btn:hover .icon-slide-a,
+  .card-link:hover .icon-slide-a {
+    transition: transform 0.3s cubic-bezier(0.895, 0.03, 0.685, 0.22);
+    transform: translate(var(--icon-slide-exit-x), var(--icon-slide-exit-y));
+  }
+  .btn:hover .icon-slide-b,
+  .card-link:hover .icon-slide-b {
+    transition: transform 0.3s 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+    transform: translate(0, 0);
+  }
+
   .btn-lg {
     @apply text-mono-3xs;
     gap: 0.86em;

@@ -4,8 +4,7 @@ import HeadingUnderline from '@/components/HeadingUnderline.astro'
 import Numbered from '@/components/Numbered.astro'
 import MediaItem from '@/components/MediaItem.astro'
 import Button from '@/components/Button.astro'
-import ArrowDownRight from '@/assets/icons/arrowDownRight.astro'
-import ArrowUpRight from '@/assets/icons/arrowUpRight.astro'
+import SlideArrow from '@/components/SlideArrow.astro'
 import clsx from 'clsx'
 import { blockPaddingClass } from '@/lib/blocks'
 import { getPosts } from '@/lib/payload'
@@ -78,7 +77,7 @@ if (selectionMode !== 'manual') {
                 <div class="mt-auto pt-4xs">
                   <Button as="span" style="text" colour="white" size="sm">
                     Read more
-                    <ArrowDownRight />
+                    <SlideArrow direction="down-right" />
                   </Button>
                 </div>
               </div>
@@ -92,7 +91,7 @@ if (selectionMode !== 'manual') {
         <div class="flex justify-center">
           <Button href="/news" size="lg" style="solid" colour="green">
             {buttonLabel}
-            <ArrowUpRight />
+            <SlideArrow direction="up-right" />
           </Button>
         </div>
       )

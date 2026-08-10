@@ -3,7 +3,7 @@ import type { MediaTextBlock } from '@/lib/payload'
 import MediaItem from '@/components/MediaItem.astro'
 import { lexicalToHtml } from '@/lib/lexical'
 import clsx from 'clsx'
-import ArrowDownRight from '@/assets/icons/arrowDownRight.astro'
+import SlideArrow from '@/components/SlideArrow.astro'
 import { blockPaddingClass, injectSpans } from '@/lib/blocks'
 import Button from '@/components/Button.astro'
 
@@ -83,7 +83,7 @@ const paddingClass = blockPaddingClass(paddingWhere, paddingSize)
             {linkHref && (
               <Button href={linkHref} size="lg" style="text" colour="green">
                 {linkLabel}
-                <ArrowDownRight />
+                <SlideArrow direction="up-right" />
               </Button>
             )}
           </div>
@@ -107,7 +107,7 @@ const paddingClass = blockPaddingClass(paddingWhere, paddingSize)
             {linkHref && (
               <Button href={linkHref} size="lg" style="text" colour="green">
                 {linkLabel}
-                <ArrowDownRight />
+                <SlideArrow direction="up-right" />
               </Button>
             )}
           </div>

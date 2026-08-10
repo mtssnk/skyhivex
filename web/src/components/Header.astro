@@ -1,7 +1,7 @@
 ---
 import Button from '@/components/Button.astro'
 import { getNavigation } from '@/lib/payload'
-import ArrowUpRight from '@/assets/icons/arrowUpRight.astro'
+import SlideArrow from '@/components/SlideArrow.astro'
 import ChevronDown from '@/assets/icons/chevronDown.astro'
 import logo from '@/assets/img/skyhive-logo-white.png'
 
@@ -85,7 +85,7 @@ function linkHref(item: {
             class="hidden xs:inline-flex"
           >
             {btn.label}
-            <ArrowUpRight />
+            <SlideArrow direction="up-right" />
           </Button>
         )
       }
@@ -145,7 +145,7 @@ function linkHref(item: {
     btn?.label && (
       <Button href={linkHref(btn)} size="md" colour="white" style="solid">
         {btn.label}
-        <ArrowUpRight />
+        <SlideArrow direction="up-right" />
       </Button>
     )
   }

@@ -3,7 +3,7 @@ import Layout from '@/layouts/Layout.astro'
 import Numbered from '@/components/Numbered.astro'
 import MediaItem from '@/components/MediaItem.astro'
 import Button from '@/components/Button.astro'
-import ArrowDownRight from '@/assets/icons/arrowDownRight.astro'
+import SlideArrow from '@/components/SlideArrow.astro'
 import Plus from '@/assets/icons/plus.astro'
 import HeadingUnderline from '@/components/HeadingUnderline.astro'
 import { getPosts } from '@/lib/payload'
@@ -75,7 +75,7 @@ const categories = Array.from(categoryMap.values())
                   </div>
                   <Button as="span" style="text" colour="white" size="sm" class="inline-flex">
                     Read more
-                    <ArrowDownRight />
+                    <SlideArrow direction="down-right" />
                   </Button>
                 </div>
               </a>

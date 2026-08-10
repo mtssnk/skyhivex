@@ -1,0 +1,25 @@
+---
+import ArrowUpRight from '@/assets/icons/arrowUpRight.astro'
+import ArrowDownRight from '@/assets/icons/arrowDownRight.astro'
+import ArrowDownLeft from '@/assets/icons/arrowDownLeft.astro'
+
+interface Props {
+  direction: 'up-right' | 'down-right' | 'down-left'
+  class?: string
+}
+
+const { direction, class: className } = Astro.props
+
+const directions = {
+  'up-right': { Icon: ArrowUpRight, exitX: '100%', exitY: '-100%' },
+  'down-right': { Icon: ArrowDownRight, exitX: '100%', exitY: '100%' },
+  'down-left': { Icon: ArrowDownLeft, exitX: '-100%', exitY: '100%' },
+} as const
+
+const { Icon, exitX, exitY } = directions[direction]
+---
+
+<span class:list={['icon-slide', className]} style={`--icon-slide-exit-x: ${exitX}; --icon-slide-exit-y: ${exitY};`}>
+  <Icon class="icon-slide-a" />
+  <Icon class="icon-slide-b" />
+</span>

@@ -2,7 +2,7 @@
 import type { FeatureListBlock } from '@/lib/payload'
 import HeadingUnderline from '@/components/HeadingUnderline.astro'
 import Button from '@/components/Button.astro'
-import ArrowUpRight from '@/assets/icons/arrowUpRight.astro'
+import SlideArrow from '@/components/SlideArrow.astro'
 import SvgIcon from '@/components/SvgIcon.astro'
 import clsx from 'clsx'
 
@@ -49,7 +49,7 @@ const linkHref = linkLabel
           <div class="w-full flex justify-center pt-xs">
             <Button href={linkHref} size="lg" style="solid" colour="green">
               {linkLabel}
-              <ArrowUpRight />
+              <SlideArrow direction="up-right" />
             </Button>
           </div>
         )

@@ -5,7 +5,7 @@ import Button from '@/components/Button.astro'
 import { clsx } from 'clsx'
 import { blockPaddingClass } from '@/lib/blocks'
 import { lexicalToHtml } from '@/lib/lexical'
-import ArrowUpRight from '@/assets/icons/arrowUpRight.astro'
+import SlideArrow from '@/components/SlideArrow.astro'
 const { navigation, body, anchorId, paddingWhere, paddingSize } = Astro.props as LinkedContentBlock
 const paddingClass = blockPaddingClass(paddingWhere, paddingSize)
 const bodyHtml = body ? lexicalToHtml(body) : null
@@ -37,7 +37,7 @@ const currentPath = Astro.url.pathname
                         colour={isActive ? 'green' : 'white'}
                       >
                         {link.label}
-                        <ArrowUpRight />
+                        <SlideArrow direction="up-right" />
                       </Button>
                     </li>
                   )
