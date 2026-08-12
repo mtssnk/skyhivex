@@ -29,7 +29,7 @@ export default defineConfig({
     }),
     astroConsent({
       siteName: 'SkyHive X',
-      headline: 'Cookie preferences',
+      headline: '',
       description:
         'We use cookies to enhance your experience and for marketing. Do you consent to the use of these cookies?',
       acceptLabel: 'Accept',
