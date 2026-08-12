@@ -46,55 +46,57 @@ if (selectionMode !== 'manual') {
 }
 ---
 
-<section id={anchorId ?? undefined} class={clsx('section-newscardlist bg-ash', paddingClass)}>
-  <div class="container space-y-2xs">
-    <header>
-      <HeadingUnderline><h2>news</h2></HeadingUnderline>
-    </header>
-    <ul class="grid grid-cols-1 md:grid-cols-3 md:gap-0" role="list">
-      {
-        resolvedArticles.map((article, i) => (
-          <li class="chromatic-glow border-congo border-2 md:border-r-0 last:border-r-2 last:border-b-2 md:border-b-2 flex">
-            <a href={`/news/${article.slug}`} class="flex flex-col bg-night group">
-              <div class="aspect-video md:aspect-4/3 overflow-hidden">
-                <MediaItem
-                  media={article.listingImage}
-                  sizes="(max-width: 768px) 100vw, 33vw"
-                  class="w-full h-full object-cover"
-                />
-              </div>
-              <div class="flex justify-end bg-grid-congo border-congo border-b">
-                <Numbered class="-mb-0.5">{String(i + 1).padStart(3, '0')}</Numbered>
-              </div>
-              <div class="p-4xs flex flex-col gap-4xs grow">
-                {article.categories && article.categories.length > 0 && (
-                  <p class="text-mono-4xs text-mist">
-                    {article.categories.map((c) => c.name).join(', ')}
-                  </p>
-                )}
-                <h3 class="text-serif-sm italic text-smoke">{article.title}</h3>
-                {article.intro && <p class="text-body-3xs text-mist">{article.intro}</p>}
-                <div class="mt-auto pt-4xs">
-                  <Button as="span" style="text" colour="white" size="sm">
-                    Read more
-                    <SlideArrow direction="down-right" />
-                  </Button>
+{
+  resolvedArticles.length > 0 && (
+    <section id={anchorId ?? undefined} class={clsx('section-newscardlist bg-ash', paddingClass)}>
+      <div class="container space-y-2xs">
+        <header>
+          <HeadingUnderline>
+            <h2>news</h2>
+          </HeadingUnderline>
+        </header>
+        <ul class="grid grid-cols-1 md:grid-cols-3 md:gap-0" role="list">
+          {resolvedArticles.map((article, i) => (
+            <li class="chromatic-glow border-congo border-2 md:border-r-0 last:border-r-2 last:border-b-2 md:border-b-2 flex">
+              <a href={`/news/${article.slug}`} class="flex flex-col bg-night group">
+                <div class="aspect-video md:aspect-4/3 overflow-hidden">
+                  <MediaItem
+                    media={article.listingImage}
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                    class="w-full h-full object-cover"
+                  />
                 </div>
-              </div>
-            </a>
-          </li>
-        ))
-      }
-    </ul>
-    {
-      buttonLabel && (
-        <div class="flex justify-center">
-          <Button href="/news" size="lg" style="solid" colour="green">
-            {buttonLabel}
-            <SlideArrow direction="up-right" />
-          </Button>
-        </div>
-      )
-    }
-  </div>
-</section>
+                <div class="flex justify-end bg-grid-congo border-congo border-b">
+                  <Numbered class="-mb-0.5">{String(i + 1).padStart(3, '0')}</Numbered>
+                </div>
+                <div class="p-4xs flex flex-col gap-4xs grow">
+                  {article.categories && article.categories.length > 0 && (
+                    <p class="text-mono-4xs text-mist">
+                      {article.categories.map((c) => c.name).join(', ')}
+                    </p>
+                  )}
+                  <h3 class="text-serif-sm italic text-smoke">{article.title}</h3>
+                  {article.intro && <p class="text-body-3xs text-mist">{article.intro}</p>}
+                  <div class="mt-auto pt-4xs">
+                    <Button as="span" style="text" colour="white" size="sm">
+                      Read more
+                      <SlideArrow direction="down-right" />
+                    </Button>
+                  </div>
+                </div>
+              </a>
+            </li>
+          ))}
+        </ul>
+        {buttonLabel && (
+          <div class="flex justify-center">
+            <Button href="/news" size="lg" style="solid" colour="green">
+              {buttonLabel}
+              <SlideArrow direction="up-right" />
+            </Button>
+          </div>
+        )}
+      </div>
+    </section>
+  )
+}

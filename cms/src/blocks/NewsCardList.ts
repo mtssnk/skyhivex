@@ -1,6 +1,21 @@
 import type { Block } from 'payload'
 import { withBlockTabs } from './fields/blockFields'
 
+const geoFields = ['filterRegion', 'filterState', 'filterCity'] as const
+
+// Of the three geography filters, the first one (in priority order) that has
+// a value "wins" and is shown; the others stay hidden. This keeps selection
+// mutually exclusive in both directions without any field being able to hide
+// itself — so a block that somehow has more than one saved (e.g. from before
+// this mutual-exclusion rule existed) always has exactly one visible field to
+// clear, rather than deadlocking with all three hidden.
+const activeGeoField = (sibling: Record<string, unknown> | undefined | null) =>
+  geoFields.find((field) => Boolean(sibling?.[field])) ?? null
+
+const geoCondition =
+  (field: (typeof geoFields)[number]) => (_: unknown, sibling: Record<string, unknown>) =>
+    sibling?.selectionMode === 'by-geography' && (activeGeoField(sibling) ?? field) === field
+
 export const NewsCardList: Block = {
   slug: 'newsCardList',
   labels: { singular: 'News Card List', plural: 'News Card Lists' },
@@ -43,8 +58,8 @@ export const NewsCardList: Block = {
       type: 'relationship',
       relationTo: 'regions',
       admin: {
-        description: 'Filter articles by region.',
-        condition: (_, sibling) => sibling?.selectionMode === 'by-geography',
+        description: 'Filter articles by region. Selecting a region hides state/city — clear it to filter by those instead.',
+        condition: geoCondition('filterRegion'),
       },
     },
     {
@@ -52,8 +67,8 @@ export const NewsCardList: Block = {
       type: 'relationship',
       relationTo: 'states',
       admin: {
-        description: 'Filter articles by state.',
-        condition: (_, sibling) => sibling?.selectionMode === 'by-geography',
+        description: 'Filter articles by state. Selecting a state hides region/city — clear it to filter by those instead.',
+        condition: geoCondition('filterState'),
       },
     },
     {
@@ -61,8 +76,8 @@ export const NewsCardList: Block = {
       type: 'relationship',
       relationTo: 'cities',
       admin: {
-        description: 'Filter articles by city.',
-        condition: (_, sibling) => sibling?.selectionMode === 'by-geography',
+        description: 'Filter articles by city. Selecting a city hides region/state — clear it to filter by those instead.',
+        condition: geoCondition('filterCity'),
       },
     },
     {

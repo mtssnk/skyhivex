@@ -25,7 +25,11 @@ if (selectionMode !== 'manual') {
   const all = await getProjects()
   let filtered = all
 
-  if (selectionMode === 'filtered') {
+  if (selectionMode === 'clientType') {
+    if (filterClientType) {
+      filtered = filtered.filter((p) => p.clientType?.id === filterClientType.id)
+    }
+  } else if (selectionMode === 'geography') {
     if (filterCity) {
       filtered = filtered.filter((p) => p.city?.id === filterCity.id)
     } else if (filterState) {
@@ -33,51 +37,46 @@ if (selectionMode !== 'manual') {
     } else if (filterRegion) {
       filtered = filtered.filter((p) => p.region?.id === filterRegion.id)
     }
-    if (filterClientType) {
-      filtered = filtered.filter((p) => p.clientType?.id === filterClientType.id)
-    }
   }
 
   resolvedProjects = count ? filtered.slice(0, count) : filtered
 }
 ---
 
-<section id={anchorId ?? undefined} class="section-projectlist">
-  <div class="container pt-xs">
-    {
-      heading && (
-        <header>
-          <HeadingUnderline>{heading}</HeadingUnderline>
-        </header>
-      )
-    }
-  </div>
-  <div class="pt-xs pb-md bg-hexagon-obsidian">
-    <ul class="container space-y-xs" role="list">
-      {
-        resolvedProjects.map((project, i) => (
-          <li class="w-full">
-            <CardProject
-              href={`/projects/${project.slug}`}
-              media={project.listingMedia ?? project.listingImage}
-              label={project.projectName ?? project.heading}
-              category={project.clientType?.name}
-              sizes="(max-width: 768px) 100vw, 33vw"
-              isEven={i % 2 !== 0}
-              number={i + 1}
-            />
-          </li>
-        ))
-      }
-    </ul>
-    {
-      viewAllLabel ? (
-        <div class="w-full flex justify-center pt-xs">
-          <Button href="/projects" style="solid" size="lg" colour="green">
-            {viewAllLabel}
-          </Button>
-        </div>
-      ) : null
-    }
-  </div>
-</section>
+{
+  resolvedProjects.length > 0 && (
+    <section id={anchorId ?? undefined} class="section-projectlist">
+      <div class="container pt-xs">
+        {heading && (
+          <header>
+            <HeadingUnderline>{heading}</HeadingUnderline>
+          </header>
+        )}
+      </div>
+      <div class="pt-xs pb-md bg-hexagon-obsidian">
+        <ul class="container space-y-xs" role="list">
+          {resolvedProjects.map((project, i) => (
+            <li class="w-full">
+              <CardProject
+                href={`/projects/${project.slug}`}
+                media={project.listingMedia ?? project.listingImage}
+                label={project.projectName ?? project.heading}
+                category={project.clientType?.name}
+                sizes="(max-width: 768px) 100vw, 33vw"
+                isEven={i % 2 !== 0}
+                number={i + 1}
+              />
+            </li>
+          ))}
+        </ul>
+        {viewAllLabel ? (
+          <div class="w-full flex justify-center pt-xs">
+            <Button href="/projects" style="solid" size="lg" colour="green">
+              {viewAllLabel}
+            </Button>
+          </div>
+        ) : null}
+      </div>
+    </section>
+  )
+}

@@ -17,6 +17,7 @@
     inset: 0;
     border-radius: inherit;
     background: conic-gradient(from var(--gradient-angle), #bb00ff, #00fbff, #44f988, #bb00ff);
+    animation: chromatic-glow-rotate 4s linear infinite;
     opacity: 0;
     transition: opacity 2s ease;
     pointer-events: none;
@@ -41,7 +42,6 @@
   .chromatic-glow:hover::before,
   .chromatic-glow:hover::after {
     opacity: 1;
-    animation: chromatic-glow-rotate 4s linear infinite;
   }
 
   @keyframes chromatic-glow-rotate {
