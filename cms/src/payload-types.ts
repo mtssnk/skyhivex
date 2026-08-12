@@ -713,7 +713,7 @@ export interface Page {
             blockType: 'cardList';
           }
         | {
-            selectionMode: 'manual' | 'filtered' | 'latest';
+            selectionMode: 'manual' | 'clientType' | 'geography' | 'latest';
             /**
              * Pick specific projects to display.
              */
@@ -723,15 +723,15 @@ export interface Page {
              */
             filterClientType?: (string | null) | ClientType;
             /**
-             * Filter by region.
+             * Filter by region. Selecting a region hides state/city — clear it to filter by those instead.
              */
             filterRegion?: (string | null) | Region;
             /**
-             * Filter by state.
+             * Filter by state. Selecting a state hides region/city — clear it to filter by those instead.
              */
             filterState?: (string | null) | State;
             /**
-             * Filter by city.
+             * Filter by city. Selecting a city hides region/state — clear it to filter by those instead.
              */
             filterCity?: (string | null) | City;
             /**
@@ -762,15 +762,15 @@ export interface Page {
              */
             category?: (string | null) | Category;
             /**
-             * Filter articles by region.
+             * Filter articles by region. Selecting a region hides state/city — clear it to filter by those instead.
              */
             filterRegion?: (string | null) | Region;
             /**
-             * Filter articles by state.
+             * Filter articles by state. Selecting a state hides region/city — clear it to filter by those instead.
              */
             filterState?: (string | null) | State;
             /**
-             * Filter articles by city.
+             * Filter articles by city. Selecting a city hides region/state — clear it to filter by those instead.
              */
             filterCity?: (string | null) | City;
             /**
@@ -1405,7 +1405,7 @@ export interface Project {
             blockType: 'cardList';
           }
         | {
-            selectionMode: 'manual' | 'filtered' | 'latest';
+            selectionMode: 'manual' | 'clientType' | 'geography' | 'latest';
             /**
              * Pick specific projects to display.
              */
@@ -1415,15 +1415,15 @@ export interface Project {
              */
             filterClientType?: (string | null) | ClientType;
             /**
-             * Filter by region.
+             * Filter by region. Selecting a region hides state/city — clear it to filter by those instead.
              */
             filterRegion?: (string | null) | Region;
             /**
-             * Filter by state.
+             * Filter by state. Selecting a state hides region/city — clear it to filter by those instead.
              */
             filterState?: (string | null) | State;
             /**
-             * Filter by city.
+             * Filter by city. Selecting a city hides region/state — clear it to filter by those instead.
              */
             filterCity?: (string | null) | City;
             /**
@@ -1454,15 +1454,15 @@ export interface Project {
              */
             category?: (string | null) | Category;
             /**
-             * Filter articles by region.
+             * Filter articles by region. Selecting a region hides state/city — clear it to filter by those instead.
              */
             filterRegion?: (string | null) | Region;
             /**
-             * Filter articles by state.
+             * Filter articles by state. Selecting a state hides region/city — clear it to filter by those instead.
              */
             filterState?: (string | null) | State;
             /**
-             * Filter articles by city.
+             * Filter articles by city. Selecting a city hides region/state — clear it to filter by those instead.
              */
             filterCity?: (string | null) | City;
             /**
@@ -2034,7 +2034,7 @@ export interface Post {
         blockType: 'cardList';
       }
     | {
-        selectionMode: 'manual' | 'filtered' | 'latest';
+        selectionMode: 'manual' | 'clientType' | 'geography' | 'latest';
         /**
          * Pick specific projects to display.
          */
@@ -2044,15 +2044,15 @@ export interface Post {
          */
         filterClientType?: (string | null) | ClientType;
         /**
-         * Filter by region.
+         * Filter by region. Selecting a region hides state/city — clear it to filter by those instead.
          */
         filterRegion?: (string | null) | Region;
         /**
-         * Filter by state.
+         * Filter by state. Selecting a state hides region/city — clear it to filter by those instead.
          */
         filterState?: (string | null) | State;
         /**
-         * Filter by city.
+         * Filter by city. Selecting a city hides region/state — clear it to filter by those instead.
          */
         filterCity?: (string | null) | City;
         /**
@@ -2083,15 +2083,15 @@ export interface Post {
          */
         category?: (string | null) | Category;
         /**
-         * Filter articles by region.
+         * Filter articles by region. Selecting a region hides state/city — clear it to filter by those instead.
          */
         filterRegion?: (string | null) | Region;
         /**
-         * Filter articles by state.
+         * Filter articles by state. Selecting a state hides region/city — clear it to filter by those instead.
          */
         filterState?: (string | null) | State;
         /**
-         * Filter articles by city.
+         * Filter articles by city. Selecting a city hides region/state — clear it to filter by those instead.
          */
         filterCity?: (string | null) | City;
         /**
@@ -3866,7 +3866,7 @@ export interface ProjectsPage {
             blockType: 'cardList';
           }
         | {
-            selectionMode: 'manual' | 'filtered' | 'latest';
+            selectionMode: 'manual' | 'clientType' | 'geography' | 'latest';
             /**
              * Pick specific projects to display.
              */
@@ -3876,15 +3876,15 @@ export interface ProjectsPage {
              */
             filterClientType?: (string | null) | ClientType;
             /**
-             * Filter by region.
+             * Filter by region. Selecting a region hides state/city — clear it to filter by those instead.
              */
             filterRegion?: (string | null) | Region;
             /**
-             * Filter by state.
+             * Filter by state. Selecting a state hides region/city — clear it to filter by those instead.
              */
             filterState?: (string | null) | State;
             /**
-             * Filter by city.
+             * Filter by city. Selecting a city hides region/state — clear it to filter by those instead.
              */
             filterCity?: (string | null) | City;
             /**
@@ -3915,15 +3915,15 @@ export interface ProjectsPage {
              */
             category?: (string | null) | Category;
             /**
-             * Filter articles by region.
+             * Filter articles by region. Selecting a region hides state/city — clear it to filter by those instead.
              */
             filterRegion?: (string | null) | Region;
             /**
-             * Filter articles by state.
+             * Filter articles by state. Selecting a state hides region/city — clear it to filter by those instead.
              */
             filterState?: (string | null) | State;
             /**
-             * Filter articles by city.
+             * Filter articles by city. Selecting a city hides region/state — clear it to filter by those instead.
              */
             filterCity?: (string | null) | City;
             /**

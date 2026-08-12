@@ -231,7 +231,7 @@ export type CardListBlock = BlockPadding & {
 export type ProjectListBlock = BlockPadding & {
   blockType: 'projectList'
   id?: string | null
-  selectionMode: 'manual' | 'filtered' | 'latest'
+  selectionMode: 'manual' | 'clientType' | 'geography' | 'latest'
   heading?: string | null
   viewAllLabel?: string | null
   projects?: Project[] | null
