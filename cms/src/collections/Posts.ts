@@ -12,7 +12,7 @@ export const Posts: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'title',
-    defaultColumns: ['title', 'categories', 'updatedAt'],
+    defaultColumns: ['title', 'categories', 'publishedAt'],
     preview: (doc) => {
       const slug = doc?.slug as string | undefined
       const base = process.env.WEB_URL ?? 'http://localhost:4321'
@@ -74,6 +74,28 @@ export const Posts: CollectionConfig = {
       hasMany: true,
       admin: {
         position: 'sidebar',
+      },
+    },
+    {
+      name: 'publishedAt',
+      type: 'date',
+      admin: {
+        position: 'sidebar',
+        date: {
+          pickerAppearance: 'dayAndTime',
+        },
+        description:
+          'Set automatically the first time this post is published. Edit to backdate or reorder.',
+      },
+      hooks: {
+        beforeChange: [
+          ({ siblingData, value }) => {
+            if (siblingData._status === 'published' && !value) {
+              return new Date()
+            }
+            return value
+          },
+        ],
       },
     },
     {
