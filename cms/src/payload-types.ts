@@ -961,6 +961,7 @@ export interface Page {
  */
 export interface Project {
   id: string;
+  _order?: string | null;
   heading: string;
   /**
    * Auto-generated from the title. Do not change after publishing.
@@ -2772,6 +2773,7 @@ export interface PagesSelect<T extends boolean = true> {
  * via the `definition` "projects_select".
  */
 export interface ProjectsSelect<T extends boolean = true> {
+  _order?: T;
   heading?: T;
   slug?: T;
   clientType?: T;

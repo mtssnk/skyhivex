@@ -6,6 +6,7 @@ import { afterChangeTriggerDeploy, afterDeleteTriggerDeploy } from '../hooks/tri
 export const Projects: CollectionConfig = {
   slug: 'projects',
   labels: { singular: 'Project', plural: 'Projects' },
+  orderable: true,
   hooks: {
     afterChange: [afterChangeTriggerDeploy],
     afterDelete: [afterDeleteTriggerDeploy],

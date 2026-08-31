@@ -517,7 +517,7 @@ export async function getProjects(): Promise<Project[]> {
   const data = await get<{ docs: Project[] }>('/projects', {
     depth: '1',
     limit: '100',
-    sort: '-createdAt',
+    sort: '_order',
   })
   return data?.docs ?? []
 }
