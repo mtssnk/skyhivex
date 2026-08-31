@@ -4,7 +4,7 @@ This document describes the conventions used in the Figma file and how they map 
 
 ## Styling approach
 
-Use Tailwind utility classes as the primary styling mechanism. Avoid scoped component styles. Custom CSS classes (e.g. `container`, typography utilities) are defined globally in `global.css` or `typography.css`. Do not output `<style>` blocks in Astro components unless there is no Tailwind equivalent.
+Use Tailwind utility classes as the primary styling mechanism. Avoid scoped component styles. Custom CSS classes (e.g. `container`, typography utilities) are defined globally in `_global.css` or `typography.css`. Do not output `<style>` blocks in Astro components unless there is no Tailwind equivalent.
 
 Use `clsx` for any class string that contains conditional logic. Avoid template literal ternaries for this — `clsx` keeps conditionals readable and avoids accidental whitespace issues.
 
@@ -43,7 +43,7 @@ Descriptive names that don't conflict with Tailwind utility classes may also be 
 }
 ```
 
-`--content-max` and `--gutter` are set in `:root` in `global.css`.
+`--content-max` and `--gutter` are set in `:root` in `_global.css`.
 
 ### grid
 
@@ -140,13 +140,13 @@ Components live in `web/src/components/`.
 
 ### Tailwind Dimensions (numeric scale)
 
-The Figma variable collection **Tailwind Dimensions** maps to Tailwind v4's built-in numeric spacing scale (e.g. `4` = 16px, `8` = 32px). These are already part of Tailwind v4 defaults — no additions to `global.css` are needed.
+The Figma variable collection **Tailwind Dimensions** maps to Tailwind v4's built-in numeric spacing scale (e.g. `4` = 16px, `8` = 32px). These are already part of Tailwind v4 defaults — no additions to `_global.css` are needed.
 
 When a Figma layer has a spacing value not assigned to a variable, round it to the nearest Tailwind value at your discretion. For example, a 17px gap → `gap-4` (16px). Use an arbitrary value (e.g. `gap-[17px]`) only if the discrepancy is large enough that the nearest step would be visually wrong.
 
 ### Clamp spacing (custom scale)
 
-The Figma variable collection **Clamp Spacing** contains fluid values clamped between breakpoints. These are defined in `web/src/styles/global.css` inside `@theme` as `--spacing-*`:
+The Figma variable collection **Clamp Spacing** contains fluid values clamped between breakpoints. These are defined in `web/src/styles/_global.css` inside `@theme` as `--spacing-*`:
 The following are examples and demonstrate the system being used, the final variables may vary.
 
 ```css
@@ -173,4 +173,4 @@ Typography utilities are defined in `web/src/styles/typography.css` using Tailwi
 
 ## Colours
 
-Colour variables are defined in `web/src/styles/global.css` inside `@theme` as `--color-*`. These generate Tailwind colour utilities (`bg-*`, `text-*`, `border-*`, etc.).
+Colour variables are defined in `web/src/styles/_global.css` inside `@theme` as `--color-*`. These generate Tailwind colour utilities (`bg-*`, `text-*`, `border-*`, etc.).
