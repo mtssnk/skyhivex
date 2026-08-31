@@ -1644,6 +1644,10 @@ export interface Post {
   slug: string;
   categories?: (string | Category)[] | null;
   /**
+   * Pin to the top of the news index, above all other posts.
+   */
+  sticky?: boolean | null;
+  /**
    * Set automatically the first time this post is published. Edit to backdate or reorder.
    */
   publishedAt?: string | null;
@@ -3038,6 +3042,7 @@ export interface PostsSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
   categories?: T;
+  sticky?: T;
   publishedAt?: T;
   intro?: T;
   listingImage?: T;

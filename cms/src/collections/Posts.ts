@@ -77,6 +77,15 @@ export const Posts: CollectionConfig = {
       },
     },
     {
+      name: 'sticky',
+      type: 'checkbox',
+      defaultValue: false,
+      admin: {
+        position: 'sidebar',
+        description: 'Pin to the top of the news index, above all other posts.',
+      },
+    },
+    {
       name: 'publishedAt',
       type: 'date',
       admin: {

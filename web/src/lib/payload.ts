@@ -120,6 +120,7 @@ export type Post = {
   title: string
   slug: string
   publishedAt?: string | null
+  sticky?: boolean | null
   intro?: string | null
   categories?: Category[] | null
   regions?: Region[] | null
