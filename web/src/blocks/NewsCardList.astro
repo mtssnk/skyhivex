@@ -42,7 +42,8 @@ if (selectionMode !== 'manual') {
     }
   }
 
-  resolvedArticles = filtered.slice(0, 3)
+  const ordered = [...filtered.filter((p) => p.sticky), ...filtered.filter((p) => !p.sticky)]
+  resolvedArticles = ordered.slice(0, 3)
 }
 ---
 
