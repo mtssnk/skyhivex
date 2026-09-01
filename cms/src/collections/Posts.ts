@@ -2,12 +2,13 @@ import type { CollectionConfig } from 'payload'
 import { overlayAlphaField } from '../fields/overlayAlpha'
 import { postBlocks } from '../blocks'
 import { afterChangeTriggerDeploy, afterDeleteTriggerDeploy } from '../hooks/triggerWebDeploy'
+import { enforceSingleSticky } from '../hooks/enforceSingleSticky'
 
 export const Posts: CollectionConfig = {
   slug: 'posts',
   labels: { singular: 'Post', plural: 'Posts' },
   hooks: {
-    afterChange: [afterChangeTriggerDeploy],
+    afterChange: [enforceSingleSticky, afterChangeTriggerDeploy],
     afterDelete: [afterDeleteTriggerDeploy],
   },
   admin: {
