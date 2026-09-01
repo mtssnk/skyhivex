@@ -2,17 +2,18 @@ import type { CollectionConfig } from 'payload'
 import { overlayAlphaField } from '../fields/overlayAlpha'
 import { postBlocks } from '../blocks'
 import { afterChangeTriggerDeploy, afterDeleteTriggerDeploy } from '../hooks/triggerWebDeploy'
+import { enforceSingleSticky } from '../hooks/enforceSingleSticky'
 
 export const Posts: CollectionConfig = {
   slug: 'posts',
   labels: { singular: 'Post', plural: 'Posts' },
   hooks: {
-    afterChange: [afterChangeTriggerDeploy],
+    afterChange: [enforceSingleSticky, afterChangeTriggerDeploy],
     afterDelete: [afterDeleteTriggerDeploy],
   },
   admin: {
     useAsTitle: 'title',
-    defaultColumns: ['title', 'categories', 'updatedAt'],
+    defaultColumns: ['title', 'categories', 'publishedAt'],
     preview: (doc) => {
       const slug = doc?.slug as string | undefined
       const base = process.env.WEB_URL ?? 'http://localhost:4321'
@@ -74,6 +75,37 @@ export const Posts: CollectionConfig = {
       hasMany: true,
       admin: {
         position: 'sidebar',
+      },
+    },
+    {
+      name: 'sticky',
+      type: 'checkbox',
+      defaultValue: false,
+      admin: {
+        position: 'sidebar',
+        description: 'Pin to the top of the news index, above all other posts.',
+      },
+    },
+    {
+      name: 'publishedAt',
+      type: 'date',
+      admin: {
+        position: 'sidebar',
+        date: {
+          pickerAppearance: 'dayAndTime',
+        },
+        description:
+          'Set automatically the first time this post is published. Edit to backdate or reorder.',
+      },
+      hooks: {
+        beforeChange: [
+          ({ siblingData, value }) => {
+            if (siblingData._status === 'published' && !value) {
+              return new Date()
+            }
+            return value
+          },
+        ],
       },
     },
     {

@@ -11,7 +11,7 @@ const BROWSER_HEADERS = {
 
 // Adobe's servers serve slug names (acumin-pro) to non-browser clients but
 // title-case names (Acumin Pro) to real browsers. Convert to title case so
-// @font-face declarations match the CSS custom properties in global.css.
+// @font-face declarations match the CSS custom properties in _global.css.
 function slugToTitle(slug: string): string {
   return (
     slug.charAt(0).toUpperCase() + slug.slice(1).replace(/-./g, (m) => ' ' + m[1].toUpperCase())

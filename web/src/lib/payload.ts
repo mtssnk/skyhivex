@@ -119,6 +119,8 @@ export type Post = {
   id: string
   title: string
   slug: string
+  publishedAt?: string | null
+  sticky?: boolean | null
   intro?: string | null
   categories?: Category[] | null
   regions?: Region[] | null
@@ -517,7 +519,7 @@ export async function getProjects(): Promise<Project[]> {
   const data = await get<{ docs: Project[] }>('/projects', {
     depth: '1',
     limit: '100',
-    sort: '-createdAt',
+    sort: '_order',
   })
   return data?.docs ?? []
 }
@@ -541,7 +543,8 @@ export async function getPosts(): Promise<Post[]> {
   const data = await get<{ docs: Post[] }>('/posts', {
     depth: '1',
     limit: '100',
-    sort: '-createdAt',
+    sort: '-publishedAt',
+    'where[_status][equals]': 'published',
   })
   return data?.docs ?? []
 }

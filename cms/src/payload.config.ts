@@ -48,7 +48,9 @@ export default buildConfig({
     Navigations,
   ],
   globals: [SiteSettings, ProjectsPage, Navigation],
-  editor: lexicalEditor(),
+  editor: lexicalEditor({
+    features: ({ defaultFeatures }) => defaultFeatures.filter((feature) => feature.key !== 'checklist'),
+  }),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),

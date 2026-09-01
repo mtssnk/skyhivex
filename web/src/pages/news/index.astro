@@ -9,7 +9,8 @@ import HeadingUnderline from '@/components/HeadingUnderline.astro'
 import { getPosts } from '@/lib/payload'
 import type { Category } from '@/lib/payload'
 
-const posts = await getPosts()
+const allPosts = await getPosts()
+const posts = [...allPosts.filter((p) => p.sticky), ...allPosts.filter((p) => !p.sticky)]
 const perPage = 8
 
 const categoryMap = new Map<string, Category>()

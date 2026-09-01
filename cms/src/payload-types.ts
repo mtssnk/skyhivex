@@ -961,6 +961,7 @@ export interface Page {
  */
 export interface Project {
   id: string;
+  _order?: string | null;
   heading: string;
   /**
    * Auto-generated from the title. Do not change after publishing.
@@ -1642,6 +1643,14 @@ export interface Post {
    */
   slug: string;
   categories?: (string | Category)[] | null;
+  /**
+   * Pin to the top of the news index, above all other posts.
+   */
+  sticky?: boolean | null;
+  /**
+   * Set automatically the first time this post is published. Edit to backdate or reorder.
+   */
+  publishedAt?: string | null;
   /**
    * Short summary shown on listing cards. Falls back to meta description for SEO.
    */
@@ -2772,6 +2781,7 @@ export interface PagesSelect<T extends boolean = true> {
  * via the `definition` "projects_select".
  */
 export interface ProjectsSelect<T extends boolean = true> {
+  _order?: T;
   heading?: T;
   slug?: T;
   clientType?: T;
@@ -3032,6 +3042,8 @@ export interface PostsSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
   categories?: T;
+  sticky?: T;
+  publishedAt?: T;
   intro?: T;
   listingImage?: T;
   overlayAlpha?: T;

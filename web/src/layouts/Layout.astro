@@ -5,7 +5,7 @@ import VideoModal from '@/components/VideoModal.astro'
 import { GoogleTracking } from '@/components/GoogleTracking'
 import { getSiteSettings } from '@/lib/payload'
 import { getAdobeFontsCss } from '@/lib/fonts'
-import '@/styles/global.css'
+import '@/styles/_global.css'
 import '@/cookiebanner/styles.css'
 
 interface Props {
@@ -43,6 +43,7 @@ if (settings?.socialLinks?.length) orgSchema.sameAs = settings.socialLinks.map((
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/png" href="/favicon.png" sizes="32x32" />
     <link rel="icon" href="/favicon.ico" sizes="48x48" />
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta name="generator" content={Astro.generator} />
     {!settings?.allowIndexing && <meta name="robots" content="noindex, nofollow" />}
