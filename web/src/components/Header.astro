@@ -155,6 +155,18 @@ function linkHref(item: {
   }
 </nav>
 
+<style>
+  /* Applied only when the mobile nav is closed by clicking a link (see the
+     script below) rather than by the toggle button, Escape, or a resize.
+     Delays the close until the page transition overlay has fully covered
+     the screen, then snaps it shut instantly instead of sliding — otherwise
+     the slide-out is visible through the overlay while it's still fading in. */
+  #mobile-nav[data-transition-close] {
+    transition-delay: var(--transition-cover-duration);
+    transition-duration: 0s;
+  }
+</style>
+
 <script>
   // --- Mobile nav ---
   const toggle = document.getElementById('nav-toggle')!
@@ -195,7 +207,30 @@ function linkHref(item: {
     nav.hasAttribute('data-open') ? closeNav() : openNav()
   })
 
-  nav.querySelectorAll('a').forEach((a) => a.addEventListener('click', closeNav))
+  // A link click means we're navigating away — the page transition overlay
+  // is about to cover the screen, so close instantly behind it rather than
+  // sliding out visibly while the overlay is still fading in.
+  const closeNavForNavigation = () => {
+    nav.setAttribute('data-transition-close', '')
+    closeNav()
+  }
+
+  nav.querySelectorAll('a').forEach((a) => a.addEventListener('click', closeNavForNavigation))
+
+  // Any other routing link in the header — the logo, desktop nav links, the
+  // header CTA button — should also close the mobile nav if it's left open
+  // (e.g. still visible at a viewport width where both are shown at once).
+  document.querySelector<HTMLElement>('.snk-header')!.addEventListener('click', (e) => {
+    if (!nav.hasAttribute('data-open')) return
+    if (!(e.target as HTMLElement).closest('a')) return
+    closeNavForNavigation()
+  })
+
+  // Restore the normal slide-close transition for the next page, in case the
+  // navigation never actually completed (e.g. an external or same-page link).
+  document.addEventListener('astro:page-load', () => {
+    nav.removeAttribute('data-transition-close')
+  })
 
   window.matchMedia('(min-width: 1024px)').addEventListener('change', ({ matches }) => {
     if (matches) closeNav()

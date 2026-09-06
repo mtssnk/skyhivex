@@ -63,6 +63,12 @@
   --content-max: 1216px;
   /* left edge of content inside a .container at any viewport width */
   --container-inset: max(var(--gutter), calc((100vw - var(--content-max)) / 2));
+
+  /* Page transition overlay timing (PageTransitionOverlay.astro). Shared at
+     :root so other components — e.g. the mobile nav in Header.astro — can
+     coordinate their own animations against the same durations. */
+  --transition-cover-duration: 300ms;
+  --transition-reveal-duration: 500ms;
 }
 body {
   -webkit-font-smoothing: antialiased;
@@ -230,4 +236,14 @@ main {
   background-repeat: repeat;
   background-position: center left;
   background-size: 43px 50px;
+}
+
+/* Astro's <ClientRouter /> applies the browser's default whole-page crossfade
+   on every navigation unless told otherwise. PageTransitionOverlay.astro is our
+   own custom transition, so the built-in one is switched off to avoid the two
+   competing on screen at once. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
 }
