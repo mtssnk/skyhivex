@@ -60,7 +60,6 @@ const clientTypes = Array.from(clientTypeMap.values())
                 media={project.listingMedia ?? project.listingImage}
                 label={project.projectName ?? project.heading}
                 category={project.clientType?.name}
-                sizes="(max-width: 768px) 100vw, 33vw"
                 isEven={i % 2 !== 0}
                 number={i + 1}
               />

@@ -22,20 +22,13 @@ Payload 3 handles content authoring and serves a REST API. Astro consumes this A
 
 ### Astro render strategy (SSR, static, or hybrid)
 
-**Status: TBD (intentional).**
+**Status: Decided.**
 
-Current operational setup:
-
-- Deploy both CMS and frontend on **Railway** to keep infrastructure simple during planning.
-
-Final decision pending:
-
-- Choose **SSR**, **static**, or **hybrid** once requirements, editor workflow, and performance targets are confirmed.
-
-Notes:
-
-- SSR: newly published pages can go live without a frontend rebuild.
-- Static/hybrid: may require rebuild/deploy hooks depending on prerender strategy.
+- Render strategy: `output: 'static'`. Pages prerender to static HTML at build time; server routes (`/preview`, `/api/contact`) opt out individually via `export const prerender = false`. Astro v5+ folded the old `hybrid` mode into `static`, so there's no separate "hybrid" output value to choose between.
+- Both CMS and frontend deploy on **Railway**, in the same project.
+- Because content is baked into static HTML at build time, publishing in the CMS does not update the live site until `web` rebuilds. This is automated: `cms/src/hooks/triggerWebDeploy.ts` commits a fresh timestamp to `web/.build-trigger` via the GitHub API on publish (`afterChange`/`afterDelete` on `Pages`, `Projects`, `Posts`, `Navigations`; `afterChange` on the `SiteSettings`, `ProjectsPage`, and `Navigation` globals), which Railway's GitHub integration then builds on push.
+- A direct Railway deploy-API trigger (without a real file change) doesn't reliably bust the build cache — Railway's build cache is content-addressed, so redeploying an unchanged commit reuses the previous build's output byte-for-byte, including stale CMS content. A genuine commit is the only thing that reliably forces a fresh build.
+- Accepted trade-off: every publish adds a small commit to `git log`. Low priority to change — see `CLAUDE.md` → "Rebuild on publish" for the fuller writeup and a possible future alternative (building `web` outside Railway via CI, deploying the finished artifact directly).
 
 ### Global layouts
 
@@ -75,13 +68,10 @@ Most pages are block-based. Current exceptions under discussion:
 
 - News collection pages
 - Projects collection pages
-- Contact page template
 
 These may use predefined templates/fields, with optional block content appended after templated content.
 
-### Contact page
-
-This is a templated page with a heading, and a templated form. The contact number, email address and postal address are output from the Site Settings CMS section. There is a text section which is displayed below the contact details and edited via the contact page section in the CMS.
+Contact was originally one of these exceptions (a hard-coded templated page) but is no longer — it's now a regular block-based `Pages` document, using a dedicated `ContactForm` block (`cms/src/blocks/ContactForm.ts`) with expanded options to replicate the previous templated layout.
 
 ### Shared block system (Payload Blocks field)
 
@@ -204,14 +194,13 @@ When the heading is clicked, the body is revealed.
 ### Current state
 
 - CMS and frontend are deployed on Railway
-- Astro runs on Node runtime
-- Final render strategy is not yet decided
+- Astro runs on Node runtime, `output: 'static'`
+- Publish-to-live is automated via a commit-triggered rebuild (see "Astro render strategy" above)
 
 ### Planned state
 
-- Finalise render strategy after design and workflow validation
-- Define caching policy and publish-to-live SLA
-- Confirm long-term hosting pattern after render decision
+- Define caching policy
+- Confirm long-term hosting pattern (Railway is the current target while broader infrastructure is finalised)
 
 ---
 
@@ -222,7 +211,9 @@ When the heading is clicked, the body is revealed.
 | D-1 | Payload CMS + Astro frontend                | Accepted | 2026-06-19 | Team  |
 | D-2 | Deploy CMS + web on Railway (initially)     | Accepted | 2026-06-19 | Team  |
 | D-3 | Astro render strategy: `output: 'static'`   | Accepted | 2026-06-24 | Team  |
-| D-4 | Template exceptions (News/Projects/Contact) | Proposed | 2026-06-19 | Team  |
+| D-4 | Template exceptions (News/Projects)         | Proposed | 2026-06-19 | Team  |
+| D-5 | Publish-to-live via commit-triggered rebuild (GitHub commit, not direct Railway deploy API) | Accepted | 2026-08-05 | Team |
+| D-6 | Contact is a regular block-based `Pages` document (not a template exception) | Accepted | 2026-08-08 | Team |
 
 ## Assumptions / unknowns
 
@@ -233,16 +224,14 @@ When the heading is clicked, the body is revealed.
   configured against the live domain. Needs a `PUBLIC_TURNSTILE_SITE_KEY` (client-side widget) and
   `TURNSTILE_SECRET_KEY` (server-side token verification in `web/src/pages/api/contact.ts`), plus a
   decision on widget mode (Managed/Invisible/Non-interactive).
-- News/Contact template boundaries vs block flexibility need confirmation
+- News/Projects template boundaries vs block flexibility need confirmation
 - SEO metadata requirements per page type need confirmation
 
 ## Performance and caching targets (draft)
 
 - Mobile LCP target (p75): <= 2.5s
-- Optimised responsive media across media-heavy blocks
-- Publish-to-live SLA by render strategy:
-  - SSR: near-instant
-  - static/hybrid: rebuild + deploy within agreed SLA
+- Optimised responsive media across media-heavy blocks — see "Images and responsive delivery" in `web/CLAUDE.md` for the actual Sharp/R2/`srcset` pipeline and the `sizes`-attribute convention
+- Publish-to-live SLA: not instant — publishing triggers an automatic `web` rebuild (see "Astro render strategy" above); actual time is bounded by Railway's build duration for the site, which is not yet measured or committed to an SLA (**TODO**)
 
 ## Editorial workflow (draft)
 
