@@ -174,3 +174,55 @@ Typography utilities are defined in `web/src/styles/typography.css` using Tailwi
 ## Colours
 
 Colour variables are defined in `web/src/styles/_global.css` inside `@theme` as `--color-*`. These generate Tailwind colour utilities (`bg-*`, `text-*`, `border-*`, etc.).
+
+---
+
+## Page transitions
+
+Astro's `<ClientRouter />` is enabled in `web/src/layouts/Layout.astro`. This intercepts same-origin link clicks and swaps `<body>` content via `fetch()` + DOM diffing (animated with the browser's View Transition API where supported) instead of doing a full page reload. The `document`/`window` are **never destroyed** across an internal navigation — it behaves like an SPA, not a series of independent page loads. This has real consequences for any script that assumes a classic page-load lifecycle:
+
+### Problem 1: a script's top-level code only ever runs once per session
+
+Browsers cache ES modules by URL for the life of the JS realm. Since the realm now persists across navigations, a `<script>` tag's top-level code (e.g. a bare `main()` call) will **not** re-run just because the same script tag reappears in a later swapped-in page — it already ran, once, the first time that module was ever evaluated.
+
+**Fix:** if something needs to (re-)initialize on every navigation — not just the first — hook it to the `astro:page-load` event instead of calling it directly:
+
+```js
+function main() {
+  // init logic
+}
+document.addEventListener('astro:page-load', main)
+```
+
+`astro:page-load` fires on the initial hard load **and** every subsequent client-side navigation, so this is the one event to reach for when something needs to "run after every page load." Register the listener once (on `document`, which persists) — it keeps firing for the rest of the session.
+
+If the init does anything stateful (starts a render loop, opens a connection, adds other listeners), tear down the previous instance at the top of the handler before creating a new one, or you'll leak one instance per navigation. See `web/src/components/HexShader.astro` for a worked example (a WebGL canvas renderer that re-inits on every visit and destroys the previous instance first).
+
+Astro also fires `astro:before-preparation`, `astro:after-preparation`, `astro:before-swap`, and `astro:after-swap` around each navigation. These are useful for temporary `console.log` debugging when working on transition behaviour, but aren't wired up permanently in the codebase — add and remove them locally as needed rather than leaving them in committed code.
+
+### Problem 2: elements a script bound listeners to may no longer exist
+
+Anything not explicitly persisted (see below) is torn down and replaced with fresh, un-hydrated HTML on every navigation. A listener bound directly to a specific element at load time ends up listening to a detached node once that element is swapped out, or the new element on the page has no listener at all.
+
+**Fix:** delegate from `document` instead of binding to the element directly:
+
+```js
+document.addEventListener('click', (e) => {
+  const trigger = e.target.closest('[data-video-url]')
+  if (!trigger) return
+  // ...
+})
+```
+
+Since `document` persists, this only needs to be attached once and keeps working regardless of what gets swapped in and out of the page. See the video-trigger click handler in `web/src/layouts/Layout.astro` for a live example.
+
+### `transition:persist` — keeping an element's actual state, not just re-initializing it
+
+Some things shouldn't be re-initialized on navigation at all — they should physically survive: an open mobile nav, scroll position, a GTM script that's already injected. `transition:persist` tells Astro to move the *old* DOM element into the new page instead of swapping in a fresh one.
+
+Two non-obvious rules, both learned the hard way:
+
+- **It must be on the actual HTML element, not passed as a prop at a component's call site.** `<Header transition:persist />` in `Layout.astro` does nothing — it only auto-forwards for hydrated islands (`client:*` components). For a plain `.astro` component, put the directive on the root element *inside* that component (e.g. directly on `<header>` in `Header.astro`).
+- **Every top-level sibling element needs it independently.** `Header.astro` renders `<header>` and `<nav id="mobile-nav">` as siblings, not one nested in the other — persisting only `<header>` broke the mobile nav toggle, because its script held a closure reference to the non-persisted `#mobile-nav`, which got replaced on every navigation while the (persisted, still-listening) toggle button kept updating the detached old one. Both siblings now carry `transition:persist`.
+
+**Rule of thumb:** reach for `astro:page-load` when a script needs to do something on every navigation; delegate from `document` when binding to elements that might not survive a swap; use `transition:persist` directly on an element when you want its actual state — not just its re-initialization — to carry over.

@@ -129,7 +129,7 @@ Valid types: `feat`, `fix`, `chore`, `docs`, `style`, `refactor`, `test`, `perf`
 
 - `web/src/lib/payload.ts` — typed CMS fetch helpers (`getPageBySlug`, `getProjects`, `getProjectBySlug`, `getPosts`, `getPostBySlug`) + all response types
 - `web/src/lib/lexical.ts` — Lexical JSON → HTML serialiser for rich text fields
-- `web/src/layouts/Layout.astro` — base HTML shell (`title`, `description` props)
+- `web/src/layouts/Layout.astro` — base HTML shell (`title`, `description` props); also wires up Astro's `<ClientRouter />` for page transitions — see "Page transitions" in `web/CLAUDE.md` before touching navigation-related scripts
 - `web/src/blocks/BlockRenderer.astro` — renders the correct block component per `blockType`
 - `web/src/styles/_global.css` — Tailwind v4 with design tokens (`--color-*`, `--font-*`)
 
