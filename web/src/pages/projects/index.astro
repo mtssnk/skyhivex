@@ -73,13 +73,21 @@ const clientTypes = Array.from(clientTypeMap.values())
 </Layout>
 
 <script>
-  const select = document.getElementById('project-filter') as HTMLSelectElement | null
-  const items = document.querySelectorAll<HTMLElement>('[data-client-type-id]')
+  // Re-initialised on every navigation via astro:page-load — the filter and
+  // list markup are swapped each time, so listeners bound at module load would
+  // be lost. See web/CLAUDE.md -> "Page transitions".
+  function initProjectFilter() {
+    const select = document.getElementById('project-filter') as HTMLSelectElement | null
+    if (!select) return
+    const items = document.querySelectorAll<HTMLElement>('[data-client-type-id]')
 
-  select?.addEventListener('change', () => {
-    const filter = select.value
-    items.forEach((item) => {
-      item.hidden = filter !== 'all' && item.dataset.clientTypeId !== filter
+    select.addEventListener('change', () => {
+      const filter = select.value
+      items.forEach((item) => {
+        item.hidden = filter !== 'all' && item.dataset.clientTypeId !== filter
+      })
     })
-  })
+  }
+
+  document.addEventListener('astro:page-load', initProjectFilter)
 </script>

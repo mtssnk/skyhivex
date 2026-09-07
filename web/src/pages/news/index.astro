@@ -42,7 +42,12 @@ const categories = Array.from(categoryMap.values())
       )
     }
     <div class="bg-space">
-      <ul class="container grid grid-cols-12 py-xs" role="list">
+      <ul
+        class="container grid grid-cols-12 py-xs"
+        role="list"
+        data-news-list
+        data-per-page={perPage}
+      >
         {
           posts.map((post, i) => (
             <li
@@ -98,37 +103,51 @@ const categories = Array.from(categoryMap.values())
   </section>
 </Layout>
 
-<script define:vars={{ perPage }}>
-  const items = Array.from(document.querySelectorAll('[data-post-item]'))
-  const btn = document.getElementById('load-more')
-  const wrapper = document.getElementById('load-more-wrapper')
-  const select = document.getElementById('news-filter')
-  let shown = perPage
+<script>
+  // Module script (runs once); re-initialised on every navigation via
+  // astro:page-load because the list markup is swapped each time. Elements are
+  // re-queried inside init — nothing is captured at module scope.
+  // See web/CLAUDE.md -> "Page transitions".
+  function initNewsFilters() {
+    const list = document.querySelector<HTMLElement>('[data-news-list]')
+    if (!list) return
 
-  const applyPagination = () => {
-    items.forEach((item, i) => {
-      item.hidden = i >= shown
+    const perPage = Number(list.dataset.perPage) || 8
+    const items = Array.from(list.querySelectorAll<HTMLElement>('[data-post-item]'))
+    const btn = document.getElementById('load-more')
+    const wrapper = document.getElementById('load-more-wrapper')
+    const select = document.getElementById('news-filter') as HTMLSelectElement | null
+    let shown = perPage
+
+    const applyPagination = () => {
+      items.forEach((item, i) => {
+        item.hidden = i >= shown
+      })
+      if (wrapper) wrapper.hidden = shown >= items.length
+    }
+
+    btn?.addEventListener('click', () => {
+      shown += perPage
+      applyPagination()
     })
-    if (wrapper) wrapper.hidden = shown >= items.length
+
+    select?.addEventListener('change', () => {
+      const filter = select.value
+
+      if (filter === 'all') {
+        shown = perPage
+        applyPagination()
+      } else {
+        items.forEach((item) => {
+          const ids = item.dataset.categoryIds?.split(' ') ?? []
+          item.hidden = !ids.includes(filter)
+        })
+        if (wrapper) wrapper.hidden = true
+      }
+    })
+
+    applyPagination()
   }
 
-  btn?.addEventListener('click', () => {
-    shown += perPage
-    applyPagination()
-  })
-
-  select?.addEventListener('change', () => {
-    const filter = select.value
-
-    if (filter === 'all') {
-      shown = perPage
-      applyPagination()
-    } else {
-      items.forEach((item) => {
-        const ids = item.dataset.categoryIds?.split(' ') ?? []
-        item.hidden = !ids.includes(filter)
-      })
-      if (wrapper) wrapper.hidden = true
-    }
-  })
+  document.addEventListener('astro:page-load', initNewsFilters)
 </script>
