@@ -1,25 +1,18 @@
 ---
-import Layout from '@/layouts/Layout.astro'
-import BlockRenderer from '@/blocks/BlockRenderer.astro'
+import PageView from '@/components/PageView.astro'
 import { getPageBySlug } from '@/lib/payload'
 
 export const prerender = false
 
 Astro.response.headers.set('Cache-Control', 'no-store')
 
-const isPreview = Astro.cookies.get('__preview')?.value === 'true'
-if (!isPreview) return Astro.redirect('/')
+if (Astro.cookies.get('__preview')?.value !== 'true') return Astro.redirect('/')
 
-const apiKey = import.meta.env.PAYLOAD_API_KEY as string
-const page = await getPageBySlug('home', { draft: true, apiKey })
+const page = await getPageBySlug('home', {
+  draft: true,
+  apiKey: import.meta.env.PAYLOAD_API_KEY as string,
+})
 if (!page) return Astro.redirect('/404')
 ---
 
-<Layout
-  title={page.title}
-  description={page.metaDescription ?? undefined}
-  ogImage={page.ogImage?.url ?? undefined}
-  isPreview={isPreview}
->
-  <BlockRenderer blocks={page.blocks} />
-</Layout>
+<PageView {page} isPreview />

@@ -174,6 +174,32 @@ Colour variables are defined in `web/src/styles/_global.css` inside `@theme` as 
 
 ---
 
+## Routes and preview
+
+Every CMS-backed page type has **two routes** that render the same output: a static one and a live-SSR preview one.
+
+| Type | Static route | Preview route |
+| ---- | ------------ | ------------- |
+| Pages | `pages/index.astro`, `pages/[...slug].astro` | `pages/preview/index.astro`, `pages/preview/[...slug].astro` |
+| News | `pages/news/[slug].astro` | `pages/preview/news/[slug].astro` |
+| Projects | `pages/projects/[slug].astro` | `pages/preview/projects/[slug].astro` |
+
+**The render logic lives once, in a view component** — `components/PageView.astro`, `components/PostView.astro`, `components/ProjectView.astro`. Each takes a resolved `page`/`post`/`project` prop (+ optional `isPreview`) and owns everything: `<Layout>`, `<Hero>`, JSON-LD, meta derivation, hero buttons, `<BlockRenderer>`. **Change page output here, not in a route file** — otherwise the static and preview versions drift.
+
+A route file only carries what genuinely must differ between static and preview:
+
+| Static route | Preview route |
+| ------------ | ------------- |
+| `export async function getStaticPaths()` | `export const prerender = false` |
+| — | `Astro.response.headers.set('Cache-Control', 'no-store')` |
+| — | cookie guard: `if (Astro.cookies.get('__preview')?.value !== 'true') return Astro.redirect(<public path>)` |
+| `getXBySlug(slug)` | `getXBySlug(slug, { draft: true, apiKey: import.meta.env.PAYLOAD_API_KEY as string })` |
+| — | `<XView … isPreview />` |
+
+`export const prerender = false` must be a literal per-file export (statically analysed by Astro) — it can't be moved into a component or middleware, which is why the preview route file can't be collapsed away entirely.
+
+Preview flow: the CMS "Preview" button hits `pages/api/preview.ts` (validates `PREVIEW_SECRET`, sets the `__preview` cookie, redirects to `/preview/…`); `pages/api/exit-preview.ts` clears the cookie. `Layout.astro`'s `isPreview` prop renders the "exit preview" bar.
+
 ## Images and responsive delivery
 
 ### Pipeline: upload → Sharp → R2 → `srcset`

@@ -1,16 +1,9 @@
 ---
-import Layout from '@/layouts/Layout.astro'
-import BlockRenderer from '@/blocks/BlockRenderer.astro'
+import PageView from '@/components/PageView.astro'
 import { getPageBySlug } from '@/lib/payload'
 
 const page = await getPageBySlug('home')
 if (!page) return Astro.redirect('/404')
 ---
 
-<Layout
-  title={page.title}
-  description={page.metaDescription ?? undefined}
-  ogImage={page.ogImage?.url ?? undefined}
->
-  <BlockRenderer blocks={page.blocks} />
-</Layout>
+<PageView {page} />
