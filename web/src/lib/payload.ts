@@ -108,7 +108,6 @@ export type Project = {
   intro?: string | null
   summary?: { label: string; value: string; id?: string | null }[] | null
   body?: LexicalContent | null
-  url?: string | null
   blocks?: ProjectBlock[] | null
   metaDescription?: string | null
   ogImage?: Media | null
@@ -211,22 +210,6 @@ export type QuoteBlock = BlockPadding & {
   quoteSize: 'small' | 'regular' | 'large'
   quote: string
   attribution?: string | null
-}
-
-export type CardListBlock = BlockPadding & {
-  blockType: 'cardList'
-  id?: string | null
-  heading?: string | null
-  cards: {
-    illustration: string
-    heading: string
-    body?: LexicalContent | null
-    id?: string | null
-  }[]
-  button?: {
-    label?: string | null
-    url?: string | null
-  } | null
 }
 
 export type ProjectListBlock = BlockPadding & {
@@ -375,7 +358,6 @@ export type SharedBlock =
   | PersonListBlock
   | AccordionListBlock
   | ContactFormBlock
-  | CardListBlock
   | ProjectListBlock
   | NewsCardListBlock
   | FeatureListBlock

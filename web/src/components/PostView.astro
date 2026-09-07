@@ -1,0 +1,50 @@
+---
+import type { Post } from '@/lib/payload'
+import Layout from '@/layouts/Layout.astro'
+import BlockRenderer from '@/blocks/BlockRenderer.astro'
+import Hero from '@/blocks/Hero.astro'
+
+interface Props {
+  post: Post
+  isPreview?: boolean
+}
+
+const { post, isPreview = false } = Astro.props
+
+const metaDescription = post.metaDescription ?? post.intro ?? post.title
+const ogImage = post.ogImage?.url ?? post.listingImage?.url ?? undefined
+
+const jsonLd: Record<string, unknown> = {
+  '@context': 'https://schema.org',
+  '@type': 'NewsArticle',
+  headline: post.title,
+  description: metaDescription,
+  url: Astro.url.href,
+  ...(ogImage ? { image: ogImage } : {}),
+}
+
+const heroButtons: NonNullable<Parameters<typeof Hero>[0]['buttons']> = [
+  {
+    label: 'Find out more',
+    type: 'anchor',
+    anchorTarget: 'article-content',
+    variant: 'solid',
+    colour: 'white',
+  },
+]
+---
+
+<Layout title={post.title} description={metaDescription} {ogImage} {jsonLd} isPreview={isPreview}>
+  <Hero
+    headingPart1={post.title}
+    backgroundMedia="image"
+    backgroundImage={post.listingImage}
+    overlayAlpha={post.overlayAlpha}
+    buttons={heroButtons}
+    size="large"
+  />
+
+  <div id="article-content"></div>
+
+  <BlockRenderer blocks={post.blocks} />
+</Layout>

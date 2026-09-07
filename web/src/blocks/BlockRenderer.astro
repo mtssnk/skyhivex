@@ -4,7 +4,6 @@ import BodyCopy from '@/blocks/BodyCopy.astro'
 import Hero from '@/blocks/Hero.astro'
 import CTA from '@/blocks/CTA.astro'
 import ProjectList from '@/blocks/ProjectList.astro'
-import CardList from '@/blocks/CardList.astro'
 import MediaText from '@/blocks/MediaText.astro'
 import MediaBlock from '@/blocks/MediaBlock.astro'
 import Quote from '@/blocks/Quote.astro'
@@ -31,7 +30,6 @@ const { blocks } = Astro.props
       {block.blockType === 'cta' && <CTA {...block} />}
       {block.blockType === 'bodyCopy' && <BodyCopy {...block} />}
       {block.blockType === 'projectList' && <ProjectList {...block} />}
-      {block.blockType === 'cardList' && <CardList {...block} />}
       {block.blockType === 'mediaText' && <MediaText {...block} />}
       {block.blockType === 'media' && <MediaBlock {...block} />}
       {block.blockType === 'quote' && <Quote {...block} />}

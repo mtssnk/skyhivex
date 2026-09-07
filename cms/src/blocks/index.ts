@@ -7,7 +7,6 @@ import { BodyCopy } from './BodyCopy'
 import { PersonList } from './PersonList'
 import { AccordionList } from './AccordionList'
 import { ContactForm } from './ContactForm'
-import { CardList } from './CardList'
 import { ProjectList } from './ProjectList'
 import { NewsCardList } from './NewsCardList'
 import { FeatureList } from './FeatureList'
@@ -26,7 +25,6 @@ const baseBlocks = [
   PersonList,
   AccordionList,
   ContactForm,
-  CardList,
   ProjectList,
   NewsCardList,
   NavBlock,
