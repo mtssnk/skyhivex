@@ -23,6 +23,16 @@ const jsonLd: Record<string, unknown> = {
   url: Astro.url.href,
   ...(ogImage ? { image: ogImage } : {}),
 }
+
+const heroButtons: NonNullable<Parameters<typeof Hero>[0]['buttons']> = [
+  {
+    label: 'Find out more',
+    type: 'anchor',
+    anchorTarget: 'article-content',
+    variant: 'solid',
+    colour: 'white',
+  },
+]
 ---
 
 <Layout title={post.title} description={metaDescription} {ogImage} {jsonLd}>
@@ -31,7 +41,11 @@ const jsonLd: Record<string, unknown> = {
     backgroundMedia="image"
     backgroundImage={post.listingImage}
     overlayAlpha={post.overlayAlpha}
+    buttons={heroButtons}
     size="large"
   />
+
+  <div id="article-content"></div>
+
   <BlockRenderer blocks={post.blocks} />
 </Layout>

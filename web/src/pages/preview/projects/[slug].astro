@@ -62,17 +62,6 @@ const heroButtons: NonNullable<Parameters<typeof Hero>[0]['buttons']> = [
     variant: 'solid',
     colour: 'white',
   },
-  ...(project.url
-    ? [
-        {
-          label: 'View project',
-          type: 'link' as const,
-          linkUrl: project.url,
-          variant: 'outline' as const,
-          colour: 'white' as const,
-        },
-      ]
-    : []),
 ]
 ---
 
