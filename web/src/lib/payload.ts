@@ -83,7 +83,6 @@ export type NavigationItem = {
     | {
         label: string
         page?: { id: string; slug: string; title: string } | null
-        url?: string | null
         id?: string | null
       }[]
     | null

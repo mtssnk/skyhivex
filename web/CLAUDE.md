@@ -115,12 +115,11 @@ Two variants controlled by a CMS or page-level option:
 
 Components live in `web/src/components/`.
 
-| Figma name                  | Astro file                         | Notes                                       |
-| --------------------------- | ---------------------------------- | ------------------------------------------- |
-| `component/Card/Link`       | `components/CardLink.astro`        | Separate files — designs vary significantly |
-| `component/Card/Text`       | `components/CardText.astro`        |                                             |
-| `component/BackgroundMedia` | `components/BackgroundMedia.astro` | Full CMS-controlled background — see below  |
-| `component/Button`          | `components/Button.astro`          |                                             |
+| Figma name                  | Astro file                         | Notes                                      |
+| --------------------------- | ---------------------------------- | ------------------------------------------ |
+| `component/Card/Text`       | `components/CardText.astro`        |                                            |
+| `component/BackgroundMedia` | `components/BackgroundMedia.astro` | Full CMS-controlled background — see below |
+| `component/Button`          | `components/Button.astro`          |                                            |
 
 ### BackgroundMedia vs MediaItem
 
@@ -270,11 +269,11 @@ Since `document` persists, this only needs to be attached once and keeps working
 
 ### `transition:persist` — keeping an element's actual state, not just re-initializing it
 
-Some things shouldn't be re-initialized on navigation at all — they should physically survive: an open mobile nav, scroll position, a GTM script that's already injected. `transition:persist` tells Astro to move the *old* DOM element into the new page instead of swapping in a fresh one.
+Some things shouldn't be re-initialized on navigation at all — they should physically survive: an open mobile nav, scroll position, a GTM script that's already injected. `transition:persist` tells Astro to move the _old_ DOM element into the new page instead of swapping in a fresh one.
 
 Two non-obvious rules, both learned the hard way:
 
-- **It must be on the actual HTML element, not passed as a prop at a component's call site.** `<Header transition:persist />` in `Layout.astro` does nothing — it only auto-forwards for hydrated islands (`client:*` components). For a plain `.astro` component, put the directive on the root element *inside* that component (e.g. directly on `<header>` in `Header.astro`).
+- **It must be on the actual HTML element, not passed as a prop at a component's call site.** `<Header transition:persist />` in `Layout.astro` does nothing — it only auto-forwards for hydrated islands (`client:*` components). For a plain `.astro` component, put the directive on the root element _inside_ that component (e.g. directly on `<header>` in `Header.astro`).
 - **Every top-level sibling element needs it independently.** `Header.astro` renders `<header>` and `<nav id="mobile-nav">` as siblings, not one nested in the other — persisting only `<header>` broke the mobile nav toggle, because its script held a closure reference to the non-persisted `#mobile-nav`, which got replaced on every navigation while the (persisted, still-listening) toggle button kept updating the detached old one. Both siblings now carry `transition:persist`.
 
 **Rule of thumb:** reach for `astro:page-load` when a script needs to do something on every navigation; delegate from `document` when binding to elements that might not survive a swap; use `transition:persist` directly on an element when you want its actual state — not just its re-initialization — to carry over.
