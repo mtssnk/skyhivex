@@ -90,7 +90,7 @@ const HeadingTag = (headingTag ?? (as === 'section' ? 'h2' : 'h1')) as 'h1' | 'h
           headingPart1 || headingPart2 ? (
             <HeadingTag class="text-white space-y-5xs">
               {headingPart1 && (
-                <span class="text-extended-xl uppercase w-full inline-flex justify-center max-w-[28em] text-balance">
+                <span class="text-extended-lg uppercase w-full inline-flex justify-center max-w-[28em] text-balance">
                   {headingPart1}
                 </span>
               )}
@@ -100,7 +100,7 @@ const HeadingTag = (headingTag ?? (as === 'section' ? 'h2' : 'h1')) as 'h1' | 'h
             </HeadingTag>
           ) : null
         }
-        {intro && <p class="text-extended-md mx-auto max-w-[24em]">{intro}</p>}
+        {intro && <p class="text-extended-md mx-auto max-w-[24em] text-balance">{intro}</p>}
         {
           bodyHtml && (
             <div
