@@ -55,28 +55,5 @@ const { items, anchorId } = Astro.props as AccordionListBlock
 </section>
 
 <script>
-  document.querySelectorAll<HTMLButtonElement>('.accordion-trigger').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const expanded = btn.getAttribute('aria-expanded') === 'true'
-      const bodyId = btn.getAttribute('aria-controls')!
-      const body = document.getElementById(bodyId)
-
-      btn.setAttribute('aria-expanded', String(!expanded))
-
-      if (body) {
-        body.setAttribute('aria-hidden', String(expanded))
-        body.classList.toggle('grid-rows-[1fr]', !expanded)
-        body.classList.toggle('grid-rows-[0fr]', expanded)
-        const inner = body.querySelector<HTMLElement>(':scope > div > div')
-        if (inner) {
-          inner.classList.toggle('opacity-0', expanded)
-          inner.classList.toggle('delay-150', !expanded)
-          inner.classList.toggle('delay-0', expanded)
-        }
-      }
-
-      const icon = btn.querySelector('.accordion-icon')
-      icon?.classList.toggle('is-open', !expanded)
-    })
-  })
+  import '../scripts/accordion'
 </script>
