@@ -129,7 +129,7 @@ Valid types: `feat`, `fix`, `chore`, `docs`, `style`, `refactor`, `test`, `perf`
 
 - `web/src/lib/payload.ts` — typed CMS fetch helpers (`getPageBySlug`, `getProjects`, `getProjectBySlug`, `getPosts`, `getPostBySlug`) + all response types
 - `web/src/lib/lexical.ts` — Lexical JSON → HTML serialiser for rich text fields
-- `web/src/layouts/Layout.astro` — base HTML shell (`title`, `description` props)
+- `web/src/layouts/Layout.astro` — base HTML shell (`title`, `description` props); also wires up Astro's `<ClientRouter />` for page transitions — see "Page transitions" in `web/CLAUDE.md` before touching navigation-related scripts
 - `web/src/blocks/BlockRenderer.astro` — renders the correct block component per `blockType`
 - `web/src/styles/_global.css` — Tailwind v4 with design tokens (`--color-*`, `--font-*`)
 
@@ -219,7 +219,7 @@ cd .. && mv pnpm-workspace.yaml.bak pnpm-workspace.yaml
 
 `web` uses `output: 'static'` (see above), so page content is fetched from the CMS at **build time** and baked into static HTML — publishing in the CMS does not update the live site until `web` rebuilds.
 
-`cms/src/hooks/triggerWebDeploy.ts` triggers a `web` rebuild automatically by committing a fresh timestamp to `web/.build-trigger` via the GitHub API, which Railway's GitHub integration then builds on push. It's wired into `afterChange`/`afterDelete` on `Pages`, `Projects`, `Posts`, `Navigations`, and `afterChange` on the `SiteSettings`, `ProjectsPage`, `ContactPage`, and `Navigation` globals — for collections with drafts enabled, it only fires when `_status === 'published'`.
+`cms/src/hooks/triggerWebDeploy.ts` triggers a `web` rebuild automatically by committing a fresh timestamp to `web/.build-trigger` via the GitHub API, which Railway's GitHub integration then builds on push. It's wired into `afterChange`/`afterDelete` on `Pages`, `Projects`, `Posts`, `Navigations`, and `afterChange` on the `SiteSettings`, `ProjectsPage`, and `Navigation` globals — for collections with drafts enabled, it only fires when `_status === 'published'`.
 
 **Why a commit instead of calling Railway's deploy API directly:** Railway's build cache (Railpack/BuildKit) is content-addressed — triggering a redeploy on an _unchanged_ commit reuses the last build's output byte-for-byte, including stale CMS content, regardless of which deploy mutation or cache-control env var is used (`NO_CACHE=1` does not help; it only disables Railway's own dependency-cache mounts, not BuildKit's fundamental "identical input → identical output" caching). A genuine file change is the only thing that reliably busts it, so the hook produces one instead of calling Railway's API.
 

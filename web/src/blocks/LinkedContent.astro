@@ -17,16 +17,14 @@ const currentPath = Astro.url.pathname
     <div class="grid grid-cols-12 lg:gap-xs">
       <div class="col-span-12 md:col-span-5 lg:col-span-4">
         {
-          navigation?.links && navigation.links.length > 0 && (
+          navigation?.links && navigation.links.some((link) => link.page?.slug) && (
             <nav aria-label={navigation.name}>
               {navigation?.name && <HeadingUnderLine>{navigation.name}</HeadingUnderLine>}
               <ul class="flex flex-col gap-4xs pt-3xs" role="list">
-                {navigation.links.map((link) => {
-                  const href = link.page?.slug
-                    ? link.page.slug === 'home'
-                      ? '/'
-                      : `/${link.page.slug}`
-                    : (link.url ?? '#')
+                {navigation.links
+                  .filter((link) => link.page?.slug)
+                  .map((link) => {
+                  const href = link.page!.slug === 'home' ? '/' : `/${link.page!.slug}`
                   const isActive = currentPath === href
                   return (
                     <li>

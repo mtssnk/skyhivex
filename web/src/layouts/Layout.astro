@@ -1,7 +1,9 @@
 ---
+import { ClientRouter } from 'astro:transitions'
 import Header from '@/components/Header.astro'
 import Footer from '@/components/Footer.astro'
 import VideoModal from '@/components/VideoModal.astro'
+import PageTransitionOverlay from '@/components/PageTransitionOverlay.astro'
 import { GoogleTracking } from '@/components/GoogleTracking'
 import { getSiteSettings } from '@/lib/payload'
 import { getAdobeFontsCss } from '@/lib/fonts'
@@ -46,6 +48,7 @@ if (settings?.socialLinks?.length) orgSchema.sameAs = settings.socialLinks.map((
     <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta name="generator" content={Astro.generator} />
+    <ClientRouter />
     {!settings?.allowIndexing && <meta name="robots" content="noindex, nofollow" />}
     <title>{pageTitle}</title>
     <link rel="canonical" href={canonicalUrl} />
@@ -100,6 +103,7 @@ if (settings?.socialLinks?.length) orgSchema.sameAs = settings.socialLinks.map((
     </script>
   </head>
   <body class="bg-night text-mist">
+    <PageTransitionOverlay />
     {
       isPreview && (
         <div class="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 flex items-center gap-4 bg-night text-ash text-condensed-sm px-5 py-3 rounded-full shadow-lg">
@@ -116,17 +120,19 @@ if (settings?.socialLinks?.length) orgSchema.sameAs = settings.socialLinks.map((
     </main>
     <Footer />
     <VideoModal />
-    <GoogleTracking client:load />
+    <GoogleTracking client:load transition:persist />
   </body>
 </html>
 
 <script>
-  document.querySelectorAll<HTMLElement>('[data-video-url]').forEach((trigger) => {
-    trigger.addEventListener('click', (e) => {
-      e.preventDefault()
-      document.dispatchEvent(
-        new CustomEvent('open-video', { detail: { url: trigger.dataset.videoUrl ?? '' } }),
-      )
-    })
+  // Delegated on `document` (not the individual triggers) because `document` persists
+  // across client-side transitions but page content is swapped out on every navigation.
+  document.addEventListener('click', (e) => {
+    const trigger = (e.target as HTMLElement).closest<HTMLElement>('[data-video-url]')
+    if (!trigger) return
+    e.preventDefault()
+    document.dispatchEvent(
+      new CustomEvent('open-video', { detail: { url: trigger.dataset.videoUrl ?? '' } }),
+    )
   })
 </script>

@@ -1,0 +1,103 @@
+<div
+  id="page-transition-overlay"
+  class="fixed inset-0 z-60 origin-top bg-night opacity-0 pointer-events-none"
+  aria-hidden="true"
+  transition:persist
+>
+</div>
+
+<style>
+  #page-transition-overlay {
+    will-change: opacity, transform;
+    transition:
+      opacity var(--transition-cover-duration) cubic-bezier(0.165, 0.84, 0.44, 1),
+      transform var(--transition-reveal-duration) cubic-bezier(0.895, 0.03, 0.685, 0.22);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #page-transition-overlay {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  const overlay = document.getElementById('page-transition-overlay') as HTMLElement
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+  const coverDuration =
+    parseFloat(getComputedStyle(overlay).getPropertyValue('--transition-cover-duration')) || 0
+
+  // Identifies the current cover/reveal cycle so a reveal scheduled by an
+  // earlier, superseded navigation can recognise it's stale and bail out
+  // instead of yanking transform around after a later cycle has moved on.
+  let currentId = 0
+  let coveredAt = 0
+  let revealTimer: ReturnType<typeof setTimeout> | null = null
+
+  // Instantly force transform to a value with no transition, so an
+  // interrupted animation snaps to a known state rather than continuing
+  // from wherever it happened to be.
+  function snapTransform(value: string) {
+    overlay.style.transition = 'none'
+    overlay.style.transform = value
+    void overlay.offsetHeight
+    overlay.style.transition = ''
+  }
+
+  // Cover the outgoing page as soon as navigation starts, before the next
+  // page has even been fetched — this hides swap latency behind the fade.
+  function cover() {
+    currentId += 1
+    coveredAt = performance.now()
+
+    if (revealTimer !== null) {
+      clearTimeout(revealTimer)
+      revealTimer = null
+    }
+
+    // Force back to fully-covering, even if a previous reveal was only
+    // partway through shrinking away when this navigation interrupted it.
+    // Opacity is left to animate normally (it's already 1 if we're
+    // interrupting a reveal, or fades in from 0 on a fresh cycle).
+    snapTransform('scaleY(1)')
+    overlay.style.pointerEvents = 'auto'
+    overlay.style.opacity = '1'
+  }
+
+  // Shrink away once the new page is ready, revealing it underneath. Waits
+  // out any remaining cover-fade time first, in case the new page loaded
+  // faster than the fade-in completed.
+  function reveal() {
+    if (!currentId) return // nothing has covered yet (e.g. the very first page-load)
+    const id = currentId
+    const remaining = coverDuration - (performance.now() - coveredAt)
+    revealTimer = setTimeout(
+      () => {
+        revealTimer = null
+        if (id !== currentId) return // superseded by a newer navigation while waiting
+        overlay.style.transform = 'scaleY(0)'
+      },
+      Math.max(0, remaining),
+    )
+  }
+
+  overlay.addEventListener('transitionend', (e) => {
+    // Driven by actual DOM state rather than a separate flag, so a stale
+    // event can't desync from what the overlay is really doing.
+    if (e.propertyName !== 'transform' || overlay.style.transform !== 'scaleY(0)') return
+    // Reset instantly (still invisible at scaleY(0), so nothing visibly jumps)
+    // so the next cover starts from a clean, known state.
+    overlay.style.transition = 'none'
+    overlay.style.opacity = '0'
+    overlay.style.transform = 'scaleY(1)'
+    overlay.style.pointerEvents = 'none'
+    void overlay.offsetHeight
+    overlay.style.transition = ''
+  })
+
+  if (!reducedMotion) {
+    document.addEventListener('astro:before-preparation', cover)
+    document.addEventListener('astro:page-load', reveal)
+  }
+</script>

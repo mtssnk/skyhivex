@@ -2238,10 +2238,6 @@ export interface Navigation {
     | {
         label: string;
         page?: (string | null) | Page;
-        /**
-         * Use instead of Page for external or custom links.
-         */
-        url?: string | null;
         id?: string | null;
       }[]
     | null;
@@ -3342,7 +3338,6 @@ export interface NavigationsSelect<T extends boolean = true> {
     | {
         label?: T;
         page?: T;
-        url?: T;
         id?: T;
       };
   updatedAt?: T;

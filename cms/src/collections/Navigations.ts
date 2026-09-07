@@ -7,18 +7,6 @@ function linkFields(): Field[] {
       name: 'page',
       type: 'relationship',
       relationTo: 'pages',
-      admin: {
-        condition: (_, sibling) => !sibling?.url,
-      },
-    },
-    {
-      name: 'url',
-      type: 'text',
-      label: 'Custom URL',
-      admin: {
-        description: 'Use instead of Page for external or custom links.',
-        condition: (_, sibling) => !sibling?.page,
-      },
     },
   ]
 }

@@ -23,10 +23,10 @@ const { items, anchorId } = Astro.props as AccordionListBlock
               >
                 {String(i + 1).padStart(3, '0')}
               </Numbered>
-              <div class="max-w-[720px]! mx-auto py-3xs container">
+              <div class="max-w-[720px]! mx-auto container">
                 <button
                   type="button"
-                  class="accordion-trigger flex justify-between gap-xs w-full text-left text-white cursor-pointer"
+                  class="accordion-trigger flex justify-between gap-xs w-full text-left text-white cursor-pointer py-3xs"
                   aria-expanded="false"
                   aria-controls={bodyId}
                 >
@@ -40,7 +40,7 @@ const { items, anchorId } = Astro.props as AccordionListBlock
                 >
                   <div class="overflow-hidden min-h-0">
                     <div
-                      class="wysiwyg text-body-xs text-mist opacity-0 transition-opacity duration-200 delay-150 pt-4xs"
+                      class="wysiwyg text-body-xs text-mist opacity-0 transition-opacity duration-200 delay-150 pb-3xs"
                       set:html={bodyHtml}
                     />
                   </div>

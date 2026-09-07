@@ -6,10 +6,28 @@
 
   const MAX_PIXEL_RATIO = 1.5
 
-  async function main() {
-    const canvas = document.getElementById('canvas') as HTMLCanvasElement
+  let renderer: ReturnType<typeof createRenderer> | null = null
+  let onVisibilityChange: (() => void) | null = null
 
-    let renderer
+  function cleanup() {
+    if (onVisibilityChange) {
+      document.removeEventListener('visibilitychange', onVisibilityChange)
+      onVisibilityChange = null
+    }
+    renderer?.destroy()
+    renderer = null
+  }
+
+  function main() {
+    // Navigating away and back re-fires this (astro:page-load) with a brand-new
+    // <canvas>, but the module itself only ever evaluates once per browser session
+    // under the client router — so any previous renderer must be torn down here
+    // rather than relying on the script re-running from scratch.
+    cleanup()
+
+    const canvas = document.getElementById('canvas') as HTMLCanvasElement | null
+    if (!canvas) return
+
     try {
       renderer = createRenderer(canvas, fragSrc, {
         maxPixelRatio: MAX_PIXEL_RATIO,
@@ -21,9 +39,10 @@
 
     renderer.start()
 
-    document.addEventListener('visibilitychange', () => {
-      document.hidden ? renderer.stop() : renderer.start()
-    })
+    onVisibilityChange = () => {
+      document.hidden ? renderer?.stop() : renderer?.start()
+    }
+    document.addEventListener('visibilitychange', onVisibilityChange)
   }
 
   function showError(msg: string) {
@@ -43,5 +62,5 @@
     console.error(msg)
   }
 
-  main()
+  document.addEventListener('astro:page-load', main)
 </script>

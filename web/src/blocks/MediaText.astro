@@ -51,6 +51,7 @@ const paddingClass = blockPaddingClass(paddingWhere, paddingSize)
             <MediaItem
               media={image}
               aspectRatio={aspectRatio ?? 'auto'}
+              sizes="(max-width: 768px) 100vw, 50vw"
               class="w-full h-auto block"
             />
           )}
@@ -120,7 +121,11 @@ const paddingClass = blockPaddingClass(paddingWhere, paddingSize)
         >
           <div class={isMediaLeft ? 'media-bleed-left' : 'media-bleed-right'}>
             {mediaType === 'image' && image && (
-              <MediaItem media={image} class="w-full h-full object-cover" />
+              <MediaItem
+                media={image}
+                sizes="(max-width: 1024px) 100vw, 65vw"
+                class="w-full h-full object-cover"
+              />
             )}
             {mediaType === 'video' && video && (
               <MediaItem

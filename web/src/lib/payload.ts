@@ -83,7 +83,6 @@ export type NavigationItem = {
     | {
         label: string
         page?: { id: string; slug: string; title: string } | null
-        url?: string | null
         id?: string | null
       }[]
     | null
@@ -143,7 +142,7 @@ export type HeroBlock = {
   blockType: 'hero'
   id?: string | null
   anchorId?: string | null
-  headingPart1: string
+  headingPart1: string | null
   headingPart2?: string | null
   headingTag?: 'h1' | 'h2' | 'h3' | 'h4' | null
   intro?: string | null
@@ -267,7 +266,7 @@ export type CTABlock = {
   blockType: 'cta'
   id?: string | null
   anchorId?: string | null
-  headingPart1: string
+  headingPart1: string | null
   headingPart2?: string | null
   headingTag?: 'h1' | 'h2' | 'h3' | 'h4' | null
   intro?: string | null
@@ -402,7 +401,7 @@ export type Page = {
 }
 
 export type ProjectsPageHero = {
-  headingPart1: string
+  headingPart1: string | null
   headingPart2?: string | null
   headingTag?: 'h1' | 'h2' | 'h3' | 'h4' | null
   intro?: string | null
