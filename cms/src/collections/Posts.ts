@@ -25,7 +25,7 @@ export const Posts: CollectionConfig = {
     read: () => true,
   },
   versions: {
-    drafts: true,
+    drafts: { validate: true },
   },
   fields: [
     {
@@ -111,8 +111,10 @@ export const Posts: CollectionConfig = {
     {
       name: 'intro',
       type: 'textarea',
+      maxLength: 150,
       admin: {
-        description: 'Short summary shown on listing cards. Falls back to meta description for SEO.',
+        description:
+          'Short summary shown on listing cards. Falls back to meta description for SEO.',
       },
     },
     {
