@@ -4,7 +4,7 @@ import MediaItem from '@/components/MediaItem.astro'
 import { lexicalToHtml } from '@/lib/lexical'
 import clsx from 'clsx'
 import SlideArrow from '@/components/SlideArrow.astro'
-import { blockPaddingClass, injectSpans } from '@/lib/blocks'
+import { blockPaddingClass, injectSpans, resolveButtonHref } from '@/lib/blocks'
 import Button from '@/components/Button.astro'
 
 const {
@@ -29,7 +29,7 @@ const HeadingTag = (headingTag ?? 'h2') as 'h1' | 'h2' | 'h3' | 'h4'
 const html = body ? lexicalToHtml(body) : ''
 const linkHref = linkLabel
   ? linkType === 'internal'
-    ? `/${linkPage?.slug ?? ''}`
+    ? resolveButtonHref(linkPage)
     : (linkUrl ?? '#')
   : null
 const isMediaLeft = mediaPosition === 'left'

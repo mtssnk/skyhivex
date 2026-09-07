@@ -4,6 +4,7 @@ import HeadingUnderline from '@/components/HeadingUnderline.astro'
 import Button from '@/components/Button.astro'
 import SlideArrow from '@/components/SlideArrow.astro'
 import SvgIcon from '@/components/SvgIcon.astro'
+import { resolveButtonHref } from '@/lib/blocks'
 import clsx from 'clsx'
 
 const { heading, headingTag, items, linkLabel, linkType, linkUrl, linkPage, anchorId } =
@@ -12,7 +13,7 @@ const { heading, headingTag, items, linkLabel, linkType, linkUrl, linkPage, anch
 const HeadingTag = (headingTag ?? 'h2') as 'h1' | 'h2' | 'h3' | 'h4'
 const linkHref = linkLabel
   ? linkType === 'internal'
-    ? `/${linkPage?.slug ?? ''}`
+    ? resolveButtonHref(linkPage)
     : (linkUrl ?? '#')
   : null
 ---

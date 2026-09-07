@@ -182,7 +182,9 @@ export type MediaTextBlock = BlockPadding & {
   linkLabel?: string | null
   linkType?: 'external' | 'internal' | null
   linkUrl?: string | null
-  linkPage?: { id: string; slug: string; title: string } | null
+  linkPage?:
+    | { relationTo: 'pages' | 'projects' | 'posts'; value: { id: string; slug: string } | string }
+    | null
   mediaPosition: 'left' | 'right'
   mediaType: 'image' | 'video'
   image?: Media | null
@@ -310,7 +312,9 @@ export type FeatureListBlock = BlockPadding & {
   linkLabel?: string | null
   linkType?: 'internal' | 'external' | null
   linkUrl?: string | null
-  linkPage?: { slug: string } | null
+  linkPage?:
+    | { relationTo: 'pages' | 'projects' | 'posts'; value: { id: string; slug: string } | string }
+    | null
 }
 
 export type FeatureAccordionListBlock = BlockPadding & {
