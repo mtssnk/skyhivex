@@ -89,7 +89,7 @@ const nl2br = (str: string) => str.replace(/\n/g, '<br>')
                     )}
                   </div>
                   {person.description && (
-                    <Button as="span" style="text" size="sm" colour="white">
+                    <Button as="span" style="text" size="sm" colour="green">
                       Find out more
                       <Plus />
                     </Button>
@@ -139,36 +139,47 @@ const nl2br = (str: string) => str.replace(/\n/g, '<br>')
 </dialog>
 
 <script>
-  const modal = document.getElementById('person-modal') as HTMLDialogElement
-  const closeBtn = document.getElementById('person-modal-close')
-  const modalContent = document.getElementById('person-modal-content')
+  // Card activation is delegated from `document` (which survives client-side
+  // navigations); the block markup — cards and the dialog — is swapped on every
+  // navigation, so the dialog's own `close` listener is rebound on
+  // astro:page-load. See web/CLAUDE.md -> "Page transitions".
+  function openPersonModal(card: HTMLElement) {
+    const dialog = document.getElementById('person-modal') as HTMLDialogElement | null
+    const content = document.getElementById('person-modal-content')
+    const template = document.getElementById(
+      card.dataset.personModal ?? '',
+    ) as HTMLTemplateElement | null
+    if (!dialog || !content || !template) return
+    content.replaceChildren(template.content.cloneNode(true))
+    document.body.style.overflow = 'hidden'
+    dialog.showModal()
+  }
 
-  document.querySelectorAll<HTMLElement>('[data-person-modal]').forEach((card) => {
-    const open = () => {
-      const template = document.getElementById(
-        card.dataset.personModal!,
-      ) as HTMLTemplateElement | null
-      if (!template || !modalContent) return
-      modalContent.replaceChildren(template.content.cloneNode(true))
-      document.body.style.overflow = 'hidden'
-      modal.showModal()
+  document.addEventListener('click', (e) => {
+    const target = e.target as HTMLElement
+    const card = target.closest<HTMLElement>('[data-person-modal]')
+    if (card) {
+      openPersonModal(card)
+      return
     }
-    card.addEventListener('click', open)
-    card.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault()
-        open()
-      }
+    const dialog = document.getElementById('person-modal') as HTMLDialogElement | null
+    if (dialog && (target === dialog || target.closest('#person-modal-close'))) {
+      dialog.close()
+    }
+  })
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Enter' && e.key !== ' ') return
+    const card = (e.target as HTMLElement).closest<HTMLElement>('[data-person-modal]')
+    if (!card) return
+    e.preventDefault()
+    openPersonModal(card)
+  })
+
+  document.addEventListener('astro:page-load', () => {
+    const dialog = document.getElementById('person-modal') as HTMLDialogElement | null
+    dialog?.addEventListener('close', () => {
+      document.body.style.overflow = ''
     })
-  })
-
-  closeBtn?.addEventListener('click', () => modal.close())
-
-  modal.addEventListener('click', (e) => {
-    if (e.target === modal) modal.close()
-  })
-
-  modal.addEventListener('close', () => {
-    document.body.style.overflow = ''
   })
 </script>

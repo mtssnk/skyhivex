@@ -82,22 +82,45 @@ const labelClasses = 'text-mono-3xs text-gravel'
 </dialog>
 
 <script>
-  const pageLoadedAt = Date.now()
-  const form = document.getElementById('contact-form') as HTMLFormElement | null
-  const submit = document.getElementById('cf-submit') as HTMLButtonElement | null
-  const modal = document.getElementById('contact-modal') as HTMLDialogElement | null
-  const closeBtn = document.getElementById('contact-modal-close')
-  const success = document.getElementById('cf-success')
-  const error = document.getElementById('cf-error')
+  // The form and status dialog are swapped on every client-side navigation, so
+  // submit handling is delegated from `document` (submit events bubble) and the
+  // dialog's `close` listener is rebound on astro:page-load. `pageLoadedAt` is
+  // reset per navigation so the spam min-fill-time check stays accurate.
+  // See web/CLAUDE.md -> "Page transitions".
+  let pageLoadedAt = Date.now()
 
-  form?.addEventListener('submit', async (e) => {
+  document.addEventListener('astro:page-load', () => {
+    pageLoadedAt = Date.now()
+    const modal = document.getElementById('contact-modal') as HTMLDialogElement | null
+    modal?.addEventListener('close', () => {
+      document.body.style.overflow = ''
+    })
+  })
+
+  document.addEventListener('submit', async (e) => {
+    const form = e.target
+    if (!(form instanceof HTMLFormElement) || form.id !== 'contact-form') return
     e.preventDefault()
+
     if (!form.checkValidity()) {
       form.reportValidity()
       return
     }
 
-    submit!.disabled = true
+    const submit = document.getElementById('cf-submit') as HTMLButtonElement | null
+    const modal = document.getElementById('contact-modal') as HTMLDialogElement | null
+    const success = document.getElementById('cf-success')
+    const error = document.getElementById('cf-error')
+
+    const showResult = (ok: boolean) => {
+      success?.classList.toggle('hidden', !ok)
+      error?.classList.toggle('hidden', ok)
+      if (submit) submit.disabled = false
+      document.body.style.overflow = 'hidden'
+      modal?.showModal()
+    }
+
+    if (submit) submit.disabled = true
 
     try {
       const payload = {
@@ -111,31 +134,17 @@ const labelClasses = 'text-mono-3xs text-gravel'
         body: JSON.stringify(payload),
       })
 
-      success?.classList.toggle('hidden', !res.ok)
-      error?.classList.toggle('hidden', res.ok)
-
       if (res.ok) form.reset()
-      submit!.disabled = false
-
-      document.body.style.overflow = 'hidden'
-      modal?.showModal()
+      showResult(res.ok)
     } catch {
-      success?.classList.add('hidden')
-      error?.classList.remove('hidden')
-      submit!.disabled = false
-
-      document.body.style.overflow = 'hidden'
-      modal?.showModal()
+      showResult(false)
     }
   })
 
-  closeBtn?.addEventListener('click', () => modal?.close())
-
-  modal?.addEventListener('click', (e) => {
-    if (e.target === modal) modal.close()
-  })
-
-  modal?.addEventListener('close', () => {
-    document.body.style.overflow = ''
+  document.addEventListener('click', (e) => {
+    const target = e.target as HTMLElement
+    const modal = document.getElementById('contact-modal') as HTMLDialogElement | null
+    if (!modal) return
+    if (target === modal || target.closest('#contact-modal-close')) modal.close()
   })
 </script>
