@@ -256,6 +256,12 @@ function linkHref(item: {
     const panel = dropdown.querySelector<HTMLElement>('[data-dropdown-panel]')!
     let timer: ReturnType<typeof setTimeout>
 
+    const collapse = () => {
+      clearTimeout(timer)
+      trigger.setAttribute('aria-expanded', 'false')
+      trigger.querySelector('.dropdown-chevron')?.classList.remove('rotate-x-180')
+    }
+
     const open = () => {
       clearTimeout(timer)
       trigger.setAttribute('aria-expanded', 'true')
@@ -264,10 +270,7 @@ function linkHref(item: {
 
     const close = () => {
       clearTimeout(timer)
-      timer = setTimeout(() => {
-        trigger.setAttribute('aria-expanded', 'false')
-        trigger.querySelector('.dropdown-chevron')?.classList.remove('rotate-x-180')
-      }, HOVER_DELAY)
+      timer = setTimeout(collapse, HOVER_DELAY)
     }
 
     dropdown.addEventListener('mouseenter', open)
@@ -275,6 +278,10 @@ function linkHref(item: {
     trigger.addEventListener('click', () => {
       trigger.getAttribute('aria-expanded') === 'true' ? close() : open()
     })
+
+    // Clicking a link in the panel navigates away — close immediately so the
+    // persisted header doesn't carry an open dropdown onto the next page.
+    panel.querySelectorAll('a').forEach((a) => a.addEventListener('click', collapse))
   })
 
   // Close desktop dropdowns on outside click or Escape
