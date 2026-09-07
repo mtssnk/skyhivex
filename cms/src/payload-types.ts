@@ -266,7 +266,7 @@ export interface Page {
   blocks?:
     | (
         | {
-            headingPart1: string;
+            headingPart1?: string | null;
             headingPart2?: string | null;
             intro?: string | null;
             body?: {
@@ -486,7 +486,7 @@ export interface Page {
             blockType: 'bodyCopy';
           }
         | {
-            headingPart1: string;
+            headingPart1?: string | null;
             headingPart2?: string | null;
             intro?: string | null;
             body?: {
@@ -657,60 +657,6 @@ export interface Page {
             id?: string | null;
             blockName?: string | null;
             blockType: 'contactForm';
-          }
-        | {
-            heading?: string | null;
-            cards: {
-              /**
-               * Predefined illustration — update options once illustrations are finalised.
-               */
-              illustration:
-                | 'illustration-1'
-                | 'illustration-2'
-                | 'illustration-3'
-                | 'illustration-4'
-                | 'illustration-5'
-                | 'illustration-6';
-              heading: string;
-              body?: {
-                root: {
-                  type: string;
-                  children: {
-                    type: any;
-                    version: number;
-                    [k: string]: unknown;
-                  }[];
-                  direction: ('ltr' | 'rtl') | null;
-                  format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-                  indent: number;
-                  version: number;
-                };
-                [k: string]: unknown;
-              } | null;
-              id?: string | null;
-            }[];
-            /**
-             * Optional button below the cards. Leave label empty to hide.
-             */
-            button?: {
-              label?: string | null;
-              url?: string | null;
-            };
-            /**
-             * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
-             */
-            anchorId?: string | null;
-            /**
-             * Which side(s) the vertical padding is applied to.
-             */
-            paddingWhere?: ('both' | 'top' | 'bottom' | 'none') | null;
-            /**
-             * Size of the vertical padding.
-             */
-            paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'cardList';
           }
         | {
             selectionMode: 'manual' | 'clientType' | 'geography' | 'latest';
@@ -1179,7 +1125,7 @@ export interface Project {
             blockType: 'bodyCopy';
           }
         | {
-            headingPart1: string;
+            headingPart1?: string | null;
             headingPart2?: string | null;
             intro?: string | null;
             body?: {
@@ -1350,60 +1296,6 @@ export interface Project {
             id?: string | null;
             blockName?: string | null;
             blockType: 'contactForm';
-          }
-        | {
-            heading?: string | null;
-            cards: {
-              /**
-               * Predefined illustration — update options once illustrations are finalised.
-               */
-              illustration:
-                | 'illustration-1'
-                | 'illustration-2'
-                | 'illustration-3'
-                | 'illustration-4'
-                | 'illustration-5'
-                | 'illustration-6';
-              heading: string;
-              body?: {
-                root: {
-                  type: string;
-                  children: {
-                    type: any;
-                    version: number;
-                    [k: string]: unknown;
-                  }[];
-                  direction: ('ltr' | 'rtl') | null;
-                  format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-                  indent: number;
-                  version: number;
-                };
-                [k: string]: unknown;
-              } | null;
-              id?: string | null;
-            }[];
-            /**
-             * Optional button below the cards. Leave label empty to hide.
-             */
-            button?: {
-              label?: string | null;
-              url?: string | null;
-            };
-            /**
-             * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
-             */
-            anchorId?: string | null;
-            /**
-             * Which side(s) the vertical padding is applied to.
-             */
-            paddingWhere?: ('both' | 'top' | 'bottom' | 'none') | null;
-            /**
-             * Size of the vertical padding.
-             */
-            paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'cardList';
           }
         | {
             selectionMode: 'manual' | 'clientType' | 'geography' | 'latest';
@@ -1816,7 +1708,7 @@ export interface Post {
         blockType: 'bodyCopy';
       }
     | {
-        headingPart1: string;
+        headingPart1?: string | null;
         headingPart2?: string | null;
         intro?: string | null;
         body?: {
@@ -1987,60 +1879,6 @@ export interface Post {
         id?: string | null;
         blockName?: string | null;
         blockType: 'contactForm';
-      }
-    | {
-        heading?: string | null;
-        cards: {
-          /**
-           * Predefined illustration — update options once illustrations are finalised.
-           */
-          illustration:
-            | 'illustration-1'
-            | 'illustration-2'
-            | 'illustration-3'
-            | 'illustration-4'
-            | 'illustration-5'
-            | 'illustration-6';
-          heading: string;
-          body?: {
-            root: {
-              type: string;
-              children: {
-                type: any;
-                version: number;
-                [k: string]: unknown;
-              }[];
-              direction: ('ltr' | 'rtl') | null;
-              format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-              indent: number;
-              version: number;
-            };
-            [k: string]: unknown;
-          } | null;
-          id?: string | null;
-        }[];
-        /**
-         * Optional button below the cards. Leave label empty to hide.
-         */
-        button?: {
-          label?: string | null;
-          url?: string | null;
-        };
-        /**
-         * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
-         */
-        anchorId?: string | null;
-        /**
-         * Which side(s) the vertical padding is applied to.
-         */
-        paddingWhere?: ('both' | 'top' | 'bottom' | 'none') | null;
-        /**
-         * Size of the vertical padding.
-         */
-        paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
-        id?: string | null;
-        blockName?: string | null;
-        blockType: 'cardList';
       }
     | {
         selectionMode: 'manual' | 'clientType' | 'geography' | 'latest';
@@ -2640,30 +2478,6 @@ export interface PagesSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
-        cardList?:
-          | T
-          | {
-              heading?: T;
-              cards?:
-                | T
-                | {
-                    illustration?: T;
-                    heading?: T;
-                    body?: T;
-                    id?: T;
-                  };
-              button?:
-                | T
-                | {
-                    label?: T;
-                    url?: T;
-                  };
-              anchorId?: T;
-              paddingWhere?: T;
-              paddingSize?: T;
-              id?: T;
-              blockName?: T;
-            };
         projectList?:
           | T
           | {
@@ -2940,30 +2754,6 @@ export interface ProjectsSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
-        cardList?:
-          | T
-          | {
-              heading?: T;
-              cards?:
-                | T
-                | {
-                    illustration?: T;
-                    heading?: T;
-                    body?: T;
-                    id?: T;
-                  };
-              button?:
-                | T
-                | {
-                    label?: T;
-                    url?: T;
-                  };
-              anchorId?: T;
-              paddingWhere?: T;
-              paddingSize?: T;
-              id?: T;
-              blockName?: T;
-            };
         projectList?:
           | T
           | {
@@ -3175,30 +2965,6 @@ export interface PostsSelect<T extends boolean = true> {
               heading?: T;
               showContactDetails?: T;
               body?: T;
-              anchorId?: T;
-              paddingWhere?: T;
-              paddingSize?: T;
-              id?: T;
-              blockName?: T;
-            };
-        cardList?:
-          | T
-          | {
-              heading?: T;
-              cards?:
-                | T
-                | {
-                    illustration?: T;
-                    heading?: T;
-                    body?: T;
-                    id?: T;
-                  };
-              button?:
-                | T
-                | {
-                    label?: T;
-                    url?: T;
-                  };
               anchorId?: T;
               paddingWhere?: T;
               paddingSize?: T;
@@ -3432,7 +3198,7 @@ export interface ProjectsPage {
    * The project list Anchor ID is project-list. Use this ID for the scroll to section Anchor ID.
    */
   hero: {
-    headingPart1: string;
+    headingPart1?: string | null;
     headingPart2?: string | null;
     intro?: string | null;
     body?: {
@@ -3646,7 +3412,7 @@ export interface ProjectsPage {
             blockType: 'bodyCopy';
           }
         | {
-            headingPart1: string;
+            headingPart1?: string | null;
             headingPart2?: string | null;
             intro?: string | null;
             body?: {
@@ -3817,60 +3583,6 @@ export interface ProjectsPage {
             id?: string | null;
             blockName?: string | null;
             blockType: 'contactForm';
-          }
-        | {
-            heading?: string | null;
-            cards: {
-              /**
-               * Predefined illustration — update options once illustrations are finalised.
-               */
-              illustration:
-                | 'illustration-1'
-                | 'illustration-2'
-                | 'illustration-3'
-                | 'illustration-4'
-                | 'illustration-5'
-                | 'illustration-6';
-              heading: string;
-              body?: {
-                root: {
-                  type: string;
-                  children: {
-                    type: any;
-                    version: number;
-                    [k: string]: unknown;
-                  }[];
-                  direction: ('ltr' | 'rtl') | null;
-                  format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-                  indent: number;
-                  version: number;
-                };
-                [k: string]: unknown;
-              } | null;
-              id?: string | null;
-            }[];
-            /**
-             * Optional button below the cards. Leave label empty to hide.
-             */
-            button?: {
-              label?: string | null;
-              url?: string | null;
-            };
-            /**
-             * Optional scroll target (e.g. "contact" → #contact). Spaces and special characters are removed automatically.
-             */
-            anchorId?: string | null;
-            /**
-             * Which side(s) the vertical padding is applied to.
-             */
-            paddingWhere?: ('both' | 'top' | 'bottom' | 'none') | null;
-            /**
-             * Size of the vertical padding.
-             */
-            paddingSize?: ('xl' | 'lg' | 'md' | 'sm') | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'cardList';
           }
         | {
             selectionMode: 'manual' | 'clientType' | 'geography' | 'latest';
@@ -4314,30 +4026,6 @@ export interface ProjectsPageSelect<T extends boolean = true> {
               heading?: T;
               showContactDetails?: T;
               body?: T;
-              anchorId?: T;
-              paddingWhere?: T;
-              paddingSize?: T;
-              id?: T;
-              blockName?: T;
-            };
-        cardList?:
-          | T
-          | {
-              heading?: T;
-              cards?:
-                | T
-                | {
-                    illustration?: T;
-                    heading?: T;
-                    body?: T;
-                    id?: T;
-                  };
-              button?:
-                | T
-                | {
-                    label?: T;
-                    url?: T;
-                  };
               anchorId?: T;
               paddingWhere?: T;
               paddingSize?: T;

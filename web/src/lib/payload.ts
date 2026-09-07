@@ -213,22 +213,6 @@ export type QuoteBlock = BlockPadding & {
   attribution?: string | null
 }
 
-export type CardListBlock = BlockPadding & {
-  blockType: 'cardList'
-  id?: string | null
-  heading?: string | null
-  cards: {
-    illustration: string
-    heading: string
-    body?: LexicalContent | null
-    id?: string | null
-  }[]
-  button?: {
-    label?: string | null
-    url?: string | null
-  } | null
-}
-
 export type ProjectListBlock = BlockPadding & {
   blockType: 'projectList'
   id?: string | null
@@ -375,7 +359,6 @@ export type SharedBlock =
   | PersonListBlock
   | AccordionListBlock
   | ContactFormBlock
-  | CardListBlock
   | ProjectListBlock
   | NewsCardListBlock
   | FeatureListBlock

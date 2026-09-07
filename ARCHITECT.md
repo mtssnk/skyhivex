@@ -176,13 +176,6 @@ For the contained variant, selectable media aspect ratios:
 - Size options: full screen, large (container width), small
 - Aspect ratio options available
 
-### Illustration card list
-
-- List of cards, each with heading, body copy, and illustration
-- Illustration choices are predefined (not user-uploaded)
-- Optional section heading above cards
-- Optional button link below cards
-
 ### News card list
 
 Editor can:

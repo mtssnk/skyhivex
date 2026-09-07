@@ -86,7 +86,6 @@ These map directly to Tailwind utility classes using the clamp spacing scale:
 | ------------------ | ------------------------- | ------------------------------ |
 | `block/Hero`       | `blocks/Hero.astro`       |                                |
 | `block/WorkList`   | `blocks/WorkList.astro`   |                                |
-| `block/CardList`   | `blocks/CardList.astro`   |                                |
 | `block/MediaText`  | `blocks/MediaText.astro`  | Left/right variant — see below |
 | `block/MediaBlock` | `blocks/MediaBlock.astro` |                                |
 | `block/Quote`      | `blocks/Quote.astro`      | Appears in Work Detail layout  |
@@ -117,7 +116,6 @@ Components live in `web/src/components/`.
 
 | Figma name                  | Astro file                         | Notes                                      |
 | --------------------------- | ---------------------------------- | ------------------------------------------ |
-| `component/Card/Text`       | `components/CardText.astro`        |                                            |
 | `component/BackgroundMedia` | `components/BackgroundMedia.astro` | Full CMS-controlled background — see below |
 | `component/Button`          | `components/Button.astro`          |                                            |
 
