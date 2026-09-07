@@ -14,7 +14,6 @@ export const heroFields: Field[] = [
       {
         name: 'headingPart1',
         type: 'textarea',
-        required: true,
       },
       {
         name: 'headingPart2',
