@@ -39,7 +39,9 @@
   .btn-lg {
     @apply text-mono-3xs;
     gap: 0.86em;
-    padding: 1.21em 2.14em;
+    padding: 1.21em 2.14em; /* 14px -> 19.36px, 24px -> 34.24px */
+    padding: clamp(0.875em, calc(0.693em + 0.807vw), 1.21em)
+      clamp(1.5em, calc(1.153em + 1.542vw), 2.14em); /* 14px -> 19.36px, 24px -> 34.24px */
   }
   .btn-lg svg {
     @apply w-4 h-4;
@@ -48,7 +50,8 @@
   .btn-md {
     @apply text-mono-3xs;
     gap: 0.6em;
-    padding: 0.93em 1.42em;
+    padding: clamp(0.625em, calc(0.515em + 0.542vw), 0.93em)
+      clamp(1.125em, calc(0.867em + 1.125vw), 1.42em);
   }
   .btn-md svg {
     width: 13px;
@@ -58,7 +61,8 @@
   .btn-sm {
     @apply text-mono-4xs;
     gap: 0.6em;
-    padding: 0.93em 1.42em;
+    padding: clamp(0.625em, calc(0.515em + 0.542vw), 0.93em)
+      clamp(1.125em, calc(0.867em + 1.125vw), 1.42em);
   }
   .btn-sm svg {
     width: 11px;
