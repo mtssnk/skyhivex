@@ -312,7 +312,9 @@ export type FeatureListBlock = BlockPadding & {
   linkLabel?: string | null
   linkType?: 'internal' | 'external' | null
   linkUrl?: string | null
-  linkPage?: { slug: string } | null
+  linkPage?:
+    | { relationTo: 'pages' | 'projects' | 'posts'; value: { id: string; slug: string } | string }
+    | null
 }
 
 export type FeatureAccordionListBlock = BlockPadding & {
