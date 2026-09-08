@@ -1,6 +1,6 @@
 # SkyHive X
 
-Headless CMS + Astro frontend monorepo.
+Headless CMS + Astro frontend monorepo
 
 ## Structure
 
