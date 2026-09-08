@@ -18,6 +18,7 @@
     "@paper-design/shaders-react": "^0.0.80",
     "astro": "^7.3.1",
     "astro-consent": "^2.1.1",
+    "gsap": "^3.15.0",
     "preact": "^10.29.8",
     "resend": "^6.26.0",
     "tailwindcss": "^4.3.3"

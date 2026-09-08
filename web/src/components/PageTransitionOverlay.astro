@@ -14,6 +14,23 @@
       transform var(--transition-reveal-duration) cubic-bezier(0.895, 0.03, 0.685, 0.22);
   }
 
+  @media (prefers-reduced-motion: no-preference) {
+    /* First load / refresh: start covering the viewport, then the script wipes
+       it away on astro:page-load (the reveal half of the transition). Guarded by
+       .js so a no-JS page isn't left permanently covered. Once the script sets
+       inline styles after that first reveal, this rule no longer applies and
+       every client-side navigation runs exactly as before.
+
+       `.js` is on <html>, outside this component, so it must be :global() —
+       otherwise Astro scopes it to this component and the selector never
+       matches. */
+    :global(.js) #page-transition-overlay {
+      opacity: 1;
+      transform: scaleY(1);
+      pointer-events: auto;
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     #page-transition-overlay {
       transition: none;
@@ -65,6 +82,20 @@
     overlay.style.opacity = '1'
   }
 
+  // First load / refresh only: the overlay starts covering via the `.js` CSS
+  // rule (no client navigation has run, so `cover()` never fired). Wipe it away
+  // once, with the same reveal motion a navigation uses. `astro:page-load` also
+  // fires after every client navigation, hence the `currentId` / one-shot guards.
+  let firstRevealDone = false
+  function initialReveal() {
+    if (firstRevealDone || currentId) return
+    firstRevealDone = true
+    requestAnimationFrame(() => {
+      if (currentId) return // a navigation started before we got here
+      overlay.style.transform = 'scaleY(0)'
+    })
+  }
+
   // Shrink away once the new page is ready, revealing it underneath. Waits
   // out any remaining cover-fade time first, in case the new page loaded
   // faster than the fade-in completed.
@@ -98,6 +129,7 @@
 
   if (!reducedMotion) {
     document.addEventListener('astro:before-preparation', cover)
+    document.addEventListener('astro:page-load', initialReveal)
     document.addEventListener('astro:page-load', reveal)
   }
 </script>
