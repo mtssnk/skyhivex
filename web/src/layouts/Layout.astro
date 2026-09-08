@@ -42,10 +42,12 @@ if (settings?.socialLinks?.length) orgSchema.sameAs = settings.socialLinks.map((
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    {/* Feature flag: gates the hero reveal-animation's initial hidden state so
-       no-JS visitors still see the content. See Hero.astro. */}
+    {/* JS-available flag. Gates initial hidden/covered states that only make
+       sense if a script will animate them (hero reveal in Hero.astro, the
+       page-transition overlay's first-load cover in PageTransitionOverlay.astro)
+       so no-JS visitors aren't left with hidden content or a covered page. */}
     <script is:inline>
-      document.documentElement.classList.add('hero-js')
+      document.documentElement.classList.add('js')
     </script>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/png" href="/favicon.png" sizes="32x32" />

@@ -157,8 +157,8 @@ const HeadingTag = (headingTag ?? (as === 'section' ? 'h2' : 'h1')) as 'h1' | 'h
     /* JS-driven content reveal: only hide when JS can animate it back in.
        No-JS or reduced-motion visitors see the content immediately. GSAP
        takes over with inline styles once the block scrolls into view. */
-    .hero-js [data-hero-animate] [data-hero-heading],
-    .hero-js [data-hero-animate] [data-hero-fade] {
+    .js [data-hero-animate] [data-hero-heading],
+    .js [data-hero-animate] [data-hero-fade] {
       opacity: 0;
     }
 
