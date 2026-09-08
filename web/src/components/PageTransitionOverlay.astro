@@ -1,6 +1,6 @@
 <div
   id="page-transition-overlay"
-  class="fixed inset-0 z-60 origin-top bg-night opacity-0 pointer-events-none"
+  class="fixed inset-0 z-60 origin-top bg-black opacity-0 pointer-events-none"
   aria-hidden="true"
   transition:persist
 >
@@ -11,7 +11,8 @@
     will-change: opacity, transform;
     transition:
       opacity var(--transition-cover-duration) cubic-bezier(0.165, 0.84, 0.44, 1),
-      transform var(--transition-reveal-duration) cubic-bezier(0.895, 0.03, 0.685, 0.22);
+      transform var(--transition-reveal-duration) cubic-bezier(0.895, 0.03, 0.685, 0.22)
+        var(--transition-reveal-delay);
   }
 
   @media (prefers-reduced-motion: no-preference) {
