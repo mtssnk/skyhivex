@@ -42,6 +42,11 @@ if (settings?.socialLinks?.length) orgSchema.sameAs = settings.socialLinks.map((
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {/* Feature flag: gates the hero reveal-animation's initial hidden state so
+       no-JS visitors still see the content. See Hero.astro. */}
+    <script is:inline>
+      document.documentElement.classList.add('hero-js')
+    </script>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/png" href="/favicon.png" sizes="32x32" />
     <link rel="icon" href="/favicon.ico" sizes="48x48" />
