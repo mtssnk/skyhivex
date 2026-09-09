@@ -19,6 +19,17 @@ export function injectSpans(text: string, spanClass = 'font-semibold'): string {
   return text.replace(/\{\{(.+?)\}\}/g, `<span class="${spanClass}">$1</span>`)
 }
 
+/**
+ * Strip a trailing slash so paths compare equal regardless of how they're
+ * served. `astro dev` reports `Astro.url.pathname` exactly as requested, but the
+ * directory-format static build prerenders each page with a trailing slash — so
+ * an un-normalised `currentPath === href` active-state check passes locally and
+ * fails on the built site.
+ */
+export function normalizePath(path: string): string {
+  return path !== '/' ? path.replace(/\/+$/, '') : path
+}
+
 const paddingClasses: Record<string, Record<string, string>> = {
   both: { xl: 'py-xl', lg: 'py-lg', md: 'py-md', sm: 'py-sm' },
   top: { xl: 'pt-xl', lg: 'pt-lg', md: 'pt-md', sm: 'pt-sm' },
