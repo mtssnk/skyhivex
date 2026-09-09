@@ -3,13 +3,13 @@ import type { LinkedContentBlock } from '@/lib/payload'
 import HeadingUnderLine from '@/components/HeadingUnderline.astro'
 import Button from '@/components/Button.astro'
 import { clsx } from 'clsx'
-import { blockPaddingClass } from '@/lib/blocks'
+import { blockPaddingClass, normalizePath } from '@/lib/blocks'
 import { lexicalToHtml } from '@/lib/lexical'
 import SlideArrow from '@/components/SlideArrow.astro'
 const { navigation, body, anchorId, paddingWhere, paddingSize } = Astro.props as LinkedContentBlock
 const paddingClass = blockPaddingClass(paddingWhere, paddingSize)
 const bodyHtml = body ? lexicalToHtml(body) : null
-const currentPath = Astro.url.pathname
+const currentPath = normalizePath(Astro.url.pathname)
 ---
 
 <section id={anchorId ?? undefined} class="section-linkedcontent">
@@ -25,7 +25,7 @@ const currentPath = Astro.url.pathname
                   .filter((link) => link.page?.slug)
                   .map((link) => {
                   const href = link.page!.slug === 'home' ? '/' : `/${link.page!.slug}`
-                  const isActive = currentPath === href
+                  const isActive = currentPath === normalizePath(href)
                   return (
                     <li>
                       <Button
