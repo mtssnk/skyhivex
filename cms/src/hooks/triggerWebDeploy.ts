@@ -49,8 +49,13 @@ async function triggerWebDeploy(reason: string): Promise<void> {
   }
 }
 
-export const afterChangeTriggerDeploy: CollectionAfterChangeHook = async ({ doc, collection }) => {
+export const afterChangeTriggerDeploy: CollectionAfterChangeHook = async ({ doc, collection, req }) => {
   if ('_status' in doc && doc._status !== 'published') return doc
+  // One rebuild per request, even when a hook re-saves other docs in the same
+  // operation (e.g. the Pages slug cascade updating a whole subtree).
+  const ctx = req.context as { webDeployTriggered?: boolean }
+  if (ctx.webDeployTriggered) return doc
+  ctx.webDeployTriggered = true
   void triggerWebDeploy(`${collection.slug} afterChange`)
   return doc
 }

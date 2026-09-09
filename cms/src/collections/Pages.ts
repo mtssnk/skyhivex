@@ -1,11 +1,12 @@
 import type { CollectionConfig } from 'payload'
 import { pageBlocks } from '../blocks'
 import { afterChangeTriggerDeploy, afterDeleteTriggerDeploy } from '../hooks/triggerWebDeploy'
+import { cascadeSlugToChildren } from '../hooks/cascadeSlugToChildren'
 
 export const Pages: CollectionConfig = {
   slug: 'pages',
   hooks: {
-    afterChange: [afterChangeTriggerDeploy],
+    afterChange: [afterChangeTriggerDeploy, cascadeSlugToChildren],
     afterDelete: [afterDeleteTriggerDeploy],
   },
   admin: {

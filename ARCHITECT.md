@@ -110,6 +110,8 @@ All pages (Home, FAQs and future pages) are documents in a single `Pages` collec
 
 This allows CMS editors to create a new page (for example, Services) without developer changes to route files.
 
+**Nested pages / `parent`.** A page can select a `parent` (another page). The `slug` field stores the **full path** — the `slug` field's `beforeValidate` hook prepends the parent's stored slug (e.g. parent `services` + segment `web-design` → `services/web-design`), and `pages/[...slug].astro` renders it from that. Because that hook only ever prepends the *immediate* parent's slug and never re-runs on children, a `cascadeSlugToChildren` `afterChange` hook (`cms/src/hooks/cascadeSlugToChildren.ts`) re-derives every descendant's slug whenever a published page's slug changes (parent added, moved, or renamed). It re-saves each direct child so its own `beforeValidate` recomputes against the updated parent, recursing down the subtree; a per-request visited set guards against `parent` cycles. `afterChangeTriggerDeploy` dedupes on `req.context` so the subtree re-save still triggers only one web rebuild.
+
 Most pages are block-based. Current exceptions under discussion:
 
 - News collection pages
