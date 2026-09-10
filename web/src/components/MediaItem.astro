@@ -1,75 +1,169 @@
 ---
 import type { Media } from '@/lib/payload'
+import { imageCdnEnabled, cfImage, buildSrcset, focalGravity, DEFAULT_QUALITY } from '@/lib/image'
+
+/**
+ * One crop group for an art-directed `<picture>` (Situation B).
+ * `media` is the `<source media>` condition — omit it on the last group, which
+ * becomes the `<img>` fallback. `ratio` (w/h) crops that group to a fixed shape;
+ * omit it for width-only (source ratio preserved).
+ */
+export interface Crop {
+  media?: string
+  ratio?: number
+}
 
 interface Props {
   media: Media
+  /** Situation A: a single known ratio. Renders inside an `aspect-*` wrapper. */
   aspectRatio?: 'auto' | '4/3' | '3/4' | '1/1' | '16/9'
+  /** Situation B: art-directed `<picture>`. Takes precedence over `aspectRatio`. */
+  crops?: Crop[]
+  /** LCP image — eager + fetchpriority high. Everything else lazy-loads. */
+  priority?: boolean
   muted?: boolean
   autoplay?: boolean
   class?: string
   sizes?: string
 }
 
-const { media, aspectRatio, class: className, sizes, muted, autoplay } = Astro.props
+const {
+  media,
+  aspectRatio,
+  crops,
+  priority = false,
+  class: className,
+  sizes,
+  muted,
+  autoplay,
+} = Astro.props
+
 const isVideo = media.mimeType?.startsWith('video/')
+const src = media.url ?? ''
+const gravity = focalGravity(media.focalX, media.focalY)
+const maxWidth = media.width
+const loading = priority ? 'eager' : 'lazy'
+const fetchpriority = priority ? 'high' : undefined
 
-const srcset = media.sizes
-  ? Object.entries(media.sizes)
-      .filter(([, s]) => s?.url && s?.width)
-      .map(([, s]) => `${s!.url} ${s!.width}w`)
-      .join(', ')
-  : undefined
-
-const ratioClasses: Record<string, string> = {
+const ratioNum: Record<string, number> = {
+  '4/3': 4 / 3,
+  '3/4': 3 / 4,
+  '1/1': 1,
+  '16/9': 16 / 9,
+}
+const ratioClass: Record<string, string> = {
   '4/3': 'aspect-[4/3]',
   '3/4': 'aspect-[3/4]',
   '1/1': 'aspect-square',
   '16/9': 'aspect-video',
 }
-const wrapClass = aspectRatio && aspectRatio !== 'auto' ? ratioClasses[aspectRatio] : null
+const fixedRatio = aspectRatio && aspectRatio !== 'auto' ? aspectRatio : null
+const wrapClass = fixedRatio ? ratioClass[fixedRatio] : null
+
+// Fallback for when the image CDN isn't configured: the pre-generated Sharp
+// sizes, uncropped. Removed once the CDN cutover is verified in production.
+const legacySrcset = media.sizes
+  ? Object.values(media.sizes)
+      .filter((s) => s?.url && s?.width)
+      .map((s) => `${s!.url} ${s!.width}w`)
+      .join(', ')
+  : undefined
+
+// A representative middle width for the `src` attribute (only used if srcset
+// isn't honoured). Cropped to match the relevant group where there is one.
+const fallbackImg = (ratio?: number) =>
+  cfImage(src, {
+    width: 1200,
+    height: ratio ? Math.round(1200 / ratio) : undefined,
+    fit: ratio ? 'cover' : undefined,
+    gravity: ratio ? gravity : undefined,
+  })
+
+const useCdn = imageCdnEnabled && !isVideo && Boolean(src)
+const pictureCrops = useCdn && crops && crops.length > 0 ? crops : null
+const lastCrop = pictureCrops ? pictureCrops[pictureCrops.length - 1] : null
 ---
 
 {
-  wrapClass ? (
-    <div class={`${wrapClass} w-full overflow-hidden`}>
-      {isVideo ? (
+  isVideo ? (
+    wrapClass ? (
+      <div class={`${wrapClass} w-full overflow-hidden`}>
         <video
-          src={media.url ?? ''}
+          src={src}
           autoplay={autoplay ?? true}
           muted={muted ?? true}
           loop
           playsinline
           class="w-full h-full object-cover block"
         />
-      ) : (
-        <img
-          src={media.url ?? ''}
-          srcset={srcset}
-          alt={media.alt}
-          width={media.width ?? undefined}
-          height={media.height ?? undefined}
+      </div>
+    ) : (
+      <video src={src} autoplay muted={muted ?? true} loop playsinline class={className} />
+    )
+  ) : pictureCrops ? (
+    /* Situation B — art-directed <picture>. Space is reserved by the caller's
+       CSS wrapper, so no width/height here. */
+    <picture>
+      {pictureCrops.slice(0, -1).map((c) => (
+        <source
+          media={c.media}
+          srcset={buildSrcset(src, {
+            ratio: c.ratio,
+            gravity,
+            quality: DEFAULT_QUALITY,
+            maxWidth,
+          })}
           sizes={sizes}
-          class="w-full h-full object-cover block"
         />
-      )}
+      ))}
+      <img
+        src={fallbackImg(lastCrop?.ratio)}
+        srcset={buildSrcset(src, {
+          ratio: lastCrop?.ratio,
+          gravity,
+          quality: DEFAULT_QUALITY,
+          maxWidth,
+        })}
+        sizes={sizes}
+        alt={media.alt}
+        loading={loading}
+        fetchpriority={fetchpriority}
+        class={className}
+      />
+    </picture>
+  ) : wrapClass ? (
+    /* Situation A — single known ratio, cropped server-side, in an aspect wrapper. */
+    <div class={`${wrapClass} w-full overflow-hidden`}>
+      <img
+        src={useCdn ? fallbackImg(fixedRatio ? ratioNum[fixedRatio] : undefined) : src}
+        srcset={
+          useCdn
+            ? buildSrcset(src, {
+                ratio: fixedRatio ? ratioNum[fixedRatio] : undefined,
+                gravity,
+                quality: DEFAULT_QUALITY,
+                maxWidth,
+              })
+            : legacySrcset
+        }
+        sizes={sizes}
+        alt={media.alt}
+        loading={loading}
+        fetchpriority={fetchpriority}
+        class="w-full h-full object-cover block"
+      />
     </div>
-  ) : isVideo ? (
-    <video
-      src={media.url ?? ''}
-      autoplay
-      muted={muted ?? true}
-      loop
-      playsinline
-      class={className}
-    />
   ) : (
+    /* Width only — source aspect ratio preserved (or the CDN-off fallback). */
     <img
-      src={media.url ?? ''}
-      srcset={srcset}
+      src={useCdn ? fallbackImg() : src}
+      srcset={useCdn ? buildSrcset(src, { quality: DEFAULT_QUALITY, maxWidth }) : legacySrcset}
+      sizes={sizes}
       alt={media.alt}
       width={media.width ?? undefined}
       height={media.height ?? undefined}
-      sizes={sizes}
+      loading={loading}
+      fetchpriority={fetchpriority}
       class={className}
     />
   )

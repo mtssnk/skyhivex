@@ -120,6 +120,7 @@ const paddingClass = blockPaddingClass(paddingWhere, paddingSize)
               <MediaItem
                 media={image}
                 sizes="(max-width: 1024px) 100vw, 65vw"
+                crops={[{ media: '(min-width: 1024px)', ratio: 1 }, { ratio: 4 / 3 }]}
                 class="w-full h-full object-cover"
               />
             )}

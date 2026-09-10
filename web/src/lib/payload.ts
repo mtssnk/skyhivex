@@ -11,6 +11,9 @@ export type Media = {
   mimeType?: string | null
   width?: number | null
   height?: number | null
+  /** Payload focal point, 0–100 (used as the Cloudflare crop `gravity`). */
+  focalX?: number | null
+  focalY?: number | null
   sizes?: {
     xs?: MediaSize
     sm?: MediaSize
