@@ -262,6 +262,36 @@ When the heading is clicked, the body is revealed.
 
 ---
 
+## Launch checklist
+
+Things that are deliberately off / neutral / staging-only and must be flipped for production. Roughly in order.
+
+### DNS / Cloudflare
+
+- **Switch Railway back off the `image_optimisations` branch** — the CMS + web services and the CMS `GITHUB_BRANCH` env var were pointed at `image_optimisations` for pre-merge testing (2026-09-10). Merge `image_optimisations` → `develop` → `main`, then repoint both services to `main` and set `GITHUB_BRANCH` back to `main`.
+- **Cloudflare "AI training & search policies"** (set on the zone during "connect a domain") — left at Allow / neutral for staging because they only enforce on *proxied* hostnames and the site is DNS-only. On launch:
+  - **Search → Allow** (always — Block means the production site is never indexed).
+  - **Agent → Allow** unless the client objects (lets AI assistants surface the company in answers).
+  - **Training → client decision** (default Block; no SEO impact either way). Match "Block training in robots.txt" to this.
+  - These still only take effect if the production hostname is proxied (orange cloud). If it stays DNS-only, crawler policy is enforced entirely by `web/src/pages/robots.txt.ts` + the `noindex` meta below.
+- **`PUBLIC_IMAGE_CDN_BASE`** (web Railway service) — set to `https://media.skyhivex.com/cdn-cgi/image` once the R2 bucket is bound to that custom domain and Transformations is enabled on the zone. Until then it's unset and images fall back to the Sharp `imageSizes`. Unsetting it is the instant rollback for any image-transform problem. See D-7.
+- **CMS `R2_PUBLIC_URL`** — change to `https://media.skyhivex.com` when the R2 custom domain is live (media URLs are computed per-request, so this takes effect immediately, no re-publish).
+
+### CMS Site Settings
+
+- **`allowIndexing`** — off on staging (drives `Layout.astro`'s `<meta name="robots" content="noindex, nofollow">`). Turn **on** for production.
+
+### Contact form
+
+- **Cloudflare Turnstile** — not yet added. Needs `PUBLIC_TURNSTILE_SITE_KEY` + `TURNSTILE_SECRET_KEY` (verified in `web/src/pages/api/contact.ts`) and a widget-mode decision (Managed / Invisible / Non-interactive). Currently defended only by the honeypot field + minimum-fill-time check.
+- **`RESEND_FROM`** — must be an address on a domain verified in Resend (not `onboarding@resend.dev`).
+
+### Analytics
+
+- **`PUBLIC_GTM_ID`** / **`PUBLIC_CF_BEACON_TOKEN`** (web) — set for production so analytics fire. Keep unset locally so dev traffic doesn't pollute the client's data.
+
+---
+
 ## Decision log (ADR-lite)
 
 | ID  | Decision                                    | Status   | Date       | Owner |
@@ -278,11 +308,8 @@ When the heading is clicked, the body is revealed.
 
 - Figma may still refine spacing, breakpoints, and media ratios
 - Contact form backend: Resend (implemented). Honeypot field + minimum-fill-time check are in place as a
-  first line of spam defence. **TODO before launch**: add Cloudflare Turnstile to the contact form —
-  on hold until the client sets up their Cloudflare account (with us given access) so it can be
-  configured against the live domain. Needs a `PUBLIC_TURNSTILE_SITE_KEY` (client-side widget) and
-  `TURNSTILE_SECRET_KEY` (server-side token verification in `web/src/pages/api/contact.ts`), plus a
-  decision on widget mode (Managed/Invisible/Non-interactive).
+  first line of spam defence. Cloudflare Turnstile still to be added — see "Launch checklist → Contact
+  form". (The client Cloudflare account now exists as of 2026-09-10, so this is unblocked.)
 - News/Projects template boundaries vs block flexibility need confirmation
 - SEO metadata requirements per page type need confirmation
 - Image delivery is mid-migration to Cloudflare Image Transformations (D-7) — frontend code is in,
