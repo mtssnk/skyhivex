@@ -95,12 +95,17 @@ const HeadingTag = (headingTag ?? (as === 'section' ? 'h2' : 'h1')) as 'h1' | 'h
                 <span
                   class="text-extended-lg uppercase w-full inline-flex justify-center max-w-[28em] text-balance"
                   data-hero-part
+                  role={'text' as any}
                 >
                   {headingPart1}
                 </span>
               )}
               {headingPart2 && (
-                <p class="text-serif-5xl w-full inline-flex justify-center" data-hero-part>
+                <p
+                  class="text-serif-5xl w-full inline-flex justify-center"
+                  data-hero-part
+                  role={'text' as any}
+                >
                   {headingPart2}
                 </p>
               )}
@@ -222,8 +227,15 @@ const HeadingTag = (headingTag ?? (as === 'section' ? 'h2' : 'h1')) as 'h1' | 'h
     const fades = Array.from(section.querySelectorAll<HTMLElement>('[data-hero-fade]'))
 
     const ctx = gsap.context(() => {
+      // SplitText's default `aria: 'auto'` puts an aria-label (the original,
+      // unsplit text) on `el` and hides the generated line/word/char spans
+      // from the accessibility tree, so screen readers hear one clean phrase
+      // instead of the fragmented markup. aria-label is only valid on an
+      // element with an explicit role, so `el` needs `role="text"` in the
+      // markup (see the [data-hero-part] spans above) — without it axe /
+      // Lighthouse flag aria-prohibited-attr.
       const splits = parts.map((el) =>
-        SplitText.create(el, { type: 'lines', mask: 'lines', linesClass: 'hero-line' }),
+        SplitText.create(el, { type: 'lines', mask: 'lines', linesClass: 'hero-line', aria: 'auto' }),
       )
       const lines = splits.flatMap((s) => s.lines)
 
