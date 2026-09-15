@@ -202,53 +202,49 @@ Preview flow: the CMS "Preview" button hits `pages/api/preview.ts` (validates `P
 
 ## Images and responsive delivery
 
-### Pipeline: upload → Sharp → R2 → `srcset`
+Two delivery paths, switched by the `PUBLIC_IMAGE_CDN_BASE` env var:
 
-Image processing is entirely Payload's built-in machinery — there's no custom resize code anywhere in this repo. `cms/src/payload.config.ts` passes the `sharp` package straight into `buildConfig({ sharp })`; Payload's internal uploads pipeline uses that instance to generate every named size on upload.
+- **Set** (e.g. `https://media.skyhivex.com/cdn-cgi/image`) → Cloudflare Image Transformations resize / crop / re-encode on the fly at the edge (`format=auto` picks AVIF/WebP/original per the request). This is the target state — see `ARCHITECT.md` D-7.
+- **Unset** (local dev, and production until the Cloudflare zone is ready) → falls back to the pre-generated Sharp `imageSizes` (`cms/src/collections/Media.ts`), uncropped, exactly as before.
 
-Sizes are configured in `cms/src/collections/Media.ts`:
+Once the CDN cutover is verified in production, a cleanup commit removes `imageSizes` from `Media.ts`, deletes the orphaned `-WxH.webp` objects from R2, and drops the fallback branch from `MediaItem.astro`.
 
-```ts
-const webpOptions = { format: 'webp' as const, options: { quality: 82 } }
+### `web/src/lib/image.ts`
 
-upload: {
-  imageSizes: [
-    { name: 'xs', width: 480, formatOptions: webpOptions },
-    { name: 'sm', width: 800, formatOptions: webpOptions },
-    { name: 'md', width: 1200, formatOptions: webpOptions },
-    { name: 'lg', width: 1600, formatOptions: webpOptions },
-    { name: 'xl', width: 2400, formatOptions: webpOptions },
-  ],
-  adminThumbnail: 'sm',
-}
-```
+- `cfImage(src, { width, height?, fit?, gravity?, quality })` — builds a `/cdn-cgi/image/…/<full source URL>` URL, or returns `src` untouched when the CDN base isn't set.
+- `buildSrcset(src, { ratio?, gravity?, maxWidth? })` — a `srcset` across the width ladder `[400, 800, 1200, 1600, 2000, 2400]`. With `ratio` each candidate is a `width × round(width/ratio)` `fit=cover` crop; without it, width only. `maxWidth` (the source's real width, from `media.width`) caps the ladder so candidates never upscale.
+- `focalGravity(focalX, focalY)` — `${x}x${y}` from Payload's focal-point fields (stored 0–100). The focal-point editor in the CMS is the crop-focus control; every crop uses it (default 50/50 = centre). No `gravity=auto`.
+- Default quality is `72`.
 
-Each size is a plain proportional downscale to that `width` (height is whatever Sharp computes to preserve aspect ratio), re-encoded to webp at quality 82. The **original uploaded file is stored untouched** — original format, original resolution, no dimension suffix — alongside the five generated sizes. Every size that gets generated is uploaded to Cloudflare R2 as its own object, named `{originalName}-{width}x{height}.webp` (Payload's own naming convention); the original keeps its plain sanitized filename. If a size's target width is larger than the original image, that size comes back as `null` — the frontend must handle missing sizes (see below), and does.
+### `web/src/components/MediaItem.astro`
 
-**Focal point is enabled but currently a no-op.** Payload's focal-point editor appears in the admin UI (and `focalX`/`focalY` are stored on every `Media` document) because it's on by default whenever `imageSizes` is configured. But actual cropping via focal point only happens when a size config specifies **both** `width` and `height` — Payload then crops around the focal point to hit that exact aspect ratio. None of the sizes above set `height`, so every generated size is a straight full-frame resize; the stored focal point has no visible effect on any current output. If a future block needs a fixed-aspect crop (e.g. a square thumbnail), add `height` to a size definition and the existing focal-point data will start being used automatically — it doesn't need to be re-captured.
+Every CMS image/video renders through this one component. Branches:
 
-### Web side: `MediaItem.astro` is the one place `srcset` gets built
+| Prop | Situation | Renders |
+| ---- | --------- | ------- |
+| `crops={[{ media, ratio }, …]}` | **B** — art-directed | `<picture>`, one `<source media>` per group, last group is the `<img>`. Each group cropped to its `ratio`. |
+| `aspectRatio="16/9"` etc. | **A** — one known ratio | `<img>` in an `aspect-*` wrapper, srcset cropped to that ratio. |
+| neither | fluid, ratio unknown | `<img>`, width only, source ratio preserved. |
+| video mimeType | — | `<video>` (with/without the aspect wrapper), always `media.url` directly. |
 
-`web/src/lib/payload.ts` types `Media` with `url`, `width`, `height`, and a `sizes` map (`xs`/`sm`/`md`/`lg`/`xl`, each optionally `null`). Every image or video sourced from CMS media should render through `web/src/components/MediaItem.astro` — it's the single shared component that builds the `srcset` string:
+**A vs B — which surface is which.** If the display aspect ratio is knowable at build time it's A (crop server-side, zero wasted pixels). If it depends on the viewport it's B — an art-directed `<picture>` where each `<source media>` condition **mirrors the CSS mechanism that actually changes that container's shape**:
 
-```ts
-const srcset = media.sizes
-  ? Object.entries(media.sizes)
-      .filter(([, s]) => s?.url && s?.width)
-      .map(([, s]) => `${s!.url} ${s!.width}w`)
-      .join(', ')
-  : undefined
-```
+- **Hero background** — container tracks the viewport, so `(orientation: landscape)` (→ `16/9`) vs default portrait (→ `4/5`). A width breakpoint would misread a narrow desktop window.
+- **MediaText split variant** — the ratio is redefined by the `lg:` CSS breakpoint, so `(min-width: 1024px)` (→ `1/1`) vs default (→ `4/3`). Orientation would misread a portrait tablet ≥1024px.
 
-`src` falls back to `media.url` — the original, full-resolution file — so it only ever loads if `srcset`/`sizes` aren't honoured (e.g. a very old browser). No Astro `<Image>`/`<Picture>`/`astro:assets` is used anywhere for CMS media, and that's intentional: `astro:assets` optimizes local build-time assets, not remote R2 URLs — R2 already serves the pre-resized webp variants above.
+A `crops` group with `ratio` omitted = that breakpoint gets width-only, no crop.
 
-**The `sizes` prop is not optional in practice — it must match the element's actual rendered width at each breakpoint.** Per the HTML spec, an `<img>` with `srcset` but no `sizes` attribute defaults to `100vw` for candidate selection, so the browser will pick the largest (`xl`, 2400px-wide) candidate regardless of how small the image is actually rendered. This bit us directly: `web/src/blocks/MediaText.astro` called `<MediaItem>` without a `sizes` prop at all, so every MediaText image on the site was loading the full 2400px `xl` variant even though the block only renders it at 50–65% of the viewport. An audit while fixing that found the same class of mistake — a `sizes` string present but not kept in sync with the actual grid layout — in a few other places; all now corrected to match their real column widths (`CardProject.astro`'s default and both its call sites, `pages/news/index.astro`'s 2-column archive grid, `PersonList.astro`'s card grid). `NewsCardList.astro`'s `33vw` was checked too and is genuinely correct there (a true 3-column grid).
+**`priority` prop** → `loading="eager" fetchpriority="high"`. Only the hero background sets it (it's the LCP). Everything else defaults to `loading="lazy"`.
 
-**When adding a new `MediaItem` caller**, work out the image's actual CSS width at each breakpoint from its grid/flex classes first, then write the `sizes` string to match — copy an existing accurate example (e.g. `Hero.astro`'s `"100vw"` for a true full-bleed image, or `NewsCardList.astro`'s `"(max-width: 768px) 100vw, 33vw"` for a genuine 3-column grid) rather than a generic guess. If the layout changes later, the `sizes` string needs to be revisited too — nothing enforces the two staying in sync.
+### `sizes` is still mandatory and must match the real rendered width
 
-Video elements (`media.mimeType?.startsWith('video/')`) always use `media.url` (the original file) directly — `imageSizes` only applies to images, so there's no responsive size selection for video at all.
+Per the HTML spec an `<img>`/`<source>` with `srcset` but no `sizes` defaults to `100vw` for candidate selection — the browser then downloads the largest candidate regardless of how small the element actually renders. This bit us before (every MediaText image loaded the 2400px variant). When adding or moving a `MediaItem` caller, work out the element's CSS width at each breakpoint from its grid/flex classes and write `sizes` to match — copy an accurate existing example (`Hero.astro`'s `"100vw"`, `NewsCardList.astro`'s `"(max-width: 768px) 100vw, 33vw"`). Nothing enforces `sizes` staying in sync with the layout.
 
-**OG/social image tags are a deliberate exception**: `Layout.astro`'s `og:image`/`twitter:image` meta tags use `media.url` (the original) directly, not a sized variant — there's only ever one `<meta>` tag, so responsive selection doesn't apply, and social crawlers generally handle full-size source images fine.
+### Other notes
+
+- **Video** — `imageSizes` / transformations don't apply; `<video src>` is always `media.url`.
+- **OG/social tags** — `Layout.astro`'s `og:image`/`twitter:image` use `media.url` (the original) directly; there's one `<meta>`, so no responsive selection.
+- No `astro:assets` (`<Image>`/`<Picture>`) for CMS media — it optimizes local build-time assets, not remote R2 URLs.
 
 ---
 
