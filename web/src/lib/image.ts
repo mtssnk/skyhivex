@@ -19,6 +19,36 @@ export const IMAGE_WIDTHS = [400, 800, 1200, 1600, 2000, 2400] as const
 
 export const DEFAULT_QUALITY = 72
 
+/**
+ * Percent-encode a media URL's path segments. The CMS doesn't sanitise upload
+ * filenames, so `media.url` can contain literal spaces or other characters
+ * that (a) break `srcset` syntax — whitespace is the candidate/descriptor
+ * delimiter, so an unencoded space inside a URL is unparseable — and (b)
+ * truncate a Cloudflare transform URL, since the source is embedded as a path
+ * segment of another URL. Each segment is decoded then re-encoded so already-
+ * encoded input isn't double-encoded.
+ */
+export function encodeMediaUrl(url: string): string {
+  try {
+    const u = new URL(url)
+    u.pathname = u.pathname
+      .split('/')
+      .map((segment) => {
+        let decoded = segment
+        try {
+          decoded = decodeURIComponent(segment)
+        } catch {
+          // not validly percent-encoded (e.g. a bare "%") — encode as-is
+        }
+        return encodeURIComponent(decoded)
+      })
+      .join('/')
+    return u.href
+  } catch {
+    return url
+  }
+}
+
 type Fit = 'scale-down' | 'contain' | 'cover' | 'crop' | 'pad'
 
 export interface CfImageOptions {
@@ -46,7 +76,7 @@ export function cfImage(src: string, opts: CfImageOptions): string {
   if (opts.height != null) params.push(`height=${Math.round(opts.height)}`)
   if (opts.fit) params.push(`fit=${opts.fit}`)
   if (opts.gravity) params.push(`gravity=${opts.gravity}`)
-  return `${CDN_BASE}/${params.join(',')}/${src}`
+  return `${CDN_BASE}/${params.join(',')}/${encodeMediaUrl(src)}`
 }
 
 /** Gravity string from Payload focal-point fields (stored 0–100). */

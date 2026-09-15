@@ -277,6 +277,11 @@ Things that are deliberately off / neutral / staging-only and must be flipped fo
 - **`PUBLIC_IMAGE_CDN_BASE`** (web Railway service) — set to `https://media.skyhivex.com/cdn-cgi/image` once the R2 bucket is bound to that custom domain and Transformations is enabled on the zone. Until then it's unset and images fall back to the Sharp `imageSizes`. Unsetting it is the instant rollback for any image-transform problem. See D-7.
 - **CMS `R2_PUBLIC_URL`** — change to `https://media.skyhivex.com` when the R2 custom domain is live (media URLs are computed per-request, so this takes effect immediately, no re-publish).
 
+### Email (Google Workspace)
+
+- **DKIM** — not configured (no `google._domainkey` TXT; there wasn't one at GoDaddy either). DMARC currently passes on SPF alignment alone. Before launch, a Workspace super admin: admin.google.com → Apps → Google Workspace → Gmail → **Authenticate email** → `skyhivex.com` → Generate new record (2048-bit) → sends us the **selector/host** (usually `google._domainkey`) and the long `v=DKIM1;…` value → we add it as a `TXT` in Cloudflare (DNS only) → admin returns and clicks **"Start authentication"** (signing only begins after that).
+- **DNS migration is done** (2026-09-10): nameservers moved GoDaddy → Cloudflare, zone DNS-only. SPF collapsed from GoDaddy's `_spfm` chain to `v=spf1 include:_spf.google.com ~all`. MX unchanged (Google), so no mail disruption.
+
 ### CMS Site Settings
 
 - **`allowIndexing`** — off on staging (drives `Layout.astro`'s `<meta name="robots" content="noindex, nofollow">`). Turn **on** for production.

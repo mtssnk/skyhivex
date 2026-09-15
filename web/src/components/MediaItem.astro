@@ -1,6 +1,13 @@
 ---
 import type { Media } from '@/lib/payload'
-import { imageCdnEnabled, cfImage, buildSrcset, focalGravity, DEFAULT_QUALITY } from '@/lib/image'
+import {
+  imageCdnEnabled,
+  cfImage,
+  buildSrcset,
+  focalGravity,
+  encodeMediaUrl,
+  DEFAULT_QUALITY,
+} from '@/lib/image'
 
 /**
  * One crop group for an art-directed `<picture>` (Situation B).
@@ -40,6 +47,10 @@ const {
 
 const isVideo = media.mimeType?.startsWith('video/')
 const src = media.url ?? ''
+// Used for <video src>, the CDN-off <img src>/<img srcset> fallback, and the
+// legacy Sharp srcset below — anywhere a raw media URL is written directly
+// rather than via cfImage()/buildSrcset() (which encode internally).
+const encodedSrc = encodeMediaUrl(src)
 const gravity = focalGravity(media.focalX, media.focalY)
 const maxWidth = media.width
 const loading = priority ? 'eager' : 'lazy'
@@ -65,7 +76,7 @@ const wrapClass = fixedRatio ? ratioClass[fixedRatio] : null
 const legacySrcset = media.sizes
   ? Object.values(media.sizes)
       .filter((s) => s?.url && s?.width)
-      .map((s) => `${s!.url} ${s!.width}w`)
+      .map((s) => `${encodeMediaUrl(s!.url!)} ${s!.width}w`)
       .join(', ')
   : undefined
 
@@ -89,7 +100,7 @@ const lastCrop = pictureCrops ? pictureCrops[pictureCrops.length - 1] : null
     wrapClass ? (
       <div class={`${wrapClass} w-full overflow-hidden`}>
         <video
-          src={src}
+          src={encodedSrc}
           autoplay={autoplay ?? true}
           muted={muted ?? true}
           loop
@@ -98,7 +109,7 @@ const lastCrop = pictureCrops ? pictureCrops[pictureCrops.length - 1] : null
         />
       </div>
     ) : (
-      <video src={src} autoplay muted={muted ?? true} loop playsinline class={className} />
+      <video src={encodedSrc} autoplay muted={muted ?? true} loop playsinline class={className} />
     )
   ) : pictureCrops ? (
     /* Situation B — art-directed <picture>. Space is reserved by the caller's
@@ -135,7 +146,7 @@ const lastCrop = pictureCrops ? pictureCrops[pictureCrops.length - 1] : null
     /* Situation A — single known ratio, cropped server-side, in an aspect wrapper. */
     <div class={`${wrapClass} w-full overflow-hidden`}>
       <img
-        src={useCdn ? fallbackImg(fixedRatio ? ratioNum[fixedRatio] : undefined) : src}
+        src={useCdn ? fallbackImg(fixedRatio ? ratioNum[fixedRatio] : undefined) : encodedSrc}
         srcset={
           useCdn
             ? buildSrcset(src, {
@@ -156,7 +167,7 @@ const lastCrop = pictureCrops ? pictureCrops[pictureCrops.length - 1] : null
   ) : (
     /* Width only — source aspect ratio preserved (or the CDN-off fallback). */
     <img
-      src={useCdn ? fallbackImg() : src}
+      src={useCdn ? fallbackImg() : encodedSrc}
       srcset={useCdn ? buildSrcset(src, { quality: DEFAULT_QUALITY, maxWidth }) : legacySrcset}
       sizes={sizes}
       alt={media.alt}
