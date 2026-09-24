@@ -92,8 +92,14 @@ const HeadingTag = (headingTag ?? (as === 'section' ? 'h2' : 'h1')) as 'h1' | 'h
           headingPart1 || headingPart2 ? (
             <HeadingTag class="text-white space-y-5xs" data-hero-heading>
               {headingPart1 && (
+                // SplitText injects per-line child elements into whatever it
+                // targets — a flex container here would turn those into flex
+                // items (default nowrap) instead of wrapping text, breaking
+                // line detection. `block` + `mx-auto` centers without flex.
+                // max-w-[28em] must stay on this element (not a wrapper): em
+                // resolves against this element's own font-size (text-extended-lg).
                 <span
-                  class="text-extended-lg uppercase w-full inline-flex justify-center max-w-[28em] text-balance"
+                  class="text-extended-lg uppercase block max-w-[28em] mx-auto text-balance"
                   data-hero-part
                   role={'text' as any}
                 >
@@ -234,8 +240,18 @@ const HeadingTag = (headingTag ?? (as === 'section' ? 'h2' : 'h1')) as 'h1' | 'h
       // element with an explicit role, so `el` needs `role="text"` in the
       // markup (see the [data-hero-part] spans above) — without it axe /
       // Lighthouse flag aria-prohibited-attr.
+      // text-wrap: balance is resolved by the browser in a separate balancing
+      // layout pass that can land after this script reads line positions, so
+      // SplitText can measure pre-balance geometry (wrong line count). Strip
+      // it before splitting and restore it on revert.
+      parts.forEach((el) => el.classList.remove('text-balance'))
       const splits = parts.map((el) =>
-        SplitText.create(el, { type: 'lines', mask: 'lines', linesClass: 'hero-line', aria: 'auto' }),
+        SplitText.create(el, {
+          type: 'lines',
+          mask: 'lines',
+          linesClass: 'hero-line',
+          aria: 'auto',
+        }),
       )
       const lines = splits.flatMap((s) => s.lines)
 
@@ -267,7 +283,10 @@ const HeadingTag = (headingTag ?? (as === 'section' ? 'h2' : 'h1')) as 'h1' | 'h
       })
 
       // Reverted by ctx.revert(): restores the original heading markup.
-      return () => splits.forEach((s) => s.revert())
+      return () => {
+        splits.forEach((s) => s.revert())
+        parts.forEach((el) => el.classList.add('text-balance'))
+      }
     }, section)
 
     cleanup = () => ctx.revert()
