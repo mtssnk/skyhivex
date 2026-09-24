@@ -26,7 +26,7 @@ const { items, anchorId } = Astro.props as AccordionListBlock
               <div class="max-w-[720px]! mx-auto container">
                 <button
                   type="button"
-                  class="accordion-trigger flex justify-between gap-xs w-full text-left text-white cursor-pointer py-3xs"
+                  class="accordion-trigger flex justify-between gap-xs w-full text-left text-white cursor-pointer py-3xs hover:[&>.accordion-icon:not(.is-open)]:rotate-90"
                   aria-expanded="false"
                   aria-controls={bodyId}
                 >
